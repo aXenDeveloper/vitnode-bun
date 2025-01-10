@@ -9,14 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hono/zod-openapi": "^0.18.3",
     "hono": "^4.6.16",
     "next": "15.1.4",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "vitnode-next": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.7.3",
-    "@types/node": "^20.17.12",
+    "@types/node": "22.10.5",
     "@types/react": "^19.0.4",
     "@types/react-dom": "^19.0.2",
     "postcss": "^8.4.49",
