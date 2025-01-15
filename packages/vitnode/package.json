@@ -1,5 +1,5 @@
 {
-  "name": "vitnode-next",
+  "name": "vitnode",
   "version": "1.0.0",
   "devDependencies": {
     "@hono/swagger-ui": "^0.5.0",
