@@ -1,6 +1,7 @@
 import type { OpenAPIHono } from "@hono/zod-openapi";
 import type { Env } from "hono";
 import { swaggerUI } from "@hono/swagger-ui";
+import { sessionMiddleware } from "./middleware/session.js";
 
 export const honoConfig = ({ app }: { app: OpenAPIHono<Env, {}, "/"> }) => {
   app.doc("/swagger/doc", {
@@ -12,4 +13,5 @@ export const honoConfig = ({ app }: { app: OpenAPIHono<Env, {}, "/"> }) => {
   });
 
   app.get("/swagger", swaggerUI({ url: "/api/swagger/doc" }));
+  app.use("*", sessionMiddleware());
 };
