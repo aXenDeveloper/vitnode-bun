@@ -1,5 +1,5 @@
 import type { Context, Env, Next } from "hono";
-import { getCookie, getSignedCookie, setCookie, setSignedCookie, deleteCookie } from "hono/cookie";
+import { getCookie } from "hono/cookie";
 
 export const sessionMiddleware = () => {
   return async (c: Context<Env, "*", {}>, next: Next) => {

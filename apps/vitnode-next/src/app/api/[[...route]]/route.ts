@@ -1,6 +1,6 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { handle } from "hono/vercel";
-import { honoConfig } from "vitnode/api-config";
+import { honoConfig } from "vitnode/api/api-config";
 import { plugins } from "./plugins";
 
 export const runtime = "edge";
