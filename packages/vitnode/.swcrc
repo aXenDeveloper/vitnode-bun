@@ -6,7 +6,16 @@
       "@/*": ["./src/*"]
     },
     "parser": {
-      "syntax": "typescript"
+      "syntax": "typescript",
+      "tsx": true
+    },
+    "transform": {
+      "react": {
+        "runtime": "automatic"
+      }
     }
+  },
+  "module": {
+    "type": "nodenext"
   }
 }

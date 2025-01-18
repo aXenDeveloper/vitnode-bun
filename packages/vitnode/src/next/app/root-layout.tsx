@@ -1,5 +1,5 @@
 import React from "react";
-import { RootProvider } from "./provider";
+import { RootProvider } from "./provider.js";
 
 export const RootLayout = ({
   children,
