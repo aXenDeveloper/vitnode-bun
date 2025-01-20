@@ -9,12 +9,16 @@
     "@types/node": "^22.10.7",
     "@types/react": "^19.0.7",
     "@types/react-dom": "^19.0.3",
+    "chokidar": "^4.0.3",
     "concurrently": "^9.1.2",
     "hono": "^4.6.17",
     "next": "^15.1.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "typescript": "^5.7.3"
+  },
+  "bin": {
+    "vitnode": "./dist/scripts/index.js"
   },
   "exports": {
     "./*": {
@@ -23,6 +27,7 @@
     }
   },
   "scripts": {
+    "build:scripts": "swc scripts -d dist --config-file .swcrc",
     "build": "tsc && swc src -d dist --config-file .swcrc",
     "dev": "concurrently \"tsc -w --preserveWatchOutput\" \"swc src -d dist --config-file .swcrc -w\""
   },

@@ -2,9 +2,10 @@
   "name": "vitnode-bun",
   "private": true,
   "scripts": {
+    "build:scripts": "turbo build:scripts && pnpm i",
     "build": "turbo build",
     "start": "turbo start",
-    "dev": "turbo dev",
+    "dev": "pnpm build:scripts && turbo dev",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
@@ -14,9 +15,9 @@
     "typescript": "5.7.3"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
-  "packageManager": "bun@1.1.43",
+  "packageManager": "pnpm@9.15.4",
   "workspaces": [
     "apps/*",
     "packages/*"
