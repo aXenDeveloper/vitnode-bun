@@ -1,7 +1,9 @@
 {
   "$schema": "https://swc.rs/schema.json",
+  "minify": true,
   "jsc": {
     "baseUrl": "./",
+    "target": "esnext",
     "paths": {
       "@/*": ["./src/*"]
     },
@@ -16,6 +18,7 @@
     }
   },
   "module": {
-    "type": "nodenext"
+    "type": "nodenext",
+    "strict": true
   }
 }

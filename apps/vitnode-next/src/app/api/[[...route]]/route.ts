@@ -12,6 +12,8 @@ honoConfig({ app });
 app.route("/", plugins);
 
 app.get("/hello", (c) => {
+  console.log("hello", process.env.DB_HOST);
+
   return c.json({
     message: "welcome"
   });

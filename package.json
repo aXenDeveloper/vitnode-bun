@@ -2,6 +2,8 @@
   "name": "vitnode-bun",
   "private": true,
   "scripts": {
+    "db:migrate": "turbo db:migrate",
+    "docker": "docker compose -f ./docker-compose.yml -p vitnode-dev-dun up -d",
     "build:scripts": "turbo build:scripts && pnpm i",
     "build": "turbo build",
     "start": "turbo start",
