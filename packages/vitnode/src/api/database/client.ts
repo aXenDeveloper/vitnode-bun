@@ -1,4 +1,5 @@
 import { drizzle } from "drizzle-orm/node-postgres";
+import schema from "./schema.js";
 
 export const DATABASE_ENVS = {
   host: process.env.DB_HOST ?? "localhost",
@@ -17,5 +18,6 @@ export const clientDb = drizzle({
     password: DATABASE_ENVS.password,
     database: DATABASE_ENVS.database,
     ssl: DATABASE_ENVS.ssl
-  }
+  },
+  schema
 });
