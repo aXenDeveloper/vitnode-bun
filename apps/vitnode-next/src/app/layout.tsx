@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { RootLayout } from "vitnode/next/app/root-layout";
+import { RootLayout } from "vitnode/app/root-layout";
 import "./globals.css";
 
 const geistSans = Geist({
