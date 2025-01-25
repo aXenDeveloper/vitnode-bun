@@ -41,4 +41,5 @@ yarn-error.log*
 next-env.d.ts
 
 # VitNode
-/src/plugins/core/database
+/src/plugins/core/database/*
+!/src/plugins/core/database/client.ts

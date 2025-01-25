@@ -4,7 +4,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "prepare": "vitnode prepare",
     "db:migrate": "drizzle-kit up && drizzle-kit generate && drizzle-kit migrate",
     "dev": "vitnode prepare && next dev --turbopack",
     "build": "next build",

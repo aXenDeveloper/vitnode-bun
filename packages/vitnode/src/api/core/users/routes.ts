@@ -1,5 +1,5 @@
-import { clientDb } from "@/api/database/client.js";
-import { core_config } from "@/api/database/schema/config.js";
+import { clientDb } from "@/database/client.js";
+import { core_config } from "@/database/schema/config.js";
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 
 export const users = new OpenAPIHono();
