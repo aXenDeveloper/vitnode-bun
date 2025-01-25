@@ -39,7 +39,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# VitNode
-/src/plugins/core/database/*
-!/src/plugins/core/database/client.ts
