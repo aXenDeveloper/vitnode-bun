@@ -18,14 +18,14 @@ importers:
         specifier: 5.7.3
         version: 5.7.3
 
-  apps/vitnode-next:
+  apps/web:
     dependencies:
       '@hono/zod-openapi':
         specifier: ^0.18.3
         version: 0.18.3(hono@4.6.18)(zod@3.24.1)
       drizzle-orm:
         specifier: ^0.38.4
-        version: 0.38.4(@neondatabase/serverless@0.10.4)(@types/pg@8.11.10)(@types/react@19.0.8)(pg@8.13.1)(react@19.0.0)
+        version: 0.38.4(@neondatabase/serverless@0.10.4)(@types/pg@8.11.10)(@types/react@19.0.8)(pg@8.13.1)(postgres@3.4.5)(react@19.0.0)
       hono:
         specifier: ^4.6.18
         version: 4.6.18
@@ -35,9 +35,6 @@ importers:
       next:
         specifier: ^15.1.6
         version: 15.1.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      pg:
-        specifier: ^8.13.1
-        version: 8.13.1
       react:
         specifier: ^19.0.0
         version: 19.0.0
@@ -57,9 +54,6 @@ importers:
       '@types/node':
         specifier: ^22.10.9
         version: 22.10.9
-      '@types/pg':
-        specifier: ^8.11.10
-        version: 8.11.10
       '@types/react':
         specifier: ^19.0.8
         version: 19.0.8
@@ -78,6 +72,9 @@ importers:
       eslint-config-next:
         specifier: ^15.1.6
         version: 15.1.6(eslint@9.18.0(jiti@2.4.2))(typescript@5.7.3)
+      postgres:
+        specifier: ^3.4.5
+        version: 3.4.5
       tailwindcss:
         specifier: ^4.0.0
         version: 4.0.0
@@ -111,6 +108,9 @@ importers:
       next-themes:
         specifier: ^0.4.4
         version: 0.4.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      postgres:
+        specifier: ^3.4.5
+        version: 3.4.5
       tailwind-merge:
         specifier: ^2.6.0
         version: 2.6.0
@@ -130,9 +130,6 @@ importers:
       '@types/node':
         specifier: ^22.10.9
         version: 22.10.9
-      '@types/pg':
-        specifier: ^8.11.10
-        version: 8.11.10
       '@types/react':
         specifier: ^19.0.8
         version: 19.0.8
@@ -153,7 +150,7 @@ importers:
         version: 0.30.2
       drizzle-orm:
         specifier: ^0.38.4
-        version: 0.38.4(@neondatabase/serverless@0.10.4)(@types/pg@8.11.10)(@types/react@19.0.8)(pg@8.13.1)(react@19.0.0)
+        version: 0.38.4(@neondatabase/serverless@0.10.4)(@types/pg@8.11.10)(@types/react@19.0.8)(pg@8.13.1)(postgres@3.4.5)(react@19.0.0)
       hono:
         specifier: ^4.6.18
         version: 4.6.18
@@ -163,9 +160,6 @@ importers:
       next:
         specifier: ^15.1.6
         version: 15.1.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      pg:
-        specifier: ^8.13.1
-        version: 8.13.1
       react:
         specifier: ^19.0.0
         version: 19.0.0
@@ -2718,6 +2712,10 @@ packages:
   postgres-range@1.1.4:
     resolution: {integrity: sha512-i/hbxIE9803Alj/6ytL7UHQxRvZkI9O4Sy+J3HGc4F4oo/2eQAjTSNJ0bfxyse3bH0nuVesCk+3IRLaMtG3H6w==}
 
+  postgres@3.4.5:
+    resolution: {integrity: sha512-cDWgoah1Gez9rN3H4165peY9qfpEo+SA61oQv65O3cRUE1pOEoJWwddwcqKE8XZYjbblOJlYDlLV4h67HrEVDg==}
+    engines: {node: '>=12'}
+
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
@@ -4083,6 +4081,7 @@ snapshots:
       '@types/node': 22.10.9
       pg-protocol: 1.7.0
       pg-types: 4.0.2
+    optional: true
 
   '@types/pg@8.11.6':
     dependencies:
@@ -4569,12 +4568,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.38.4(@neondatabase/serverless@0.10.4)(@types/pg@8.11.10)(@types/react@19.0.8)(pg@8.13.1)(react@19.0.0):
+  drizzle-orm@0.38.4(@neondatabase/serverless@0.10.4)(@types/pg@8.11.10)(@types/react@19.0.8)(pg@8.13.1)(postgres@3.4.5)(react@19.0.0):
     optionalDependencies:
       '@neondatabase/serverless': 0.10.4
       '@types/pg': 8.11.10
       '@types/react': 19.0.8
       pg: 8.13.1
+      postgres: 3.4.5
       react: 19.0.0
 
   dunder-proto@1.0.1:
@@ -5540,7 +5540,8 @@ snapshots:
       define-properties: 1.2.1
       es-object-atoms: 1.1.1
 
-  obuf@1.1.2: {}
+  obuf@1.1.2:
+    optional: true
 
   onetime@5.1.2:
     dependencies:
@@ -5592,17 +5593,22 @@ snapshots:
   pg-cloudflare@1.1.1:
     optional: true
 
-  pg-connection-string@2.7.0: {}
+  pg-connection-string@2.7.0:
+    optional: true
 
-  pg-int8@1.0.1: {}
+  pg-int8@1.0.1:
+    optional: true
 
-  pg-numeric@1.0.2: {}
+  pg-numeric@1.0.2:
+    optional: true
 
   pg-pool@3.7.0(pg@8.13.1):
     dependencies:
       pg: 8.13.1
+    optional: true
 
-  pg-protocol@1.7.0: {}
+  pg-protocol@1.7.0:
+    optional: true
 
   pg-types@2.2.0:
     dependencies:
@@ -5611,6 +5617,7 @@ snapshots:
       postgres-bytea: 1.0.0
       postgres-date: 1.0.7
       postgres-interval: 1.2.0
+    optional: true
 
   pg-types@4.0.2:
     dependencies:
@@ -5621,6 +5628,7 @@ snapshots:
       postgres-date: 2.1.0
       postgres-interval: 3.0.0
       postgres-range: 1.1.4
+    optional: true
 
   pg@8.13.1:
     dependencies:
@@ -5631,10 +5639,12 @@ snapshots:
       pgpass: 1.0.5
     optionalDependencies:
       pg-cloudflare: 1.1.1
+    optional: true
 
   pgpass@1.0.5:
     dependencies:
       split2: 4.2.0
+    optional: true
 
   picocolors@1.1.1: {}
 
@@ -5658,27 +5668,38 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  postgres-array@2.0.0: {}
+  postgres-array@2.0.0:
+    optional: true
 
-  postgres-array@3.0.2: {}
+  postgres-array@3.0.2:
+    optional: true
 
-  postgres-bytea@1.0.0: {}
+  postgres-bytea@1.0.0:
+    optional: true
 
   postgres-bytea@3.0.0:
     dependencies:
       obuf: 1.1.2
+    optional: true
 
-  postgres-date@1.0.7: {}
+  postgres-date@1.0.7:
+    optional: true
 
-  postgres-date@2.1.0: {}
+  postgres-date@2.1.0:
+    optional: true
 
   postgres-interval@1.2.0:
     dependencies:
       xtend: 4.0.2
+    optional: true
 
-  postgres-interval@3.0.0: {}
+  postgres-interval@3.0.0:
+    optional: true
 
-  postgres-range@1.1.4: {}
+  postgres-range@1.1.4:
+    optional: true
+
+  postgres@3.4.5: {}
 
   prelude-ls@1.2.1: {}
 
@@ -5940,7 +5961,8 @@ snapshots:
 
   source-map@0.7.4: {}
 
-  split2@4.2.0: {}
+  split2@4.2.0:
+    optional: true
 
   stable-hash@0.0.4: {}
 
@@ -6244,7 +6266,8 @@ snapshots:
       string-width: 4.2.3
       strip-ansi: 6.0.1
 
-  xtend@4.0.2: {}
+  xtend@4.0.2:
+    optional: true
 
   y18n@5.0.8: {}
 

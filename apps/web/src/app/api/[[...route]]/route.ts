@@ -3,13 +3,11 @@ import { handle } from "hono/vercel";
 import { honoConfig } from "vitnode/api/config";
 import { plugins } from "./plugins";
 
-// export const runtime = "edge";
-
 const app = new OpenAPIHono().basePath("/api");
 honoConfig({ app });
 app.route("/", plugins);
 
-app.get("/hello", (c) => {
+app.get("/hello", async (c) => {
   console.log("hello", process.env.DB_HOST);
 
   return c.json({
