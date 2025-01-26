@@ -14,6 +14,7 @@
     "dotenv": "^16.4.7",
     "drizzle-kit": "^0.30.2",
     "drizzle-orm": "^0.38.4",
+    "eslint": "^9.18.0",
     "hono": "^4.6.18",
     "lucide-react": "^0.474.0",
     "next": "^15.1.6",
@@ -42,7 +43,9 @@
     "build:scripts": "swc scripts -d dist --config-file .swcrc",
     "start:scripts": "bun ./dist/scripts/index.js",
     "build": "tsc && swc src -d dist --config-file .swcrc",
-    "dev": "concurrently \"tsc -w --preserveWatchOutput\" \"swc src -d dist --config-file .swcrc -w\""
+    "dev": "concurrently \"tsc -w --preserveWatchOutput\" \"swc src -d dist --config-file .swcrc -w\"",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "type": "module",
   "dependencies": {

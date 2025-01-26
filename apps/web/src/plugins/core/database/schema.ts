@@ -1,5 +1,5 @@
-import * as config from "./schema/config";
+import * as config from './schema/config';
 
 export default {
-  ...config
+  ...config,
 };

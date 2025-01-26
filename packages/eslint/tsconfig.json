@@ -9,7 +9,6 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-
     "composite": false,
     "removeComments": true,
     "noImplicitAny": false,

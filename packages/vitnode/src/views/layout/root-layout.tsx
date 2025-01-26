@@ -1,12 +1,13 @@
-import React from "react";
-import { getMessages } from "next-intl/server";
-import { NextIntlClientProvider } from "next-intl";
-import { RootProvider } from "./provider";
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
+import React from 'react';
+
+import { RootProvider } from './provider';
 
 export const RootLayout = async ({
   children,
   className,
-  params
+  params,
 }: {
   children: React.ReactNode;
   className: string;

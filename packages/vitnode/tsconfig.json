@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "eslint-config-typescript-vitnode/tsconfig.json",
+  "extends": "eslint-config-typescript-vitnode/tsconfig",
   "compilerOptions": {
     "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -21,6 +21,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "eslint.config.mjs"],
   "include": ["src", "scripts"]
 }

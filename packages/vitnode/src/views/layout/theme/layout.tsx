@@ -1,4 +1,4 @@
-import { HeaderLayout } from "./header";
+import { HeaderLayout } from './header';
 
 export const ThemeLayout = ({ children }: { children: React.ReactNode }) => {
   return (
