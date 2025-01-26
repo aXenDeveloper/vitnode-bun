@@ -1,4 +1,4 @@
-import * as config from "./schema/config.js";
+import * as config from "./schema/config";
 
 export default {
   ...config

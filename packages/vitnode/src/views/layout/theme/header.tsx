@@ -1,4 +1,4 @@
-import { ThemeSwitcher } from "@/components/switchers/theme-switcher.js";
+import { ThemeSwitcher } from "@/components/switchers/theme-switcher";
 
 export const HeaderLayout = () => {
   return (

@@ -1,5 +1,5 @@
 import { drizzle } from "drizzle-orm/postgres-js";
-import schema from "./schema.js";
+import schema from "./schema";
 
 export const DATABASE_ENVS = {
   host: process.env.DB_HOST ?? "localhost",

@@ -1,5 +1,11 @@
 import { drizzle } from "drizzle-orm/postgres-js";
-import schema from "./schema.js";
+import schema from "./schema";
+import * as dotenv from "dotenv";
+import { join } from "path";
+
+dotenv.config({
+  path: join(process.cwd(), "..", "..", ".env")
+});
 
 export const DATABASE_ENVS = {
   host: process.env.DB_HOST ?? "localhost",

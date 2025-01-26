@@ -1,7 +1,7 @@
 import React from "react";
 import { getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
-import { RootProvider } from "./provider.js";
+import { RootProvider } from "./provider";
 
 export const RootLayout = async ({
   children,
