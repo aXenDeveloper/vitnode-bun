@@ -20,13 +20,12 @@ const getPluginsPath = () => {
 };
 
 if (process.argv[2] === 'prepare') {
-  console.log(`${initMessage} Preparing files...`);
-  void prepareFiles({ pluginsPath: getPluginsPath() });
-  console.log(`${initMessage} \x1b[32mFiles prepared successfully.\x1b[0m`);
+  void prepareFiles({ pluginsPath: getPluginsPath(), initMessage });
 } else if (process.argv[2] === 'init') {
-  await prepareDatabase({ initMessage });
+  void prepareDatabase({ initMessage });
 } else {
   console.log(
     `${initMessage} \x1b[31mCommand not found: "${process.argv[2] ?? ''}"\x1b[0m`,
   );
+  process.exit(1);
 }

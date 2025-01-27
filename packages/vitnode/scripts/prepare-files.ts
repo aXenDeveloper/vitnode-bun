@@ -1,11 +1,7 @@
 /* eslint-disable no-console */
 import { existsSync } from 'fs';
 import { cp, mkdir } from 'fs/promises';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import { join } from 'path';
 
 const copyDatabase = async (pluginsPath: string) => {
   const databasePath = join(__dirname, '..', '..', 'src', 'database');
@@ -37,8 +33,13 @@ const copyDatabase = async (pluginsPath: string) => {
 
 export const prepareFiles = async ({
   pluginsPath,
+  initMessage,
 }: {
+  initMessage: string;
   pluginsPath: string;
 }) => {
+  console.log(`${initMessage} [1/1] Preparing files...`);
   await copyDatabase(pluginsPath);
+  console.log(`${initMessage} \x1b[32mFiles prepared successfully.\x1b[0m`);
+  process.exit(0);
 };

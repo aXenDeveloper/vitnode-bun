@@ -1,6 +1,8 @@
 import { clientDb } from '@/database/client';
+import { core_users } from '@/database/schema/users';
 import { removeSpecialCharacters } from '@/functions/special-characters';
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
+import { and, eq } from 'drizzle-orm';
 import { HTTPException } from 'hono/http-exception';
 
 import { passwordModel } from './models/password';
@@ -56,13 +58,15 @@ users.openapi(
     } = c.req.valid('json');
     const name = removeSpecialCharacters(nameFromBody);
     const encryptPassword = await passwordModel.encryptPassword(password);
-    // eslint-disable-next-line no-console
-    console.log({ encryptPassword });
 
-    const checkIfUserExist = await clientDb.query.core_users.findMany({
-      where: (table, { eq, and }) =>
-        and(eq(table.email, email), eq(table.name, name)),
-    });
+    const checkIfUserExist = await clientDb
+      .select({
+        email: core_users.email,
+        name: core_users.name,
+      })
+      .from(core_users)
+      .where(and(eq(core_users.email, email), eq(core_users.name, name)));
+
     const findEmail = checkIfUserExist.find(user => user.email === email);
     if (findEmail) {
       throw new HTTPException(400, {

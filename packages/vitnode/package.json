@@ -21,27 +21,28 @@
     "next-intl": "4.0.0-beta-67507cc",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "tsup": "^8.3.6",
     "typescript": "^5.7.3"
   },
   "bin": {
-    "vitnode": "./dist/scripts/scripts.js"
+    "vitnode": "./dist/scripts/scripts.cjs"
   },
   "exports": {
     "./api/config": {
       "import": "./dist/src/api/config.js",
-      "default": "./dist/src/api/config.js",
-      "types": "./dist/src/api/config.d.ts"
+      "types": "./dist/src/api/config.d.ts",
+      "default": "./dist/src/api/config.js"
     },
     "./*": {
       "import": "./dist/src/*.js",
-      "default": "./dist/src/*.js",
-      "types": "./dist/src/*.d.ts"
+      "types": "./dist/src/*.d.ts",
+      "default": "./dist/src/*.js"
     },
     "./config/next.config": "./config/next.config.ts"
   },
   "scripts": {
-    "build:scripts": "swc scripts -d dist --config-file .swcrc",
-    "start:scripts": "bun ./dist/scripts/index.js",
+    "build:scripts": "tsup",
+    "start:scripts": "bun ./dist/scripts/scripts.js",
     "build": "tsc && swc src -d dist --config-file .swcrc",
     "dev": "concurrently \"tsc -w --preserveWatchOutput\" \"swc src -d dist --config-file .swcrc -w\"",
     "lint": "eslint .",

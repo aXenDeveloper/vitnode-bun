@@ -1,5 +1,11 @@
 /* eslint-disable no-console */
+
+import { clientDb } from '@/database/client.js';
+
 import { runInteractiveShellCommand } from './run-interactive-shell-command.js';
+import { core_config } from '@/database/schema/config.js';
+import { count } from 'drizzle-orm';
+import { core_languages } from '@/database/schema/languages.js';
 
 export const generateDatabaseMigrations = async () => {
   try {
@@ -20,13 +26,45 @@ export const runMigrations = async () => {
   }
 };
 
+export const initialDataForDatabase = async () => {
+  const [config] = await clientDb.select().from(core_config).limit(1);
+  if (!config) {
+    await clientDb.insert(core_config).values([{}]);
+  } else {
+    await clientDb.update(core_config).set({
+      restart_server: false,
+    });
+  }
+
+  const [languageCount] = await clientDb
+    .select({
+      count: count(),
+    })
+    .from(core_languages);
+  if (languageCount.count === 0) {
+    await clientDb.insert(core_languages).values([
+      {
+        code: 'en',
+        name: 'English (USA)',
+        default: true,
+        protected: true,
+        timezone: 'America/New_York',
+      },
+    ]);
+  }
+};
+
 export const prepareDatabase = async ({
   initMessage,
 }: {
   initMessage: string;
 }) => {
-  console.log(`${initMessage} [1/2] Generate migrations...`);
+  console.log(`${initMessage} [1/3] Generate migrations...`);
   await generateDatabaseMigrations();
-  console.log(`${initMessage} [2/2] Run migrations...`);
+  console.log(`${initMessage} [2/3] Run migrations...`);
   await runMigrations();
+  console.log(`${initMessage} [3/3] Insert initial data...`);
+  await initialDataForDatabase();
+  console.log(`${initMessage} \x1b[32mDatabase prepared successfully.\x1b[0m`);
+  process.exit(0);
 };

@@ -61,6 +61,7 @@ export default [
       '.turbo',
       '.next',
       'global.d.ts',
+      'tsup.config.ts',
     ],
   },
   {
