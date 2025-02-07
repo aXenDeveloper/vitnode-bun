@@ -1,10 +1,10 @@
 import { ThemeSwitcher } from '@/components/switchers/theme-switcher';
 
-export const HeaderLayout = () => {
+export const HeaderLayout = ({ logo }: { logo: React.ReactNode }) => {
   return (
     <header className="bg-background/75 top-0 z-20 w-full border-b backdrop-blur sm:sticky">
       <div className="container mx-auto flex items-center p-4">
-        <div>logo</div>
+        {logo}
 
         <div className="ml-auto">
           <ThemeSwitcher />

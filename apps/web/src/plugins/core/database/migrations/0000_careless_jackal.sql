@@ -15,7 +15,7 @@ CREATE TABLE "core_config" (
 );
 --> statement-breakpoint
 CREATE TABLE "core_groups" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"protected" boolean DEFAULT false NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE "core_groups" (
 );
 --> statement-breakpoint
 CREATE TABLE "core_languages" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"code" varchar(32) NOT NULL,
 	"name" varchar(255) NOT NULL,
 	"timezone" varchar(255) DEFAULT 'UTC' NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE "core_languages" (
 );
 --> statement-breakpoint
 CREATE TABLE "core_languages_words" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY NOT NULL,
 	"language_code" varchar NOT NULL,
 	"plugin_code" varchar(50) NOT NULL,
 	"item_id" integer NOT NULL,
@@ -54,19 +54,19 @@ CREATE TABLE "core_languages_words" (
 );
 --> statement-breakpoint
 CREATE TABLE "core_files_avatars" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY NOT NULL,
 	"dir_folder" varchar(255) NOT NULL,
 	"file_name" varchar(255) NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"file_size" integer NOT NULL,
 	"mimetype" varchar(255) NOT NULL,
 	"extension" varchar(32) NOT NULL,
-	"user_id" integer,
+	"user_id" uuid,
 	CONSTRAINT "core_files_avatars_user_id_unique" UNIQUE("user_id")
 );
 --> statement-breakpoint
 CREATE TABLE "core_users" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY NOT NULL,
 	"name_seo" varchar(255) NOT NULL,
 	"name" varchar(255) NOT NULL,
 	"email" varchar(255) NOT NULL,
@@ -75,7 +75,7 @@ CREATE TABLE "core_users" (
 	"newsletter" boolean DEFAULT false NOT NULL,
 	"avatar_color" varchar(6) NOT NULL,
 	"email_verified" boolean DEFAULT false NOT NULL,
-	"group_id" integer NOT NULL,
+	"group_id" uuid NOT NULL,
 	"birthday" timestamp,
 	"ip_address" varchar(40) NOT NULL,
 	"language" varchar(5) DEFAULT 'en' NOT NULL,
@@ -85,8 +85,8 @@ CREATE TABLE "core_users" (
 );
 --> statement-breakpoint
 CREATE TABLE "core_users_confirm_emails" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"user_id" integer NOT NULL,
+	"id" uuid PRIMARY KEY NOT NULL,
+	"user_id" uuid NOT NULL,
 	"token" varchar(100) NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"expires" timestamp NOT NULL,
@@ -94,8 +94,8 @@ CREATE TABLE "core_users_confirm_emails" (
 );
 --> statement-breakpoint
 CREATE TABLE "core_users_forgot_password" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"user_id" integer NOT NULL,
+	"id" uuid PRIMARY KEY NOT NULL,
+	"user_id" uuid NOT NULL,
 	"token" varchar(100) NOT NULL,
 	"ip_address" varchar(40) NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
@@ -113,8 +113,8 @@ CREATE TABLE "core_users_sso" (
 );
 --> statement-breakpoint
 CREATE TABLE "core_users_sso_tokens" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"user_id" integer NOT NULL,
+	"id" uuid PRIMARY KEY NOT NULL,
+	"user_id" uuid NOT NULL,
 	"provider" varchar(100) NOT NULL,
 	"provider_id" varchar(255) NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,

@@ -1,4 +1,5 @@
-import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
+import { createApiRoute } from '@/api/helpers/route';
+import { OpenAPIHono, z } from '@hono/zod-openapi';
 
 export const showApi = new OpenAPIHono();
 
@@ -8,9 +9,14 @@ export const showMiddlewareObj = z.object({
   plugins: z.array(z.string()),
 });
 
-const route = createRoute({
+const route = createApiRoute({
   method: 'get',
-  path: '/',
+  path: '/{id}',
+  request: {
+    params: z.object({
+      id: z.string(),
+    }),
+  },
   responses: {
     200: {
       content: {

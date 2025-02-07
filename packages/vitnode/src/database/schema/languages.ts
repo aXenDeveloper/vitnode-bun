@@ -4,7 +4,7 @@ import { index, pgTable } from 'drizzle-orm/pg-core';
 export const core_languages = pgTable(
   'core_languages',
   t => ({
-    id: t.serial().primaryKey(),
+    id: t.uuid().defaultRandom().primaryKey(),
     code: t.varchar({ length: 32 }).notNull().unique(),
     name: t.varchar({ length: 255 }).notNull(),
     timezone: t.varchar({ length: 255 }).notNull().default('UTC'),
@@ -25,7 +25,7 @@ export const core_languages = pgTable(
 export const core_languages_words = pgTable(
   'core_languages_words',
   t => ({
-    id: t.serial().primaryKey(),
+    id: t.uuid().primaryKey(),
     language_code: t
       .varchar()
       .notNull()

@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 
 import { clientDb } from '@/database/client.js';
+import { core_config } from '@/database/schema/config.js';
+import { core_languages } from '@/database/schema/languages.js';
+import { count } from 'drizzle-orm';
 
 import { runInteractiveShellCommand } from './run-interactive-shell-command.js';
-import { core_config } from '@/database/schema/config.js';
-import { count } from 'drizzle-orm';
-import { core_languages } from '@/database/schema/languages.js';
 
 export const generateDatabaseMigrations = async () => {
   try {

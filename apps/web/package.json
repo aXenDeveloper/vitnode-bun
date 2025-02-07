@@ -15,32 +15,25 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "@hono/zod-openapi": "^0.18.3",
-    "drizzle-orm": "^0.38.4",
-    "hono": "^4.6.18",
-    "lucide-react": "^0.474.0",
-    "next": "^15.1.6",
-    "next-intl": "4.0.0-beta-67507cc",
+    "@hono/zod-openapi": "^0.18.4",
+    "drizzle-kit": "^0.30.4",
+    "drizzle-orm": "^0.39.2",
+    "hono": "^4.7.0",
+    "next": "15.1.6",
+    "next-intl": "4.0.0-beta-c4c5986",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "vitnode": "workspace:*"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.0.0",
-    "@types/node": "^22.10.9",
+    "@tailwindcss/postcss": "^4.0.4",
+    "@types/node": "^22.13.1",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
-    "dotenv": "^16.4.7",
-    "drizzle-kit": "^0.30.2",
-    "eslint": "^9.18.0",
-    "postgres": "^3.4.5",
-    "tailwindcss": "^4.0.0",
+    "eslint-config-typescript-vitnode": "workspace:*",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^4.0.4",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.7.3"
-  },
-  "main": "index.js",
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": ""
+  }
 }

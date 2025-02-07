@@ -1,5 +1,6 @@
 {
   "core": {
-    "test": "Test PL"
+    "test": "Test PL",
+    "about": "About PL"
   }
 }
