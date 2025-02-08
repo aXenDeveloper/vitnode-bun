@@ -15,7 +15,7 @@ export const appCoreTypeEnum = pgEnum('vitnode_core_app_type', [
 ]);
 
 // export const core_config_files = pgTable("core_config_files", (t) => ({
-//   id: t.uuid().primaryKey(),
+//       id: t.uuid().defaultRandom().primaryKey(),
 //   extension: t.varchar({ length: 32 }).notNull(),
 //   file_alt: t.varchar({ length: 255 }),
 //   file_name: t.varchar({ length: 255 }).notNull(),

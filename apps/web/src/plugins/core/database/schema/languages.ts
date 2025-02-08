@@ -25,7 +25,7 @@ export const core_languages = pgTable(
 export const core_languages_words = pgTable(
   'core_languages_words',
   t => ({
-    id: t.uuid().primaryKey(),
+    id: t.uuid().defaultRandom().primaryKey(),
     language_code: t
       .varchar()
       .notNull()
@@ -33,7 +33,7 @@ export const core_languages_words = pgTable(
         onDelete: 'cascade',
       }),
     plugin_code: t.varchar({ length: 50 }).notNull(),
-    item_id: t.integer().notNull(),
+    item_id: t.varchar().notNull(),
     value: t.text().notNull(),
     table_name: t.varchar({ length: 255 }).notNull(),
     variable: t.varchar({ length: 255 }).notNull(),

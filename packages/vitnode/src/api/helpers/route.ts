@@ -1,14 +1,24 @@
 import { createRoute as createRouteHono, RouteConfig } from '@hono/zod-openapi';
 
-import { sessionMiddleware } from '../middleware/session';
+import { sessionMiddleware } from '../middlewares/session';
 
-export function createApiRoute({
+type RoutingPath<P extends string> =
+  P extends `${infer Head}/{${infer Param}}${infer Tail}`
+    ? `${Head}/:${Param}${RoutingPath<Tail>}`
+    : P;
+
+export function createApiRoute<
+  R extends Omit<RouteConfig, 'path'> & {
+    path: string;
+  },
+>({
   isAuth,
   ...routeConfig
-}: Omit<RouteConfig, 'path'> & {
+}: R & {
   isAuth?: boolean;
-  path: string;
-}): ReturnType<typeof createRouteHono> {
+}): R & {
+  getRoutingPath: () => RoutingPath<R['path']>;
+} {
   const middlewareFromConfig = routeConfig.middleware
     ? Array.isArray(routeConfig.middleware)
       ? routeConfig.middleware
@@ -18,5 +28,7 @@ export function createApiRoute({
   return createRouteHono({
     middleware: isAuth ? [sessionMiddleware(), ...middlewareFromConfig] : [],
     ...routeConfig,
-  });
+  }) as R & {
+    getRoutingPath: () => RoutingPath<R['path']>;
+  };
 }

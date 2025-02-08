@@ -2,7 +2,11 @@
 
 import { clientDb } from '@/database/client.js';
 import { core_config } from '@/database/schema/config.js';
-import { core_languages } from '@/database/schema/languages.js';
+import { core_groups } from '@/database/schema/groups.js';
+import {
+  core_languages,
+  core_languages_words,
+} from '@/database/schema/languages.js';
 import { count } from 'drizzle-orm';
 
 import { runInteractiveShellCommand } from './run-interactive-shell-command.js';
@@ -27,7 +31,15 @@ export const runMigrations = async () => {
 };
 
 export const initialDataForDatabase = async () => {
-  const [config] = await clientDb.select().from(core_config).limit(1);
+  const [[config], [groupCount]] = await Promise.all([
+    clientDb.select().from(core_config).limit(1),
+    clientDb
+      .select({
+        count: count(),
+      })
+      .from(core_groups)
+      .limit(1),
+  ]);
   if (!config) {
     await clientDb.insert(core_config).values([{}]);
   } else {
@@ -51,6 +63,78 @@ export const initialDataForDatabase = async () => {
         timezone: 'America/New_York',
       },
     ]);
+  }
+
+  if (groupCount.count === 0) {
+    const [guestGroup] = await clientDb
+      .insert(core_groups)
+      .values({
+        protected: true,
+        guest: true,
+        files_allow_upload: false,
+      })
+      .returning();
+
+    await clientDb.insert(core_languages_words).values({
+      language_code: 'en',
+      plugin_code: 'core',
+      item_id: guestGroup.id,
+      value: 'Guest',
+      table_name: 'core_groups',
+      variable: 'name',
+    });
+
+    const [memberGroup] = await clientDb
+      .insert(core_groups)
+      .values({
+        protected: true,
+        default: true,
+      })
+      .returning();
+
+    await clientDb.insert(core_languages_words).values({
+      language_code: 'en',
+      plugin_code: 'core',
+      item_id: memberGroup.id,
+      value: 'Member',
+      table_name: 'core_groups',
+      variable: 'name',
+    });
+
+    const [moderatorGroup] = await clientDb
+      .insert(core_groups)
+      .values({
+        protected: true,
+        color: 'hsl(122, 80%, 45%)',
+      })
+      .returning();
+
+    await clientDb.insert(core_languages_words).values({
+      language_code: 'en',
+      plugin_code: 'core',
+      item_id: moderatorGroup.id,
+      value: 'Moderator',
+      table_name: 'core_groups',
+      variable: 'name',
+    });
+
+    const [adminGroup] = await clientDb
+      .insert(core_groups)
+      .values({
+        protected: true,
+        root: true,
+        color: 'hsl(0, 100%, 50%)',
+      })
+      .returning();
+
+    await clientDb.insert(core_languages_words).values({
+      language_code: 'en',
+      plugin_code: 'core',
+      item_id: adminGroup.id,
+      value: 'Administrator',
+      table_name: 'core_groups',
+      variable: 'name',
+    });
   }
 };
 

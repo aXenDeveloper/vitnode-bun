@@ -1,6 +1,5 @@
 // import * as dotenv from 'dotenv';
 import { drizzle } from 'drizzle-orm/postgres-js';
-import { join } from 'path';
 
 // dotenv.config({
 //   path: join(process.cwd(), '..', '..', '.env'),

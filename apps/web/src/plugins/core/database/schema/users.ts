@@ -7,7 +7,7 @@ import { core_languages } from './languages';
 export const core_users = pgTable(
   'core_users',
   t => ({
-    id: t.uuid().primaryKey(),
+    id: t.uuid().defaultRandom().primaryKey(),
     name_seo: t.varchar({ length: 255 }).notNull().unique(),
     name: t.varchar({ length: 255 }).notNull().unique(),
     email: t.varchar({ length: 255 }).notNull().unique(),
@@ -42,10 +42,6 @@ export const core_users_relations = relations(core_users, ({ one, many }) => ({
     fields: [core_users.group_id],
     references: [core_groups.id],
   }),
-  avatar: one(core_files_avatars, {
-    fields: [core_users.id],
-    references: [core_files_avatars.user_id],
-  }),
   language: one(core_languages, {
     fields: [core_users.language],
     references: [core_languages.code],
@@ -71,7 +67,7 @@ export const core_users_sso = pgTable('core_users_sso', t => ({
 export const core_users_sso_tokens = pgTable(
   'core_users_sso_tokens',
   t => ({
-    id: t.uuid().primaryKey(),
+    id: t.uuid().defaultRandom().primaryKey(),
     user_id: t
       .uuid()
       .references(() => core_users.id, {
@@ -101,36 +97,10 @@ export const core_users_sso_tokens_relations = relations(
   }),
 );
 
-export const core_files_avatars = pgTable('core_files_avatars', t => ({
-  id: t.uuid().primaryKey(),
-  dir_folder: t.varchar({ length: 255 }).notNull(),
-  file_name: t.varchar({ length: 255 }).notNull(),
-  created_at: t.timestamp().notNull().defaultNow(),
-  file_size: t.integer().notNull(),
-  mimetype: t.varchar({ length: 255 }).notNull(),
-  extension: t.varchar({ length: 32 }).notNull(),
-  user_id: t
-    .uuid()
-    .references(() => core_users.id, {
-      onDelete: 'cascade',
-    })
-    .unique(),
-}));
-
-export const core_files_avatars_relations = relations(
-  core_files_avatars,
-  ({ one }) => ({
-    user: one(core_users, {
-      fields: [core_files_avatars.user_id],
-      references: [core_users.id],
-    }),
-  }),
-);
-
 export const core_users_confirm_emails = pgTable(
   'core_users_confirm_emails',
   t => ({
-    id: t.uuid().primaryKey(),
+    id: t.uuid().defaultRandom().primaryKey(),
     user_id: t
       .uuid()
       .references(() => core_users.id, {
@@ -156,7 +126,7 @@ export const core_users_confirm_emails_relations = relations(
 export const core_users_forgot_password = pgTable(
   'core_users_forgot_password',
   t => ({
-    id: t.uuid().primaryKey(),
+    id: t.uuid().defaultRandom().primaryKey(),
     user_id: t
       .uuid()
       .references(() => core_users.id, {

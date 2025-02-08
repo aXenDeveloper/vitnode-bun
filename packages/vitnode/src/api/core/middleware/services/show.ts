@@ -6,7 +6,6 @@ export const showApi = new OpenAPIHono();
 export const showMiddlewareObj = z.object({
   languages_code_default: z.string(),
   last_updated: z.date(),
-  plugins: z.array(z.string()),
 });
 
 const route = createApiRoute({
@@ -33,7 +32,6 @@ showApi.openapi(route, c => {
   const json: z.infer<typeof showMiddlewareObj> = {
     languages_code_default: 'en',
     last_updated: new Date(),
-    plugins: ['core', 'admin'],
   };
 
   return c.json(json);

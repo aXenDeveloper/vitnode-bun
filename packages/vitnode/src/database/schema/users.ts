@@ -7,7 +7,7 @@ import { core_languages } from './languages';
 export const core_users = pgTable(
   'core_users',
   t => ({
-    id: t.uuid().primaryKey(),
+    id: t.uuid().defaultRandom().primaryKey(),
     name_seo: t.varchar({ length: 255 }).notNull().unique(),
     name: t.varchar({ length: 255 }).notNull().unique(),
     email: t.varchar({ length: 255 }).notNull().unique(),
@@ -67,7 +67,7 @@ export const core_users_sso = pgTable('core_users_sso', t => ({
 export const core_users_sso_tokens = pgTable(
   'core_users_sso_tokens',
   t => ({
-    id: t.uuid().primaryKey(),
+    id: t.uuid().defaultRandom().primaryKey(),
     user_id: t
       .uuid()
       .references(() => core_users.id, {
@@ -100,7 +100,7 @@ export const core_users_sso_tokens_relations = relations(
 export const core_users_confirm_emails = pgTable(
   'core_users_confirm_emails',
   t => ({
-    id: t.uuid().primaryKey(),
+    id: t.uuid().defaultRandom().primaryKey(),
     user_id: t
       .uuid()
       .references(() => core_users.id, {
@@ -126,7 +126,7 @@ export const core_users_confirm_emails_relations = relations(
 export const core_users_forgot_password = pgTable(
   'core_users_forgot_password',
   t => ({
-    id: t.uuid().primaryKey(),
+    id: t.uuid().defaultRandom().primaryKey(),
     user_id: t
       .uuid()
       .references(() => core_users.id, {
