@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 
-export const passwordModel = {
+export const PasswordModel = {
   async encryptPassword(password: string): Promise<string> {
     return new Promise((resolve, reject) => {
       const salt = crypto.randomBytes(8).toString('hex');

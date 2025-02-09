@@ -1,10 +1,8 @@
 import type { NextConfig } from 'next';
-import createNextIntlPlugin from 'next-intl/plugin';
-
-const withNextIntl = createNextIntlPlugin();
+import { vitNodeNextConfig } from 'vitnode/config/next.config';
 
 const nextConfig: NextConfig = {
   /* config options here */
 };
 
-export default withNextIntl(nextConfig);
+export default vitNodeNextConfig(nextConfig);

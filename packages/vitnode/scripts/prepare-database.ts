@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import { clientDb } from '@/database/client.js';
+import { dbClient } from '@/database/client.js';
 import { core_config } from '@/database/schema/config.js';
 import { core_groups } from '@/database/schema/groups.js';
 import {
@@ -32,8 +32,8 @@ export const runMigrations = async () => {
 
 export const initialDataForDatabase = async () => {
   const [[config], [groupCount]] = await Promise.all([
-    clientDb.select().from(core_config).limit(1),
-    clientDb
+    dbClient.select().from(core_config).limit(1),
+    dbClient
       .select({
         count: count(),
       })
@@ -41,20 +41,20 @@ export const initialDataForDatabase = async () => {
       .limit(1),
   ]);
   if (!config) {
-    await clientDb.insert(core_config).values([{}]);
+    await dbClient.insert(core_config).values([{}]);
   } else {
-    await clientDb.update(core_config).set({
+    await dbClient.update(core_config).set({
       restart_server: false,
     });
   }
 
-  const [languageCount] = await clientDb
+  const [languageCount] = await dbClient
     .select({
       count: count(),
     })
     .from(core_languages);
   if (languageCount.count === 0) {
-    await clientDb.insert(core_languages).values([
+    await dbClient.insert(core_languages).values([
       {
         code: 'en',
         name: 'English (USA)',
@@ -66,7 +66,7 @@ export const initialDataForDatabase = async () => {
   }
 
   if (groupCount.count === 0) {
-    const [guestGroup] = await clientDb
+    const [guestGroup] = await dbClient
       .insert(core_groups)
       .values({
         protected: true,
@@ -75,7 +75,7 @@ export const initialDataForDatabase = async () => {
       })
       .returning();
 
-    await clientDb.insert(core_languages_words).values({
+    await dbClient.insert(core_languages_words).values({
       language_code: 'en',
       plugin_code: 'core',
       item_id: guestGroup.id,
@@ -84,7 +84,7 @@ export const initialDataForDatabase = async () => {
       variable: 'name',
     });
 
-    const [memberGroup] = await clientDb
+    const [memberGroup] = await dbClient
       .insert(core_groups)
       .values({
         protected: true,
@@ -92,7 +92,7 @@ export const initialDataForDatabase = async () => {
       })
       .returning();
 
-    await clientDb.insert(core_languages_words).values({
+    await dbClient.insert(core_languages_words).values({
       language_code: 'en',
       plugin_code: 'core',
       item_id: memberGroup.id,
@@ -101,7 +101,7 @@ export const initialDataForDatabase = async () => {
       variable: 'name',
     });
 
-    const [moderatorGroup] = await clientDb
+    const [moderatorGroup] = await dbClient
       .insert(core_groups)
       .values({
         protected: true,
@@ -109,7 +109,7 @@ export const initialDataForDatabase = async () => {
       })
       .returning();
 
-    await clientDb.insert(core_languages_words).values({
+    await dbClient.insert(core_languages_words).values({
       language_code: 'en',
       plugin_code: 'core',
       item_id: moderatorGroup.id,
@@ -118,7 +118,7 @@ export const initialDataForDatabase = async () => {
       variable: 'name',
     });
 
-    const [adminGroup] = await clientDb
+    const [adminGroup] = await dbClient
       .insert(core_groups)
       .values({
         protected: true,
@@ -127,7 +127,7 @@ export const initialDataForDatabase = async () => {
       })
       .returning();
 
-    await clientDb.insert(core_languages_words).values({
+    await dbClient.insert(core_languages_words).values({
       language_code: 'en',
       plugin_code: 'core',
       item_id: adminGroup.id,

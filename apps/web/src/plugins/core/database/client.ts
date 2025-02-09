@@ -14,6 +14,6 @@ export const DATABASE_ENVS = {
   ssl: process.env.DB_SSL ? process.env.DB_SSL === 'true' : false,
 };
 
-export const clientDb = drizzle({
+export const dbClient = drizzle({
   connection: DATABASE_ENVS,
 });
