@@ -1,6 +1,12 @@
 {
   "core": {
-    "test": "Test EN",
-    "about": "About EN"
+    "global": {
+      "register": "Register"
+    },
+    "auth": {
+      "sign_up": {
+        "desc": "You already have an account? <link>Sign in</link>."
+      }
+    }
   }
 }

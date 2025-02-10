@@ -94,12 +94,6 @@
   }
 }
 
-@layer utilities {
-  body {
-    font-family: Arial, Helvetica, sans-serif;
-  }
-}
-
 @layer base {
   :root:not(.dark) {
     --background: 0 0% 100%;
