@@ -1,4 +1,4 @@
-import { NextIntlClientProvider } from 'next-intl';
+import { Locale, NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import React from 'react';
 
@@ -8,10 +8,11 @@ export const RootLayout = async ({
   children,
   className,
   params,
-}: {
+  ...paramsForRoot
+}: React.ComponentProps<typeof RootProvider> & {
   children: React.ReactNode;
-  className: string;
-  params: Promise<{ locale: string }>;
+  className?: string;
+  params: Promise<{ locale: Locale }>;
 }) => {
   const { locale } = await params;
   const messages = await getMessages();
@@ -20,7 +21,7 @@ export const RootLayout = async ({
     <html lang={locale} suppressHydrationWarning>
       <body className={className}>
         <NextIntlClientProvider messages={messages}>
-          <RootProvider>{children}</RootProvider>
+          <RootProvider {...paramsForRoot}>{children}</RootProvider>
         </NextIntlClientProvider>
       </body>
     </html>

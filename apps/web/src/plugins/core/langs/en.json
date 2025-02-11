@@ -1,11 +1,35 @@
 {
   "core": {
     "global": {
-      "register": "Register"
+      "register": "Register",
+      "login": "Login",
+      "save": "Save",
+      "cancel": "Cancel",
+      "optional": "Optional"
     },
     "auth": {
       "sign_up": {
-        "desc": "You already have an account? <link>Sign in</link>."
+        "desc": "You already have an account? <link>Sign in</link>.",
+        "username": {
+          "label": "Username",
+          "min_length": "Username must be at least 3 characters long.",
+          "max_length": "Username must be at most 32 characters long."
+        },
+        "email": {
+          "label": "Email",
+          "invalid": "Invalid email address."
+        },
+        "password": {
+          "label": "Password",
+          "invalid": "Password is too weak.",
+          "requirements": {
+            "label": "Password should contain:",
+            "min_length": "At least 8 characters",
+            "uppercase": "At least one uppercase letter",
+            "number": "At least one number",
+            "special_char": "At least one special character"
+          }
+        }
       }
     }
   }

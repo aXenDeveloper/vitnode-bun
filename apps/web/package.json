@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@hono/zod-openapi": "^0.18.4",
+    "@hookform/resolvers": "^4.0.0",
     "drizzle-kit": "^0.30.4",
     "drizzle-orm": "^0.39.3",
     "hono": "^4.7.0",
@@ -23,7 +24,9 @@
     "next-intl": "4.0.0-beta-ca3fcd5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "vitnode": "workspace:*"
+    "react-hook-form": "^7.54.2",
+    "vitnode": "workspace:*",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.6",
