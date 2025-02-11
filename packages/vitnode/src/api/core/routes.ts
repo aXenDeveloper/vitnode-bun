@@ -4,5 +4,4 @@ import { middleware } from './middleware/routes';
 import { users } from './users/routes';
 
 export const core = new OpenAPIHono();
-core.route('/middleware', middleware);
-core.route('/users', users);
+core.route('/middleware', middleware).route('/users', users);

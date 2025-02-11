@@ -3,4 +3,4 @@ import { core } from 'vitnode/api/core/routes';
 
 export const plugins = new OpenAPIHono();
 
-plugins.route('/core', core);
+plugins.route('/', core);

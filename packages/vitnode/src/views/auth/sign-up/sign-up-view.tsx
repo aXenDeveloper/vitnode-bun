@@ -16,7 +16,11 @@ export const SignUpView = () => {
         </h1>
         <CardDescription>
           {t.rich('desc', {
-            link: text => <Link href="/login">{text}</Link>,
+            link: text => (
+              <Link className="text-primary" href="/login">
+                {text}
+              </Link>
+            ),
           })}
         </CardDescription>
       </div>

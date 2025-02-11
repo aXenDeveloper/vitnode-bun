@@ -17,6 +17,8 @@ import {
   useFormState,
 } from 'react-hook-form';
 
+import { Button } from './button';
+
 function Form<
   TFieldValues extends FieldValues,
   TContext = unknown,
@@ -201,8 +203,26 @@ function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
   );
 }
 
+const FormButtonSubmit = ({
+  className,
+  ...props
+}: React.ComponentProps<typeof Button>) => {
+  const { formState } = useFormContext();
+
+  return (
+    <Button
+      className={cn('w-full', className)}
+      disabled={!formState.isValid}
+      isLoading={formState.isSubmitting}
+      type="submit"
+      {...props}
+    />
+  );
+};
+
 export {
   Form,
+  FormButtonSubmit,
   FormControl,
   FormDescription,
   FormField,

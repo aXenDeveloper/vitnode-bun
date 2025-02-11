@@ -19,7 +19,10 @@ export const useFormSignUp = () => {
       .regex(/\d/, invalidPassword)
       .regex(/\W|_/, invalidPassword)
       .default(''),
-    terms: z.boolean().default(false),
+    terms: z
+      .boolean()
+      .refine(value => value, t('terms.required'))
+      .default(false),
     newsletter: z.boolean().default(false).optional(),
   });
 

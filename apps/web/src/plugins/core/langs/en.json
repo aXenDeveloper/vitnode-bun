@@ -5,11 +5,13 @@
       "login": "Login",
       "save": "Save",
       "cancel": "Cancel",
-      "optional": "Optional"
+      "optional": "Optional",
+      "loading": "Loading..."
     },
     "auth": {
       "sign_up": {
         "desc": "You already have an account? <link>Sign in</link>.",
+        "submit": "Sign up",
         "username": {
           "label": "Username",
           "min_length": "Username must be at least 3 characters long.",
@@ -29,6 +31,15 @@
             "number": "At least one number",
             "special_char": "At least one special character"
           }
+        },
+        "terms": {
+          "label": "Accept terms and conditions",
+          "required": "You must accept the terms and conditions.",
+          "desc": "You agree to our <link>Legal documents & Policies</link>."
+        },
+        "newsletter": {
+          "label": "Newsletter",
+          "desc": "Receive the latest news and updates."
         }
       }
     }

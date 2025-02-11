@@ -1,7 +1,10 @@
 import { cn } from '@/utils/cn';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
+import { useTranslations } from 'next-intl';
 import * as React from 'react';
+
+import { Loader } from './loader';
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 ring-ring/10 dark:ring-ring/20 dark:outline-ring/40 outline-ring/50 focus-visible:ring-4 focus-visible:outline-1 aria-invalid:focus-visible:ring-0",
@@ -38,12 +41,34 @@ function Button({
   variant,
   size,
   asChild = false,
+  isLoading,
+  loadingText,
   ...props
 }: React.ComponentProps<'button'> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
+    isLoading?: boolean;
+    loadingText?: string;
   }) {
+  const t = useTranslations('core.global');
   const Comp = asChild ? Slot : 'button';
+
+  if (isLoading) {
+    const text = loadingText ?? t('loading');
+
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        {...props}
+        aria-label={text}
+        disabled
+        type="button"
+      >
+        <Loader small />
+        <span className="truncate">{size !== 'icon' && text}</span>
+      </Comp>
+    );
+  }
 
   return (
     <Comp
