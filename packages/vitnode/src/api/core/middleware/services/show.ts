@@ -11,6 +11,7 @@ export const showMiddlewareObj = z.object({
 const route = createApiRoute({
   method: 'get',
   path: '/{id}',
+  plugin: 'core',
   request: {
     params: z.object({
       id: z.string(),

@@ -2,13 +2,12 @@ import { createApiRoute } from '@/api/helpers/route';
 import { UserModel } from '@/api/models/user/user';
 import { OpenAPIHono, z } from '@hono/zod-openapi';
 
-export const users = new OpenAPIHono();
 const nameRegex = /^(?!.* {2})[\p{L}\p{N}._@ -]*$/u;
 
 const route = createApiRoute({
   method: 'post',
   description: 'Create a new user',
-  tags: ['Core'],
+  plugin: 'core',
   path: '/sign_up',
   request: {
     body: {
@@ -49,8 +48,55 @@ const route = createApiRoute({
   },
 });
 
-users.openapi(route, async c => {
-  const data = await UserModel.signUp(c.req.valid('json'), c.req);
-
-  return c.json({ id: data.id });
+const route2 = createApiRoute({
+  method: 'get',
+  description: 'Create a new user',
+  plugin: 'core',
+  path: '/sign_up2',
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: z.object({
+            id: z.string(),
+          }),
+        },
+      },
+      description: 'User created',
+    },
+  },
 });
+
+const route3 = createApiRoute({
+  method: 'delete',
+  description: 'Create a new user',
+  plugin: 'core',
+  path: '/sign_up',
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: z.object({
+            id: z.string(),
+          }),
+        },
+      },
+      description: 'User created',
+    },
+  },
+});
+
+export const users = new OpenAPIHono()
+  .openapi(route, async c => {
+    const data = await UserModel.signUp(c.req.valid('json'), c.req);
+
+    return c.json({ id: data.id });
+  })
+  .openapi(route2, c => {
+    return c.json({ id: '123' });
+  })
+  .openapi(route3, c => {
+    return c.json({ id: '123' });
+  });
+
+export type UsersTypes = typeof users;

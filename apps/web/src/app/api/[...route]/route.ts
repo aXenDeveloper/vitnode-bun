@@ -1,17 +1,12 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { handle } from 'hono/vercel';
-import { honoConfig } from 'vitnode/api/config';
-
-import { plugins } from './plugins';
+import { VitNodeAPIInit } from 'vitnode/api/config';
+import { corePlugin } from 'vitnode/api/core/routes';
 
 const app = new OpenAPIHono().basePath('/api');
-honoConfig({ app });
-app.route('/', plugins);
-
-app.get('/hello', c => {
-  return c.json({
-    message: 'welcome',
-  });
+VitNodeAPIInit({
+  app,
+  plugins: [corePlugin()],
 });
 
 export const GET = handle(app);

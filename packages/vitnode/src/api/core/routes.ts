@@ -1,7 +1,19 @@
-import { OpenAPIHono } from '@hono/zod-openapi';
-
+import { createPlugin } from '../helpers/plugin';
 import { middleware } from './middleware/routes';
 import { users } from './users/routes';
 
-export const core = new OpenAPIHono();
-core.route('/middleware', middleware).route('/users', users);
+export const corePlugin = () => {
+  return createPlugin({
+    name: 'core',
+    modules: [
+      {
+        name: 'middleware',
+        routes: middleware,
+      },
+      {
+        name: 'users',
+        routes: users,
+      },
+    ],
+  });
+};

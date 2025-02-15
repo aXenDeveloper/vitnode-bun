@@ -1,0 +1,31 @@
+---
+title: Debugging
+description: ddd
+---
+
+## React Scan
+
+VitNode has to implement a [React Scan](https://react-scan.com/) feature that will show you re-rendering components in real-time. This feature will help you to optimize your React application.
+
+To enable **React Scan**, you need to pass `debug` props in `RootLayout` component:
+
+```tsx title="src/app/[locale]/layout.tsx"
+export default function LocaleLayout({
+  children,
+  ...props
+}: Pick<React.ComponentProps<typeof RootLayout>, 'children' | 'params'>) {
+  return (
+    <RootLayout
+      className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      // [!code ++]
+      debug
+      theme={{
+        defaultTheme: 'dark',
+      }}
+      {...props}
+    >
+      {children}
+    </RootLayout>
+  );
+}
+```

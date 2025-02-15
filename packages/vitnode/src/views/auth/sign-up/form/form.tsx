@@ -1,5 +1,6 @@
 'use client';
 
+import { UsersTypes } from '@/api/core/users/routes';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
@@ -12,10 +13,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { fetcher } from '@/utils/fetcher';
 import { Link } from '@/utils/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { PasswordInput } from '../../components/password-input';
@@ -36,9 +39,19 @@ export const FormSignUp = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // eslint-disable-next-line no-console
     console.log(values);
+
+    await fetcher<UsersTypes>({
+      path: '/sign_up',
+      method: 'post',
+      input: {
+        json: values,
+      },
+    });
+
+    toast('Event has been created.');
   };
 
   return (

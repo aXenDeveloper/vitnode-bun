@@ -4,10 +4,10 @@
   "devDependencies": {
     "@hono/swagger-ui": "^0.5.0",
     "@hono/zod-openapi": "^0.18.4",
-    "@hookform/resolvers": "^4.0.0",
+    "@hookform/resolvers": "^4.1.0",
     "@swc/cli": "^0.6.0",
-    "@swc/core": "^1.10.15",
-    "@types/node": "^22.13.1",
+    "@swc/core": "^1.10.16",
+    "@types/node": "^22.13.4",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "chokidar": "^4.0.3",
@@ -15,17 +15,18 @@
     "dotenv": "^16.4.7",
     "drizzle-kit": "^0.30.4",
     "drizzle-orm": "^0.39.3",
-    "eslint": "^9.20.0",
-    "hono": "^4.7.0",
+    "eslint": "^9.20.1",
+    "hono": "^4.7.1",
     "lucide-react": "^0.475.0",
-    "next": "^15.1.6",
+    "next": "^15.1.7",
     "next-intl": "4.0.0-beta-ca3fcd5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
+    "sonner": "^1.7.4",
     "tsup": "^8.3.6",
     "typescript": "^5.7.3",
-    "zod": "^3.24.1"
+    "zod": "^3.24.2"
   },
   "bin": {
     "vitnode": "./dist/scripts/scripts.cjs"
@@ -63,6 +64,7 @@
     "next-themes": "^0.4.4",
     "postgres": "^3.4.5",
     "react-scan": "^0.1.3",
-    "tailwind-merge": "^3.0.1"
+    "tailwind-merge": "^3.0.1",
+    "vaul": "^1.1.2"
   }
 }

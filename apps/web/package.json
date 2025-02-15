@@ -16,25 +16,26 @@
   },
   "dependencies": {
     "@hono/zod-openapi": "^0.18.4",
-    "@hookform/resolvers": "^4.0.0",
+    "@hookform/resolvers": "^4.1.0",
     "drizzle-kit": "^0.30.4",
     "drizzle-orm": "^0.39.3",
-    "hono": "^4.7.0",
-    "next": "15.1.6",
+    "hono": "^4.7.1",
+    "next": "^15.1.7",
     "next-intl": "4.0.0-beta-ca3fcd5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
+    "sonner": "^1.7.4",
     "vitnode": "workspace:*",
-    "zod": "^3.24.1"
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.6",
-    "@types/node": "^22.13.1",
+    "@types/node": "^22.13.4",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "eslint-config-typescript-vitnode": "workspace:*",
-    "postcss": "^8.5.1",
+    "postcss": "^8.5.2",
     "tailwindcss": "^4.0.6",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.7.3"
