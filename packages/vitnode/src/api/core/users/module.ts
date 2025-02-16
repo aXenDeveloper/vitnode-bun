@@ -1,3 +1,4 @@
+import { createModuleApi } from '@/api/helpers/module';
 import { createApiRoute } from '@/api/helpers/route';
 import { UserModel } from '@/api/models/user/user';
 import { OpenAPIHono, z } from '@hono/zod-openapi';
@@ -86,17 +87,21 @@ const route3 = createApiRoute({
   },
 });
 
-export const users = new OpenAPIHono()
-  .openapi(route, async c => {
-    const data = await UserModel.signUp(c.req.valid('json'), c.req);
+export const usersModule = createModuleApi({
+  name: 'users',
+  plugin: 'core',
+  routes: new OpenAPIHono()
+    .openapi(route, async c => {
+      const data = await UserModel.signUp(c.req.valid('json'), c.req);
 
-    return c.json({ id: data.id });
-  })
-  .openapi(route2, c => {
-    return c.json({ id: '123' });
-  })
-  .openapi(route3, c => {
-    return c.json({ id: '123' });
-  });
+      return c.json({ id: data.id });
+    })
+    .openapi(route2, c => {
+      return c.json({ id: '123' });
+    })
+    .openapi(route3, c => {
+      return c.json({ id: '123' });
+    }),
+});
 
-export type UsersTypes = typeof users;
+export type UsersTypes = typeof usersModule;

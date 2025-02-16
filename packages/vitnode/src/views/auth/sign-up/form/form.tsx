@@ -1,6 +1,6 @@
 'use client';
 
-import { UsersTypes } from '@/api/core/users/routes';
+import { UsersTypes } from '@/api/core/users/module';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
@@ -45,6 +45,8 @@ export const FormSignUp = () => {
 
     await fetcher<UsersTypes>({
       path: '/sign_up',
+      plugin: 'core',
+      module: 'users',
       method: 'post',
       input: {
         json: values,
