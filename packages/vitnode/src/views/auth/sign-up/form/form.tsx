@@ -1,6 +1,5 @@
 'use client';
 
-import { UsersTypes } from '@/api/core/users/module';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
@@ -13,7 +12,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { fetcher } from '@/utils/fetcher';
 import { Link } from '@/utils/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
@@ -22,6 +20,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { PasswordInput } from '../../components/password-input';
+import { mutationApi } from './hooks/mutation-api';
 import { useFormSignUp } from './hooks/use-form';
 
 export const FormSignUp = () => {
@@ -40,17 +39,8 @@ export const FormSignUp = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // eslint-disable-next-line no-console
-    console.log(values);
-
-    await fetcher<UsersTypes>({
-      path: '/sign_up',
-      plugin: 'core',
-      module: 'users',
-      method: 'post',
-      input: {
-        json: values,
-      },
+    await mutationApi({
+      json: values,
     });
 
     toast('Event has been created.');

@@ -37,6 +37,6 @@
     "eslint-plugin-react-compiler": "19.0.0-beta-decd7b8-20250118",
     "eslint-plugin-react-hooks": "^5.1.0",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "typescript-eslint": "^8.24.0"
+    "typescript-eslint": "^8.24.1"
   }
 }
