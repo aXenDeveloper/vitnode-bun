@@ -1,6 +1,6 @@
 import { ThemeSwitcher } from '@/components/switchers/theme-switcher';
 import { Button } from '@/components/ui/button';
-import { Link } from '@/utils/navigation';
+import { Link } from '@/helpers/navigation';
 import { useTranslations } from 'next-intl';
 
 export const HeaderLayout = ({ logo }: { logo: React.ReactNode }) => {

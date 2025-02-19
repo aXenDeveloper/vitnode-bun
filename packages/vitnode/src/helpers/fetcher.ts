@@ -1,5 +1,6 @@
 import { ModuleApi } from '@/api/helpers/module';
 import { Schema } from 'hono/types';
+import { CONFIG } from './config';
 
 type MethodKeys<T> = Extract<keyof T, `$${string}`>;
 type InputProp<I> = [keyof I] extends [never]
@@ -26,10 +27,13 @@ export async function fetcher<T extends ModuleApi<Schema, string, string>>({
   path,
   method,
   input: inputFromArgs,
+  plugin,
+  module,
 }: FetcherConfig<T>) {
   const input: null | { json?: object } = inputFromArgs ?? null;
+  const url = new URL(`/api${path}/${plugin}/${module}`, CONFIG.backend.origin);
 
-  const res = await fetch(path, {
+  const res = await fetch(url.href, {
     method,
     body: JSON.stringify(input?.json),
   });

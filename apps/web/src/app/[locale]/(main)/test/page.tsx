@@ -1,5 +1,5 @@
 import { useTranslations } from 'next-intl';
-import { Link } from 'vitnode/utils/navigation';
+import { Link } from 'vitnode/helpers/navigation';
 
 export default function Home() {
   const t = useTranslations('core.global');

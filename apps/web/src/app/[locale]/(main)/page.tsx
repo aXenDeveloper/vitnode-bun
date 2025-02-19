@@ -1,4 +1,4 @@
-import { Link } from 'vitnode/utils/navigation';
+import { Link } from 'vitnode/helpers/navigation';
 
 export default function Home() {
   return (

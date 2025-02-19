@@ -1,7 +1,7 @@
 'use server';
 
-import { UsersTypes } from '@/api/core/users/module';
-import { fetcher, FetcherInput } from '@/utils/fetcher';
+import { UsersTypes } from '@/api/core/users/routes';
+import { fetcher, FetcherInput } from '@/helpers/fetcher';
 
 export const mutationApi = async (
   input: FetcherInput<UsersTypes, '/sign_up', 'post'>,

@@ -1,4 +1,4 @@
-import { cn } from '@/utils/cn';
+import { cn } from '@/helpers/cn';
 import { Loader2 } from 'lucide-react';
 
 export const Loader = ({

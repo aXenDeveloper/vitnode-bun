@@ -1,5 +1,5 @@
 import { CardDescription } from '@/components/ui/card';
-import { Link } from '@/utils/navigation';
+import { Link } from '@/helpers/navigation';
 import { useTranslations } from 'next-intl';
 
 import { FormSignUp } from './form/form';

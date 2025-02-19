@@ -1,0 +1,17 @@
+---
+title: Plugins
+description: sss
+---
+
+VitNode allows you to create your own plugin with own API endpoints and views. This is a powerful feature that allows you to extend the functionality of your application and share it with others.
+
+## API Plugin
+
+```ts title="plugins/{name_plugin}/src/api/plugin.ts"
+import { createPluginApi } from 'vitnode/api/helpers/plugin';
+
+export const corePlugin = createPluginApi({
+  name: 'core',
+  modules: [],
+});
+```
