@@ -4,7 +4,7 @@ import { dbClient } from '@/database/client';
 import { core_groups } from '@/database/schema/groups';
 import { core_users } from '@/database/schema/users';
 import { removeSpecialCharacters } from '@/functions/special-characters';
-import { and, count, eq } from 'drizzle-orm';
+import { and, count, eq, or } from 'drizzle-orm';
 import { HonoRequest } from 'hono';
 import { HTTPException } from 'hono/http-exception';
 
@@ -83,7 +83,7 @@ export const signUp = async (
     })
     .from(core_users)
     .where(
-      and(
+      or(
         eq(core_users.email, email),
         eq(core_users.name_seo, convertToNameSEO),
       ),

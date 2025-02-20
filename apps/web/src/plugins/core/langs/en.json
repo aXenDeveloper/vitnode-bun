@@ -6,7 +6,11 @@
       "save": "Save",
       "cancel": "Cancel",
       "optional": "Optional",
-      "loading": "Loading..."
+      "loading": "Loading...",
+      "errors": {
+        "title": "Oops! Something went wrong.",
+        "internal_server_error": "Internal server error."
+      }
     },
     "auth": {
       "sign_up": {
@@ -15,11 +19,13 @@
         "username": {
           "label": "Username",
           "min_length": "Username must be at least 3 characters long.",
-          "max_length": "Username must be at most 32 characters long."
+          "max_length": "Username must be at most 32 characters long.",
+          "exists": "Username already exists."
         },
         "email": {
           "label": "Email",
-          "invalid": "Invalid email address."
+          "invalid": "Invalid email address.",
+          "exists": "Email already exists."
         },
         "password": {
           "label": "Password",

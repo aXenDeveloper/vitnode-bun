@@ -25,6 +25,7 @@ import { useFormSignUp } from './hooks/use-form';
 
 export const FormSignUp = () => {
   const t = useTranslations('core.auth.sign_up');
+  const tError = useTranslations('core.global.errors');
   const { formSchema } = useFormSignUp();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -39,11 +40,39 @@ export const FormSignUp = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    await mutationApi({
+    const mutation = await mutationApi({
       json: values,
     });
+    if (!mutation?.message) {
+      return toast('Event has been created.');
+    }
 
-    toast('Event has been created.');
+    const errorMessages = {
+      'Email already exists': {
+        field: 'email',
+        message: t('email.exists'),
+      },
+      'Name already exists': {
+        field: 'name',
+        message: t('username.exists'),
+      },
+    } as const;
+
+    const errorConfig =
+      errorMessages[mutation.message as keyof typeof errorMessages];
+
+    if (errorConfig) {
+      form.setError(errorConfig.field, {
+        type: 'manual',
+        message: errorConfig.message,
+      });
+
+      return;
+    }
+
+    toast.error(tError('title'), {
+      description: tError('internal_server_error'),
+    });
   };
 
   return (

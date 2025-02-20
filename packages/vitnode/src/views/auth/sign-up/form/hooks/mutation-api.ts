@@ -6,11 +6,12 @@ import { fetcher, FetcherInput } from '@/helpers/fetcher';
 export const mutationApi = async (
   input: FetcherInput<UsersTypes, '/sign_up', 'post'>,
 ) => {
-  await fetcher<UsersTypes>({
-    path: '/sign_up',
+  const data = await fetcher<UsersTypes>({
     plugin: 'core',
     module: 'users',
-    method: 'post',
-    input: input,
-  });
+  }).sign_up.$post(input);
+
+  if (data.status !== 200) {
+    return { message: await data.text() };
+  }
 };

@@ -78,7 +78,7 @@ const route3 = createApiRoute({
       content: {
         'application/json': {
           schema: z.object({
-            id: z.string(),
+            test123: z.string(),
           }),
         },
       },
@@ -100,7 +100,7 @@ export const usersModule = createModuleApi({
       return c.json({ id: '123' });
     })
     .openapi(route3, c => {
-      return c.json({ id: '123' });
+      return c.json({ test123: '123' });
     }),
 });
 

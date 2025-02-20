@@ -1,7 +1,13 @@
 import type { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
+import * as dotenv from 'dotenv';
+import { join } from 'path';
 
 const withNextIntl = createNextIntlPlugin('./src/i18n.ts');
+
+dotenv.config({
+  path: join(process.cwd(), '..', '..', '.env'),
+});
 
 export const vitNodeNextConfig = (config: NextConfig): NextConfig =>
   withNextIntl({

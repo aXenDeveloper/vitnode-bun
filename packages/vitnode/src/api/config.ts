@@ -3,6 +3,7 @@ import { OpenAPIHono } from '@hono/zod-openapi';
 import { Context, Env, Schema } from 'hono';
 import { cors } from 'hono/cors';
 import { csrf } from 'hono/csrf';
+import { HTTPException } from 'hono/http-exception';
 
 import { PluginAPI } from './helpers/plugin';
 
@@ -44,6 +45,16 @@ export function VitNodeAPIInit<T extends Schema>({
   app.use(cors(corsOptions));
   app.use(csrf(csrfOptions));
   app.get('/swagger', swaggerUI({ url: `/api/swagger/doc` }));
+
+  app.onError(error => {
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
+    return new Response('Internal Server Error', {
+      status: 500,
+    });
+  });
 
   plugins.map(root => {
     app.route(`/${root.name}`, root.app);

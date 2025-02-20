@@ -8,8 +8,8 @@ export const getUserIp = (req: HonoRequest): string => {
 
   // eslint-disable-next-line no-console
   console.error(
-    'No IP found in request. Please check if you passed `x-forwarded-for` header.',
+    '\x1b[31m[VitNode]\x1b[31m No IP found in request. Please check if you passed `x-forwarded-for` header.\x1b[0m',
   );
 
-  return '127.0.0.1';
+  return '0.0.0.1';
 };

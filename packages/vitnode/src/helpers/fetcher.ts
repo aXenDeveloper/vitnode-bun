@@ -1,42 +1,50 @@
 import { ModuleApi } from '@/api/helpers/module';
-import { Schema } from 'hono/types';
+import { ClientRequest, ClientRequestOptions, hc } from 'hono/client';
+import { HonoBase } from 'hono/hono-base';
+import { Env, Schema } from 'hono/types';
+import { UnionToIntersection } from 'hono/utils/types';
+
 import { CONFIG } from './config';
 
-type MethodKeys<T> = Extract<keyof T, `$${string}`>;
-type InputProp<I> = [keyof I] extends [never]
-  ? { input?: never }
-  : { input: I }; // Required to make input optional when it's not present
-
-type FetcherConfig<T extends ModuleApi<Schema, string, string>> =
-  T extends ModuleApi<infer S, string, string>
+type PathToChain<
+  Path extends string,
+  E extends Schema,
+  Original extends string = Path,
+> = Path extends `/${infer P}`
+  ? PathToChain<P, E, Path>
+  : Path extends `${infer P}/${infer R}`
     ? {
-        [P in keyof S]: {
-          [K in MethodKeys<S[P]>]: (S[P][K] extends { input: infer I }
-            ? InputProp<I>
-            : { input: never }) & {
-            method: K extends `$${infer U}` ? Lowercase<U> : never;
-            module: T['name'];
-            path: P;
-            plugin: T['plugin'];
-          };
-        }[MethodKeys<S[P]>];
-      }[keyof S]
+        [K in P]: PathToChain<R, E, Original>;
+      }
+    : Record<
+        Path extends '' ? 'index' : Path,
+        ClientRequest<E extends Record<string, unknown> ? E[Original] : never>
+      >;
+
+type Client<T> =
+  T extends HonoBase<Env, infer S, string>
+    ? S extends Record<infer K, Schema>
+      ? K extends string
+        ? PathToChain<K, S>
+        : never
+      : never
     : never;
 
-export async function fetcher<T extends ModuleApi<Schema, string, string>>({
-  path,
-  method,
-  input: inputFromArgs,
+export function fetcher<T extends ModuleApi<Schema, string, string>>({
   plugin,
   module,
-}: FetcherConfig<T>) {
-  const input: null | { json?: object } = inputFromArgs ?? null;
-  const url = new URL(`/api${path}/${plugin}/${module}`, CONFIG.backend.origin);
-
-  const res = await fetch(url.href, {
-    method,
-    body: JSON.stringify(input?.json),
+  options,
+}: {
+  module: T['name'];
+  options?: ClientRequestOptions;
+  plugin: T['plugin'];
+}): UnionToIntersection<Client<T['app']>> {
+  const url = new URL(`/api/${plugin}/${module}`, CONFIG.backend.origin);
+  const client = hc<T['app']>(url.href, {
+    ...options,
   });
+
+  return client as unknown as UnionToIntersection<Client<T['app']>>;
 }
 
 type SchemaOf<T extends ModuleApi<Schema, string, string>> =
