@@ -13,67 +13,14 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Link } from '@/helpers/navigation';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
 
 import { PasswordInput } from '../../components/password-input';
-import { mutationApi } from './hooks/mutation-api';
 import { useFormSignUp } from './hooks/use-form';
 
 export const FormSignUp = () => {
   const t = useTranslations('core.auth.sign_up');
-  const tError = useTranslations('core.global.errors');
-  const { formSchema } = useFormSignUp();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    mode: 'onBlur',
-    defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-      terms: false,
-      newsletter: false,
-    },
-  });
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const mutation = await mutationApi({
-      json: values,
-    });
-    if (!mutation?.message) {
-      return toast('Event has been created.');
-    }
-
-    const errorMessages = {
-      'Email already exists': {
-        field: 'email',
-        message: t('email.exists'),
-      },
-      'Name already exists': {
-        field: 'name',
-        message: t('username.exists'),
-      },
-    } as const;
-
-    const errorConfig =
-      errorMessages[mutation.message as keyof typeof errorMessages];
-
-    if (errorConfig) {
-      form.setError(errorConfig.field, {
-        type: 'manual',
-        message: errorConfig.message,
-      });
-
-      return;
-    }
-
-    toast.error(tError('title'), {
-      description: tError('internal_server_error'),
-    });
-  };
+  const { form, onSubmit } = useFormSignUp();
 
   return (
     <Form form={form} onSubmit={onSubmit}>

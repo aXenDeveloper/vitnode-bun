@@ -1,7 +1,11 @@
 import { cn } from '@/helpers/cn';
 import * as React from 'react';
 
-function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
+function Input({
+  className,
+  type = 'text',
+  ...props
+}: React.ComponentProps<'input'>) {
   return (
     <input
       className={cn(

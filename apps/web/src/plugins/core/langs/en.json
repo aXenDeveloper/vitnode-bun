@@ -47,6 +47,10 @@
           "label": "Newsletter",
           "desc": "Receive the latest news and updates."
         }
+      },
+      "sign_in": {
+        "desc": "Don't have an account? <link>Sign up</link>.",
+        "submit": "Sign in"
       }
     }
   }

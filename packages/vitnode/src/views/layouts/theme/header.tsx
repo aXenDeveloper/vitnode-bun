@@ -13,6 +13,9 @@ export const HeaderLayout = ({ logo }: { logo: React.ReactNode }) => {
 
         <div className="ml-auto flex items-center gap-2">
           <ThemeSwitcher />
+          <Button asChild variant="ghost">
+            <Link href="/login">{t('login')}</Link>
+          </Button>
           <Button asChild>
             <Link href="/register">{t('register')}</Link>
           </Button>
