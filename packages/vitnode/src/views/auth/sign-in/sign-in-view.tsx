@@ -19,7 +19,7 @@ export const SignInView = () => {
   const tGlobal = useTranslations('core.global');
 
   return (
-    <div className="mx-auto max-w-md px-4 py-10">
+    <div className="mx-auto max-w-md space-y-4 px-4 py-10">
       <div className="mb-10 space-y-2 text-center">
         <h1 className="text-3xl font-semibold leading-none tracking-tight">
           {tGlobal('login')}

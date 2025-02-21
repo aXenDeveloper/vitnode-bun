@@ -50,6 +50,12 @@
       },
       "sign_in": {
         "desc": "Don't have an account? <link>Sign up</link>.",
+        "errors": {
+          "access_denied": {
+            "title": "Invalid credentials",
+            "desc": "The email address or password was incorrect. Please try again (make sure your caps lock is off)."
+          }
+        },
         "submit": "Sign in"
       }
     }

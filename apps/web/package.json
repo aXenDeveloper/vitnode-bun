@@ -19,7 +19,7 @@
     "@hookform/resolvers": "^4.1.0",
     "drizzle-kit": "^0.30.4",
     "drizzle-orm": "^0.39.3",
-    "hono": "^4.7.1",
+    "hono": "^4.7.2",
     "next": "^15.1.7",
     "next-intl": "4.0.0-beta-ca3fcd5",
     "react": "^19.0.0",
@@ -30,14 +30,14 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.0.6",
+    "@tailwindcss/postcss": "^4.0.7",
     "@types/node": "^22.13.4",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "eslint": "^9.20.1",
     "eslint-config-typescript-vitnode": "workspace:*",
-    "postcss": "^8.5.2",
-    "tailwindcss": "^4.0.6",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.0.7",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.7.3"
   }
