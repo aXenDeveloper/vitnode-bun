@@ -5,7 +5,7 @@ import { cors } from 'hono/cors';
 import { csrf } from 'hono/csrf';
 import { HTTPException } from 'hono/http-exception';
 
-import { PluginAPI } from './helpers/plugin';
+import { PluginAPI } from './utils/plugin';
 
 interface CORSOptions {
   allowHeaders?: string[];

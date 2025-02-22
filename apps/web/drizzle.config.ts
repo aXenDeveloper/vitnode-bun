@@ -1,9 +1,10 @@
-import { DATABASE_ENVS } from '@/plugins/core/database/client';
+import { DATABASE_ENVS } from '@/database/client';
 import { defineConfig } from 'drizzle-kit';
 
 export default defineConfig({
-  out: './src/plugins/core/database/migrations/',
-  schema: './src/plugins/**/database/schema/*',
+  out: './src/database/migrations/',
+  // schema: ['./src/plugins/**/database/schema/*'],
+  schema: ['./src/database/schema/*'],
   dialect: 'postgresql',
   dbCredentials: DATABASE_ENVS,
 });

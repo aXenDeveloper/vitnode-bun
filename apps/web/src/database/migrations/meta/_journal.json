@@ -29,6 +29,27 @@
       "when": 1739033542717,
       "tag": "0003_tricky_paper_doll",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1740148955908,
+      "tag": "0004_magical_eternity",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1740222763080,
+      "tag": "0005_silky_havok",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1740224513898,
+      "tag": "0006_salty_northstar",
+      "breakpoints": true
     }
   ]
 }

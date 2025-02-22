@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Link } from '@/helpers/navigation';
+import { Link } from '@/utils/navigation';
 import { useTranslations } from 'next-intl';
 
 import { PasswordInput } from '../../components/password-input';

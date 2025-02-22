@@ -1,0 +1,7 @@
+{
+  "name": "vitnode-blog",
+  "version": "0.2.0",
+  "description": "Backend wrapper for VitNode projects",
+  "author": "VitNode",
+  "homepage": "https://vitnode.com"
+}

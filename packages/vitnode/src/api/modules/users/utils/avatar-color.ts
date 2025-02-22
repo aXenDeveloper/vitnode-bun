@@ -1,4 +1,4 @@
-import { convertColor } from '@/functions/colors';
+import { convertColor } from '@/utils/colors';
 
 const getHashOfString = (str: string) => {
   let hash = 0;

@@ -1,4 +1,4 @@
-import { createModuleApi } from '@/api/helpers/module';
+import { createModuleApi } from '@/api/utils/module';
 import { OpenAPIHono } from '@hono/zod-openapi';
 
 import { signInRoute } from './sign-in/route';

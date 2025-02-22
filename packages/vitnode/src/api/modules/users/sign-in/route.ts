@@ -1,15 +1,13 @@
-import { createApiRoute } from '@/api/helpers/route';
+import { createApiRoute } from '@/api/utils/route';
 import { UserModel } from '@/api/models/user/user';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { z } from 'zod';
 
-const nameRegex = /^(?!.* {2})[\p{L}\p{N}._@ -]*$/u;
-
 const route = createApiRoute({
   method: 'post',
-  description: 'Create a new user',
+  description: 'Sign in with email and password',
   plugin: 'core',
-  path: '/sign_up',
+  path: '/sign_in',
   request: {
     body: {
       required: true,
@@ -19,17 +17,9 @@ const route = createApiRoute({
             email: z.string().email().toLowerCase().openapi({
               example: 'test@test.com',
             }),
-            name: z
-              .string()
-              .openapi({ example: 'test' })
-              .min(3)
-              .refine(val => nameRegex.test(val), {
-                message: 'Invalid name',
-              }),
             password: z.string().min(8).openapi({
               example: 'Test123!',
             }),
-            newsletter: z.boolean().default(false).optional(),
           }),
         },
       },
@@ -44,13 +34,18 @@ const route = createApiRoute({
           }),
         },
       },
-      description: 'User created',
+      description: 'User signed in',
+    },
+    403: {
+      description: 'Access Denied',
     },
   },
 });
 
-export const signUpRoute = new OpenAPIHono().openapi(route, async c => {
-  const data = await UserModel.signUp(c.req.valid('json'), c.req);
+export const signInRoute = new OpenAPIHono().openapi(route, async c => {
+  const data = await UserModel.signInWithPassword(c.req.valid('json'), c.req);
+  console.log(c.res.headers);
+  console.log(c.req.header('User-Agent'));
 
   return c.json({ id: data.id });
 });

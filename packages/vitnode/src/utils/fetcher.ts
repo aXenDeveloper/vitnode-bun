@@ -1,8 +1,9 @@
-import { ModuleApi } from '@/api/helpers/module';
+import { ModuleApi } from '@/api/utils/module';
 import { ClientRequest, ClientRequestOptions, hc } from 'hono/client';
 import { HonoBase } from 'hono/hono-base';
 import { Env, Schema } from 'hono/types';
 import { UnionToIntersection } from 'hono/utils/types';
+import { cookies, headers } from 'next/headers';
 
 import { CONFIG } from './config';
 
@@ -30,7 +31,7 @@ type Client<T> =
       : never
     : never;
 
-export function fetcher<T extends ModuleApi<Schema, string, string>>({
+export async function fetcher<T extends ModuleApi<Schema, string, string>>({
   plugin,
   module,
   options,
@@ -38,10 +39,28 @@ export function fetcher<T extends ModuleApi<Schema, string, string>>({
   module: T['name'];
   options?: ClientRequestOptions;
   plugin: T['plugin'];
-}): UnionToIntersection<Client<T['app']>> {
+}): Promise<UnionToIntersection<Client<T['app']>>> {
   const url = new URL(`/api/${plugin}/${module}`, CONFIG.backend.origin);
+  const [nextInternalHeaders, cookie] = await Promise.all([
+    headers(),
+    cookies(),
+  ]);
+
+  const internalHeaders = {
+    Cookie: cookie.toString(),
+    ['user-agent']: nextInternalHeaders.get('user-agent') ?? 'node',
+    // ['x-forwarded-for']:
+    //   nextInternalHeaders.get('x-forwarded-for') ?? '0.0.0.0',
+    // ['x-real-ip']: nextInternalHeaders.get('x-real-ip') ?? '0.0.0.0',
+    // 'x-vitnode-user-language': cookie.get('NEXT_LOCALE')?.value ?? 'en',
+  };
+
   const client = hc<T['app']>(url.href, {
     ...options,
+    headers: {
+      ...internalHeaders,
+      ...options?.headers,
+    },
   });
 
   return client as unknown as UnionToIntersection<Client<T['app']>>;

@@ -1,15 +1,16 @@
 'use server';
 
-import { UsersTypes } from '@/api/core/users/routes';
-import { fetcher, FetcherInput } from '@/helpers/fetcher';
+import { UsersTypes } from '@/api/modules/users/users.module';
+import { fetcher, FetcherInput } from '@/utils/fetcher';
 
 export const mutationApi = async (
   input: FetcherInput<UsersTypes, '/sign_up', 'post'>,
 ) => {
-  const data = await fetcher<UsersTypes>({
+  const res = await fetcher<UsersTypes>({
     plugin: 'core',
     module: 'users',
-  }).sign_up.$post(input);
+  });
+  const data = await res.sign_up.$post(input);
 
   if (data.status !== 200) {
     return { message: await data.text() };

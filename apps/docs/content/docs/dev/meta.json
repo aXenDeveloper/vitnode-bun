@@ -3,5 +3,15 @@
   "description": "Make plugins and APIs",
   "icon": "Braces",
   "root": true,
-  "pages": ["index", "---Plugins---", "plugins", "..."]
+  "pages": [
+    "index",
+    "contribution",
+    "structure",
+    "---Plugins---",
+    "create-plugins",
+    "modules",
+    "routes",
+    "---APIs---",
+    "..."
+  ]
 }

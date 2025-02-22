@@ -11,7 +11,7 @@ const copyDatabase = async (pluginsPath: string) => {
     );
     process.exit(1);
   }
-  const destinationPath = join(pluginsPath, 'core', 'database');
+  const destinationPath = join(process.cwd(), 'src', 'database');
   if (!existsSync(destinationPath)) {
     await mkdir(destinationPath, { recursive: true });
   }

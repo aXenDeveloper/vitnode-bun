@@ -1,9 +1,9 @@
-import { generateAvatarColor } from '@/api/core/users/utils/avatar-color';
-import { getUserIp } from '@/api/helpers/get-user-ip';
+import { generateAvatarColor } from '@/api/modules/users/utils/avatar-color';
+import { getUserIp } from '@/api/utils/get-user-ip';
 import { dbClient } from '@/database/client';
 import { core_groups } from '@/database/schema/groups';
 import { core_users } from '@/database/schema/users';
-import { removeSpecialCharacters } from '@/functions/special-characters';
+import { removeSpecialCharacters } from '@/utils/special-characters';
 import { and, count, eq, or } from 'drizzle-orm';
 import { HonoRequest } from 'hono';
 import { HTTPException } from 'hono/http-exception';

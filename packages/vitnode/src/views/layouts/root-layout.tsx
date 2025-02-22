@@ -1,4 +1,4 @@
-import { CONFIG } from '@/helpers/config';
+import { CONFIG } from '@/utils/config';
 import { Locale, NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { Metadata } from 'next/dist/types';
