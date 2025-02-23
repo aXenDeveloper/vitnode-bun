@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { locales } from '@/middleware';
+import { locales } from '@/i18n';
 import { Geist, Geist_Mono } from 'next/font/google';
 import {
   generateMetadataRootLayout,
@@ -23,6 +23,8 @@ export const generateMetadata = (): Metadata => {
   });
 };
 
+export const generateStaticParams = () => locales.map(locale => ({ locale }));
+
 export default function LocaleLayout(
   props: Pick<React.ComponentProps<typeof RootLayout>, 'children' | 'params'>,
 ) {
@@ -36,8 +38,4 @@ export default function LocaleLayout(
       {...props}
     />
   );
-}
-
-export function generateStaticParams() {
-  return locales.map(locale => ({ locale }));
 }
