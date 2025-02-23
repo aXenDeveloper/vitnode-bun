@@ -9,9 +9,10 @@ import { mutationApi } from './mutation-api';
 
 export const useFormSignIn = () => {
   const [error, setError] = React.useState<'' | 'access_denied'>('');
-  const t = useTranslations('core.global.errors');
+  const t = useTranslations('core.auth.sign_in');
+  const tErrors = useTranslations('core.global.errors');
   const formSchema = z.object({
-    email: z.string().email(),
+    email: z.string().email({ message: t('email.invalid') }),
     password: z.string(),
   });
 
@@ -39,8 +40,8 @@ export const useFormSignIn = () => {
       return;
     }
 
-    toast.error(t('title'), {
-      description: t('internal_server_error'),
+    toast.error(tErrors('title'), {
+      description: tErrors('internal_server_error'),
     });
   };
 

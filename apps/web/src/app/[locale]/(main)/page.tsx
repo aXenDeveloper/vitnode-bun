@@ -12,7 +12,7 @@ export default async function Home({
 
   return (
     <div className="container mx-auto p-4">
-      <Link href="/test">{t('loading')}</Link>
+      <Link href="/admin">{t('loading')} + admin</Link>
     </div>
   );
 }

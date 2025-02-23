@@ -16,9 +16,8 @@ import { useTranslations } from 'next-intl';
 
 import { useFormSignIn } from './hooks/use-form';
 
-export const FormSignIn = () => {
+export const FormSignIn = ({ isAdmin }: { isAdmin?: boolean }) => {
   const t = useTranslations('core.auth.sign_in');
-  const tSignUp = useTranslations('core.auth.sign_up');
   const { form, onSubmit, error } = useFormSignIn();
 
   return (
@@ -37,7 +36,7 @@ export const FormSignIn = () => {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{tSignUp('email.label')}</FormLabel>
+              <FormLabel>{t('email.label')}</FormLabel>
               <FormControl>
                 <Input className="bg-card" type="email" {...field} />
               </FormControl>
@@ -51,7 +50,7 @@ export const FormSignIn = () => {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{tSignUp('password.label')}</FormLabel>
+              <FormLabel>{t('password')}</FormLabel>
               <FormControl>
                 <Input className="bg-card" type="password" {...field} />
               </FormControl>
