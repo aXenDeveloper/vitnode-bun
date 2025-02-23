@@ -6,8 +6,10 @@ import { Metadata } from 'next/dist/types';
 
 import { FormSignIn } from './form/form';
 
-export const generateMetadataSignInView = async (): Promise<Metadata> => {
-  const t = await getTranslations('core.global');
+export const generateMetadataSignInView = async (
+  locale: string,
+): Promise<Metadata> => {
+  const t = await getTranslations({ locale, namespace: 'core.global' });
 
   return {
     title: t('login'),

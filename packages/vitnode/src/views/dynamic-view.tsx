@@ -1,3 +1,4 @@
+import { setRequestLocale } from 'next-intl/server';
 import { Metadata } from 'next/dist/types';
 import { notFound } from 'next/navigation';
 
@@ -12,6 +13,7 @@ import {
 
 interface Props {
   params: Promise<{
+    locale: string;
     rest: string[];
   }>;
 }
@@ -19,19 +21,20 @@ interface Props {
 export const generateMetadataDynamicView = async ({
   params,
 }: Props): Promise<Metadata> => {
-  const { rest } = await params;
+  const { rest, locale } = await params;
   const path = rest.join('/');
 
   const views: Record<string, Promise<Metadata>> = {
-    register: generateMetadataSignUpView(),
-    login: generateMetadataSignInView(),
+    register: generateMetadataSignUpView(locale),
+    login: generateMetadataSignInView(locale),
   };
 
   return await views[path];
 };
 
 export const DynamicView = async ({ params }: Props) => {
-  const { rest } = await params;
+  const { rest, locale } = await params;
+  setRequestLocale(locale);
   const path = rest.join('/');
 
   const views = {

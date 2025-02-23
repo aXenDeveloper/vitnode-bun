@@ -1,3 +1,4 @@
+import { locales } from '@/middleware';
 import {
   DynamicView,
   generateMetadataDynamicView,
@@ -9,4 +10,8 @@ export default function CatchAllPage(
   props: React.ComponentProps<typeof DynamicView>,
 ) {
   return <DynamicView {...props} />;
+}
+
+export function generateStaticParams() {
+  return locales.map(locale => ({ locale }));
 }
