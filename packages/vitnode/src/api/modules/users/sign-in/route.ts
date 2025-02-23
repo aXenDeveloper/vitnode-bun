@@ -1,5 +1,6 @@
-import { createApiRoute } from '@/api/utils/route';
+import { SessionModel } from '@/api/models/session/session';
 import { UserModel } from '@/api/models/user/user';
+import { createApiRoute } from '@/api/utils/route';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { z } from 'zod';
 
@@ -44,8 +45,12 @@ const route = createApiRoute({
 
 export const signInRoute = new OpenAPIHono().openapi(route, async c => {
   const data = await UserModel.signInWithPassword(c.req.valid('json'), c.req);
-  console.log(c.res.headers);
-  console.log(c.req.header('User-Agent'));
+  const token = await SessionModel.createSession(
+    {
+      userId: data.id,
+    },
+    c,
+  );
 
   return c.json({ id: data.id });
 });

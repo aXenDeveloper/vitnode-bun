@@ -1,12 +1,12 @@
+import { signJWT } from '@/api/utils/jwt';
 import { dbClient } from '@/database/client';
 import { core_users } from '@/database/schema/users';
 import { eq } from 'drizzle-orm';
 import { HonoRequest } from 'hono';
 import { HTTPException } from 'hono/http-exception';
+import { decodeJwt, jwtDecrypt, jwtVerify } from 'jose';
 
 import { PasswordModel } from '../password';
-import { signJWT } from '@/api/utils/jwt';
-import { decodeJwt, jwtDecrypt, jwtVerify } from 'jose';
 
 export const signInWithPassword = async (
   {

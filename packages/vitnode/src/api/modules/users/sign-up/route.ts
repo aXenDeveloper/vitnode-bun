@@ -1,5 +1,5 @@
-import { createApiRoute } from '@/api/utils/route';
 import { UserModel } from '@/api/models/user/user';
+import { createApiRoute } from '@/api/utils/route';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { z } from 'zod';
 

@@ -1,7 +1,11 @@
 'use server';
 
 import { UsersTypes } from '@/api/modules/users/users.module';
-import { fetcher, FetcherInput } from '@/utils/fetcher';
+import {
+  fetcher,
+  FetcherInput,
+  handleSetCookiesFetcher,
+} from '@/utils/fetcher';
 
 export const mutationApi = async (
   input: FetcherInput<UsersTypes, '/sign_in', 'post'>,
@@ -10,7 +14,9 @@ export const mutationApi = async (
     plugin: 'core',
     module: 'users',
   });
+
   const data = await res.sign_in.$post(input);
+  await handleSetCookiesFetcher(data);
 
   if (data.status === 403) {
     return { message: 'access_denied' } as const;

@@ -16,4 +16,5 @@ export const CONFIG = {
   node_development: process.env.NODE_ENV === 'development',
   backend: urls.backend,
   frontend: urls.frontend,
+  cookie_session: 'vitnode-auth',
 };

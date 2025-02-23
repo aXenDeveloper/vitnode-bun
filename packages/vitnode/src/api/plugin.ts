@@ -1,5 +1,5 @@
-import { createPluginApi } from './utils/plugin';
 import { usersModule } from './modules/users/users.module';
+import { createPluginApi } from './utils/plugin';
 
 export default createPluginApi({
   name: 'core',

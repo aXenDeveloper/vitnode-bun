@@ -1,11 +1,18 @@
 import { ModuleApi } from '@/api/utils/module';
-import { ClientRequest, ClientRequestOptions, hc } from 'hono/client';
+import {
+  ClientRequest,
+  ClientRequestOptions,
+  ClientResponse,
+  hc,
+} from 'hono/client';
 import { HonoBase } from 'hono/hono-base';
-import { Env, Schema } from 'hono/types';
+import { Env, ResponseFormat, Schema } from 'hono/types';
+import { StatusCode } from 'hono/utils/http-status';
 import { UnionToIntersection } from 'hono/utils/types';
 import { cookies, headers } from 'next/headers';
 
 import { CONFIG } from './config';
+import { cookieFromStringToObject } from './cookie-from-string-to-object';
 
 type PathToChain<
   Path extends string,
@@ -49,9 +56,8 @@ export async function fetcher<T extends ModuleApi<Schema, string, string>>({
   const internalHeaders = {
     Cookie: cookie.toString(),
     ['user-agent']: nextInternalHeaders.get('user-agent') ?? 'node',
-    // ['x-forwarded-for']:
-    //   nextInternalHeaders.get('x-forwarded-for') ?? '0.0.0.0',
-    // ['x-real-ip']: nextInternalHeaders.get('x-real-ip') ?? '0.0.0.0',
+    ['x-forwarded-for']:
+      nextInternalHeaders.get('x-forwarded-for') ?? '0.0.0.0',
     // 'x-vitnode-user-language': cookie.get('NEXT_LOCALE')?.value ?? 'en',
   };
 
@@ -91,3 +97,27 @@ export type FetcherInput<
       : never
     : never;
 }[Extract<keyof SchemaOf<T>[P], `$${string}`>];
+
+export async function handleSetCookiesFetcher<
+  T,
+  U extends number = StatusCode,
+  F extends ResponseFormat = string,
+>(res: ClientResponse<T, U, F>) {
+  await Promise.all(
+    cookieFromStringToObject(res.headers.getSetCookie()).map(async cookie => {
+      const key = Object.keys(cookie)[0];
+      const value = Object.values(cookie)[0];
+
+      if (typeof value !== 'string' || typeof key !== 'string') return;
+
+      (await cookies()).set(key, value, {
+        domain: cookie.Domain,
+        path: cookie.Path,
+        expires: new Date(cookie.Expires),
+        secure: cookie.Secure,
+        httpOnly: cookie.HttpOnly,
+        sameSite: cookie.SameSite,
+      });
+    }),
+  );
+}

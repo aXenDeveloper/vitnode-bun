@@ -295,6 +295,8 @@ importers:
         specifier: ^3.24.2
         version: 3.24.2
 
+  plugins/blog: {}
+
 packages:
 
   '@alloc/quick-lru@5.2.0':

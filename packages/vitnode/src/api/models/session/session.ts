@@ -5,7 +5,9 @@ import {
   core_sessions,
   core_sessions_known_devices,
 } from '@/database/schema/sessions';
-import { HonoRequest } from 'hono';
+import { CONFIG } from '@/utils/config';
+import { Context, Env, Input } from 'hono';
+import { setCookie } from 'hono/cookie';
 import { HTTPException } from 'hono/http-exception';
 import { jwtVerify } from 'jose';
 
@@ -15,13 +17,8 @@ interface SessionJWTPayload {
 
 export const SessionModel = {
   createSession: async (
-    {
-      userId,
-      userAgent,
-    }: SessionJWTPayload & {
-      userAgent: string;
-    },
-    req: HonoRequest,
+    { userId }: SessionJWTPayload,
+    c: Context<Env, '/', Input>,
   ) => {
     const token = await signJWT(
       { userId },
@@ -31,8 +28,8 @@ export const SessionModel = {
     const [device] = await dbClient
       .insert(core_sessions_known_devices)
       .values({
-        ip_address: getUserIp(req),
-        user_agent: userAgent,
+        ip_address: getUserIp(c.req),
+        user_agent: c.req.header('User-Agent') ?? 'node',
       })
       .returning();
 
@@ -41,6 +38,14 @@ export const SessionModel = {
       user_id: userId,
       expires_at: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 days
       device_id: device.id,
+    });
+
+    setCookie(c, CONFIG.cookie_session, token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      path: '/',
+      domain: CONFIG.frontend.hostname,
     });
 
     return { token, deviceId: device.id };

@@ -25,6 +25,9 @@ export default async function Page(props: {
         sha: 'canary',
         path,
       }}
+      tableOfContent={{
+        style: 'clerk',
+      }}
       toc={page.data.toc}
       full={page.data.full}
     >
