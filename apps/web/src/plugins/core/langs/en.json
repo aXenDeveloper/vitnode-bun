@@ -12,6 +12,12 @@
         "internal_server_error": "Internal server error."
       }
     },
+    "not_found": {
+      "title": "Page Not Found",
+      "desc": "Oops! The page you're looking for doesn't exist.",
+      "back_home": "Back to home",
+      "go_back": "Go back"
+    },
     "auth": {
       "sign_up": {
         "desc": "You already have an account? <link>Sign in</link>.",

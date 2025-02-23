@@ -1,7 +1,5 @@
+import { NotFoundView } from 'vitnode/views/not-found/not-found';
+
 export default function NotFoundPage() {
-  return (
-    <div>
-      <div>Error! Not found!</div>
-    </div>
-  );
+  return <NotFoundView />;
 }

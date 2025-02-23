@@ -8,7 +8,7 @@ export const HeaderLayout = ({ logo }: { logo: React.ReactNode }) => {
 
   return (
     <header className="bg-background/75 top-0 z-20 w-full border-b backdrop-blur sm:sticky">
-      <div className="container mx-auto flex items-center p-4">
+      <div className="container mx-auto flex h-14 items-center px-4">
         <Link href="/">{logo}</Link>
 
         <div className="ml-auto flex items-center gap-2">
