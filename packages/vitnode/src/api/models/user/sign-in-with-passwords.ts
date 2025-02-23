@@ -1,23 +1,17 @@
-import { signJWT } from '@/api/utils/jwt';
 import { dbClient } from '@/database/client';
 import { core_users } from '@/database/schema/users';
 import { eq } from 'drizzle-orm';
-import { HonoRequest } from 'hono';
 import { HTTPException } from 'hono/http-exception';
-import { decodeJwt, jwtDecrypt, jwtVerify } from 'jose';
 
 import { PasswordModel } from '../password';
 
-export const signInWithPassword = async (
-  {
-    email,
-    password,
-  }: {
-    email: string;
-    password: string;
-  },
-  req: HonoRequest,
-) => {
+export const signInWithPassword = async ({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) => {
   const [user] = await dbClient
     .select({
       id: core_users.id,

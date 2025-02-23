@@ -1,6 +1,6 @@
 import { CONFIG } from '@/utils/config';
 import { Locale, NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { getMessages, setRequestLocale } from 'next-intl/server';
 import { Metadata } from 'next/dist/types';
 import React from 'react';
 
@@ -38,6 +38,7 @@ export const RootLayout = async ({
 }) => {
   const { locale } = await params;
   const messages = await getMessages();
+  setRequestLocale(locale);
 
   return (
     <html lang={locale} suppressHydrationWarning>

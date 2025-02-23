@@ -1,12 +1,12 @@
 import { Button } from '@/components/ui/button';
 import { Link } from '@/utils/navigation';
 import { ArrowLeft } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
 import { BackButtonNotFound } from './back-button';
 
-export const NotFoundView = () => {
-  const t = useTranslations('core.not_found');
+export const NotFoundView = async () => {
+  const t = await getTranslations('core.not_found');
 
   return (
     <div className="flex flex-col items-center justify-center px-4 py-10 sm:py-20">

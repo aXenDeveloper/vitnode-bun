@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import { locales } from '@/middleware';
 import { Geist, Geist_Mono } from 'next/font/google';
 import {
   generateMetadataRootLayout,
@@ -22,10 +23,9 @@ export const generateMetadata = (): Metadata => {
   });
 };
 
-export default function LocaleLayout({
-  children,
-  ...props
-}: Pick<React.ComponentProps<typeof RootLayout>, 'children' | 'params'>) {
+export default function LocaleLayout(
+  props: Pick<React.ComponentProps<typeof RootLayout>, 'children' | 'params'>,
+) {
   return (
     <RootLayout
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -34,8 +34,10 @@ export default function LocaleLayout({
         defaultTheme: 'dark',
       }}
       {...props}
-    >
-      {children}
-    </RootLayout>
+    />
   );
+}
+
+export function generateStaticParams() {
+  return locales.map(locale => ({ locale }));
 }
