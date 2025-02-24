@@ -1,4 +1,4 @@
-import { HeaderLayout } from './header';
+import { HeaderLayout } from './header/header';
 
 export const ThemeLayout = ({
   children,

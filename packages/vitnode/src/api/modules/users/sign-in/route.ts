@@ -32,6 +32,7 @@ const route = createApiRoute({
         'application/json': {
           schema: z.object({
             id: z.string(),
+            token: z.string(),
           }),
         },
       },
@@ -52,5 +53,5 @@ export const signInRoute = new OpenAPIHono().openapi(route, async c => {
     c,
   );
 
-  return c.json({ id: data.id });
+  return c.json({ id: data.id, token });
 });

@@ -1,16 +1,16 @@
 import { ThemeSwitcher } from '@/components/switchers/theme-switcher';
-import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/utils/cn';
 import { Link } from '@/utils/navigation';
-import { useTranslations } from 'next-intl';
+import { Suspense } from 'react';
+
+import { UserHeader } from './user/user';
 
 export const HeaderLayout = ({
   logo,
   className,
   ...props
 }: React.ComponentProps<'header'> & { logo: React.ReactNode }) => {
-  const t = useTranslations('core.global');
-
   return (
     <header
       className={cn(
@@ -24,12 +24,9 @@ export const HeaderLayout = ({
 
         <div className="ml-auto flex items-center gap-2">
           <ThemeSwitcher />
-          <Button asChild variant="ghost">
-            <Link href="/login">{t('login')}</Link>
-          </Button>
-          <Button asChild>
-            <Link href="/register">{t('register')}</Link>
-          </Button>
+          <Suspense fallback={<Skeleton className="h-9 w-32" />}>
+            <UserHeader />
+          </Suspense>
         </div>
       </div>
     </header>
