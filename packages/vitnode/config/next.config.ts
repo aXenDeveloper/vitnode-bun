@@ -14,11 +14,14 @@ export const vitNodeNextConfig = (config: NextConfig): NextConfig =>
     ...config,
     env: {
       ...config.env,
-      DB_HOST: process.env.DB_HOST ?? 'localhost',
-      DB_PORT: process.env.DB_PORT ? process.env.DB_PORT : '5432',
-      DB_USER: process.env.DB_USER ?? 'root',
-      DB_PASSWORD: process.env.DB_PASSWORD ?? 'root',
-      DB_DATABASE: process.env.DB_DATABASE ?? 'vitnode',
-      DB_SSL: process.env.DB_SSL === 'true' ? 'true' : 'false',
+      POSTGRES_URL: process.env.POSTGRES_URL ?? '',
+      POSTGRES_HOST: process.env.POSTGRES_HOST ?? 'localhost',
+      POSTGRES_PORT: process.env.POSTGRES_PORT
+        ? process.env.POSTGRES_PORT
+        : '5432',
+      POSTGRES_USER: process.env.POSTGRES_USER ?? 'root',
+      POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD ?? 'root',
+      POSTGRES_NAME: process.env.POSTGRES_NAME ?? 'vitnode',
+      POSTGRES_SSL: process.env.POSTGRES_SSL === 'true' ? 'true' : 'false',
     },
   });

@@ -1,4 +1,4 @@
-import { DATABASE_ENVS } from '@/database/client';
+import { POSTGRES_ENVS } from '@/database/client';
 import { defineConfig } from 'drizzle-kit';
 
 export default defineConfig({
@@ -6,5 +6,5 @@ export default defineConfig({
   // schema: ['./src/plugins/**/database/schema/*'],
   schema: ['./src/database/schema/*'],
   dialect: 'postgresql',
-  dbCredentials: DATABASE_ENVS,
+  dbCredentials: POSTGRES_ENVS,
 });
