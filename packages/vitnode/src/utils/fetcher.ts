@@ -1,10 +1,5 @@
 import { ModuleApi } from '@/api/utils/module';
-import {
-  ClientRequest,
-  ClientRequestOptions,
-  ClientResponse,
-  hc,
-} from 'hono/client';
+import { ClientRequest, ClientResponse, hc } from 'hono/client';
 import { HonoBase } from 'hono/hono-base';
 import { Env, ResponseFormat, Schema } from 'hono/types';
 import { StatusCode } from 'hono/utils/http-status';
@@ -44,7 +39,7 @@ export async function fetcher<T extends ModuleApi<Schema, string, string>>({
   options,
 }: {
   module: T['name'];
-  options?: ClientRequestOptions;
+  options?: Omit<RequestInit, 'body'>;
   plugin: T['plugin'];
 }): Promise<UnionToIntersection<Client<T['app']>>> {
   const url = new URL(`/api/${plugin}/${module}`, CONFIG.backend.origin);
@@ -62,10 +57,16 @@ export async function fetcher<T extends ModuleApi<Schema, string, string>>({
   };
 
   const client = hc<T['app']>(url.href, {
-    ...options,
-    headers: {
-      ...internalHeaders,
-      ...options?.headers,
+    fetch: async (input, requestInit) => {
+      return await fetch(input, {
+        ...requestInit,
+        ...options,
+        headers: {
+          ...internalHeaders,
+          ...options?.headers,
+          ...requestInit?.headers,
+        },
+      });
     },
   });
 

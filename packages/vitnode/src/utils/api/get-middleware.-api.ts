@@ -6,6 +6,9 @@ export const getMiddlewareApi = async () => {
   const client = await fetcher<MiddlewareTypes>({
     plugin: 'core',
     module: 'middleware',
+    options: {
+      cache: 'force-cache',
+    },
   });
 
   const data = await client.index.$get();
