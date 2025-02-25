@@ -4,10 +4,10 @@ import { Link } from '@/utils/navigation';
 import { getTranslations } from 'next-intl/server';
 
 export const UserHeader = async () => {
-  const t = await getTranslations('core.global');
-  const data = await getMiddlewareApi();
-
-  await new Promise(resolve => setTimeout(resolve, 10000));
+  const [t, data] = await Promise.all([
+    getTranslations('core.global'),
+    getMiddlewareApi(),
+  ]);
 
   return (
     <>
