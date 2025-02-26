@@ -15,7 +15,7 @@ You have 2 choices to create a plugin:
 ## API Plugin
 
 ```ts title="plugins/{name_plugin}/src/api/plugin.ts"
-import { createPluginApi } from 'vitnode/api/utils/plugin';
+import { createPluginApi } from 'vitnode/api/lib/plugin';
 
 export const corePlugin = createPluginApi({
   name: 'core',

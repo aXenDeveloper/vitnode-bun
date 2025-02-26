@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
-import { Link } from '@/utils/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { Link } from '@/lib/navigation';
+import { ArrowLeft, HomeIcon } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { BackButtonNotFound } from './back-button';
@@ -10,18 +10,24 @@ export const NotFoundView = async () => {
 
   return (
     <div className="flex flex-col items-center justify-center px-4 py-10 sm:py-20">
-      <div className="max-w-xl text-center">
-        <h1 className="text-9xl font-bold">404</h1>
-        <h2 className="mt-4 text-4xl font-semibold">{t('title')}</h2>
-        <p className="text-muted-foreground mb-8 mt-4">{t('desc')}</p>
+      <div className="max-w-md space-y-6 text-center">
+        <div className="space-y-2">
+          <h1 className="text-primary text-8xl font-bold">404</h1>
+          <h2 className="text-2xl font-medium">{t('title')}</h2>
+          <p className="text-muted-foreground">{t('desc')}</p>
+        </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-4">
+        <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
           <BackButtonNotFound>
             <ArrowLeft />
             {t('go_back')}
           </BackButtonNotFound>
+
           <Button asChild size="lg">
-            <Link href="/">{t('back_home')}</Link>
+            <Link href="/">
+              <HomeIcon />
+              {t('back_home')}
+            </Link>
           </Button>
         </div>
       </div>

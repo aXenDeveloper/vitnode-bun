@@ -17,6 +17,7 @@
   "dependencies": {
     "@hono/zod-openapi": "^0.18.4",
     "@hookform/resolvers": "^4.1.2",
+    "dotenv": "^16.4.7",
     "drizzle-kit": "^0.30.4",
     "drizzle-orm": "^0.39.3",
     "hono": "^4.7.2",

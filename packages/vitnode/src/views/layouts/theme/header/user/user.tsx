@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
-import { getMiddlewareApi } from '@/utils/api/get-middleware.-api';
-import { Link } from '@/utils/navigation';
+import { getMiddlewareApi } from '@/lib/api/get-middleware.-api';
+import { Link } from '@/lib/navigation';
 import { getTranslations } from 'next-intl/server';
 
 export const UserHeader = async () => {

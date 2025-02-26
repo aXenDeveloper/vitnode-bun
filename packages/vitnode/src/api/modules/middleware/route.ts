@@ -1,4 +1,4 @@
-import { createApiRoute } from '@/api/utils/route';
+import { createApiRoute } from '@/api/lib/route';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { z } from 'zod';
 

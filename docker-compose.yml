@@ -3,12 +3,12 @@ version: '3.8'
 services:
   database:
     container_name: vitnode_postgres_dev_bun
-    image: postgres:17.2-alpine
+    image: postgres:17.4-alpine
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER-root}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD-root}
-      POSTGRES_DB: vitnode
+      POSTGRES_DB: ${POSTGRES_NAME-vitnode}
     command: ['postgres', '-c', 'log_statement=all'] # log all sql queries
     volumes:
       - ./docker/dev:/var/lib/postgresql/data

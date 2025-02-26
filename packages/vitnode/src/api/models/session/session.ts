@@ -1,11 +1,11 @@
-import { getUserIp } from '@/api/utils/get-user-ip';
-import { signJWT } from '@/api/utils/jwt';
+import { getUserIp } from '@/api/lib/get-user-ip';
+import { signJWT } from '@/api/lib/jwt';
 import { dbClient } from '@/database/client';
 import {
   core_sessions,
   core_sessions_known_devices,
 } from '@/database/schema/sessions';
-import { CONFIG } from '@/utils/config';
+import { CONFIG } from '@/lib/config';
 import { Context, Env, Input } from 'hono';
 import { setCookie } from 'hono/cookie';
 import { HTTPException } from 'hono/http-exception';

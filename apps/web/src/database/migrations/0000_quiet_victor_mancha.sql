@@ -15,7 +15,7 @@ CREATE TABLE "core_config" (
 );
 --> statement-breakpoint
 CREATE TABLE "core_groups" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"protected" boolean DEFAULT false NOT NULL,
@@ -44,29 +44,33 @@ CREATE TABLE "core_languages" (
 );
 --> statement-breakpoint
 CREATE TABLE "core_languages_words" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"language_code" varchar NOT NULL,
 	"plugin_code" varchar(50) NOT NULL,
-	"item_id" integer NOT NULL,
+	"item_id" varchar NOT NULL,
 	"value" text NOT NULL,
 	"table_name" varchar(255) NOT NULL,
 	"variable" varchar(255) NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "core_files_avatars" (
-	"id" uuid PRIMARY KEY NOT NULL,
-	"dir_folder" varchar(255) NOT NULL,
-	"file_name" varchar(255) NOT NULL,
+CREATE TABLE "core_sessions" (
+	"token" varchar(255) NOT NULL,
+	"user_id" uuid NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"file_size" integer NOT NULL,
-	"mimetype" varchar(255) NOT NULL,
-	"extension" varchar(32) NOT NULL,
-	"user_id" uuid,
-	CONSTRAINT "core_files_avatars_user_id_unique" UNIQUE("user_id")
+	"expires_at" timestamp NOT NULL,
+	"device_id" uuid NOT NULL,
+	CONSTRAINT "core_sessions_token_unique" UNIQUE("token")
+);
+--> statement-breakpoint
+CREATE TABLE "core_sessions_known_devices" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"ip_address" varchar(40) NOT NULL,
+	"user_agent" text NOT NULL,
+	"last_seen" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "core_users" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name_seo" varchar(255) NOT NULL,
 	"name" varchar(255) NOT NULL,
 	"email" varchar(255) NOT NULL,
@@ -85,7 +89,7 @@ CREATE TABLE "core_users" (
 );
 --> statement-breakpoint
 CREATE TABLE "core_users_confirm_emails" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" uuid NOT NULL,
 	"token" varchar(100) NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
@@ -94,7 +98,7 @@ CREATE TABLE "core_users_confirm_emails" (
 );
 --> statement-breakpoint
 CREATE TABLE "core_users_forgot_password" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" uuid NOT NULL,
 	"token" varchar(100) NOT NULL,
 	"ip_address" varchar(40) NOT NULL,
@@ -113,7 +117,7 @@ CREATE TABLE "core_users_sso" (
 );
 --> statement-breakpoint
 CREATE TABLE "core_users_sso_tokens" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" uuid NOT NULL,
 	"provider" varchar(100) NOT NULL,
 	"provider_id" varchar(255) NOT NULL,
@@ -122,7 +126,8 @@ CREATE TABLE "core_users_sso_tokens" (
 );
 --> statement-breakpoint
 ALTER TABLE "core_languages_words" ADD CONSTRAINT "core_languages_words_language_code_core_languages_code_fk" FOREIGN KEY ("language_code") REFERENCES "public"."core_languages"("code") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "core_files_avatars" ADD CONSTRAINT "core_files_avatars_user_id_core_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."core_users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "core_sessions" ADD CONSTRAINT "core_sessions_user_id_core_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."core_users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "core_sessions" ADD CONSTRAINT "core_sessions_device_id_core_sessions_known_devices_id_fk" FOREIGN KEY ("device_id") REFERENCES "public"."core_sessions_known_devices"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "core_users" ADD CONSTRAINT "core_users_group_id_core_groups_id_fk" FOREIGN KEY ("group_id") REFERENCES "public"."core_groups"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "core_users" ADD CONSTRAINT "core_users_language_core_languages_code_fk" FOREIGN KEY ("language") REFERENCES "public"."core_languages"("code") ON DELETE set default ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "core_users_confirm_emails" ADD CONSTRAINT "core_users_confirm_emails_user_id_core_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."core_users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
@@ -132,6 +137,8 @@ ALTER TABLE "core_users_sso_tokens" ADD CONSTRAINT "core_users_sso_tokens_provid
 CREATE INDEX "core_languages_code_idx" ON "core_languages" USING btree ("code");--> statement-breakpoint
 CREATE INDEX "core_languages_name_idx" ON "core_languages" USING btree ("name");--> statement-breakpoint
 CREATE INDEX "core_languages_words_lang_code_idx" ON "core_languages_words" USING btree ("language_code");--> statement-breakpoint
+CREATE INDEX "core_sessions_user_id_idx" ON "core_sessions" USING btree ("user_id");--> statement-breakpoint
+CREATE INDEX "core_sessions_known_devices_ip_address_idx" ON "core_sessions_known_devices" USING btree ("ip_address");--> statement-breakpoint
 CREATE INDEX "core_users_name_seo_idx" ON "core_users" USING btree ("name_seo");--> statement-breakpoint
 CREATE INDEX "core_users_name_idx" ON "core_users" USING btree ("name");--> statement-breakpoint
 CREATE INDEX "core_users_email_idx" ON "core_users" USING btree ("email");--> statement-breakpoint

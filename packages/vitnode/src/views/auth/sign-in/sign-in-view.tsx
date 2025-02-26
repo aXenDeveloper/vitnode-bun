@@ -1,5 +1,5 @@
 import { CardDescription } from '@/components/ui/card';
-import { Link } from '@/utils/navigation';
+import { Link } from '@/lib/navigation';
 import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next/dist/types';

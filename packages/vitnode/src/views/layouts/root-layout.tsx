@@ -1,4 +1,4 @@
-import { CONFIG } from '@/utils/config';
+import { CONFIG } from '@/lib/config';
 import { Locale, NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { Metadata } from 'next/dist/types';

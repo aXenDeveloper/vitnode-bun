@@ -11,6 +11,7 @@
       "outputs": [".next/**", "!.next/cache/**", "dist/**"],
       "env": [
         "LOGIN_TOKEN_SECRET",
+        "POSTGRES_URL",
         "POSTGRES_PORT",
         "POSTGRES_USER",
         "POSTGRES_PASSWORD",
@@ -34,7 +35,16 @@
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "env": [
+        "LOGIN_TOKEN_SECRET",
+        "POSTGRES_URL",
+        "POSTGRES_PORT",
+        "POSTGRES_USER",
+        "POSTGRES_PASSWORD",
+        "POSTGRES_NAME",
+        "POSTGRES_SSL"
+      ]
     },
     "start": {
       "dependsOn": ["^start"]

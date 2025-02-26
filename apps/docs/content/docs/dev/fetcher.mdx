@@ -22,7 +22,7 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 As an example, we will pass `UsersTypes` as a generic type.
 
 ```ts
-import { fetcher } from 'vitnode/utils/fetcher';
+import { fetcher } from 'vitnode/lib/fetcher';
 import { UsersTypes } from 'vitnode/api/modules/users/users.module';
 ```
 
@@ -56,7 +56,7 @@ Methods like `POST`, `PUT` and `DELETE` require to use [Server Functions](https:
 'use server';
 
 import { UsersTypes } from 'vitnode/api/modules/users/users.module';
-import { fetcher, FetcherInput } from 'vitnode/utils/fetcher';
+import { fetcher, FetcherInput } from 'vitnode/lib/fetcher';
 
 export const mutationApi = async (
   input: FetcherInput<UsersTypes, '/sign_in', 'post'>,
@@ -163,7 +163,7 @@ import {
   FetcherInput,
   // [!code ++]
   handleSetCookiesFetcher,
-} from 'vitnode/utils/fetcher';
+} from 'vitnode/lib/fetcher';
 
 export const mutationApi = async (
   input: FetcherInput<UsersTypes, '/sign_in', 'post'>,

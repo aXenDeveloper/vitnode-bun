@@ -5,50 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1738591561801,
-      "tag": "0000_careless_jackal",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1738924156283,
-      "tag": "0001_premium_gladiator",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1739030195086,
-      "tag": "0002_white_polaris",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1739033542717,
-      "tag": "0003_tricky_paper_doll",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1740148955908,
-      "tag": "0004_magical_eternity",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1740222763080,
-      "tag": "0005_silky_havok",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1740224513898,
-      "tag": "0006_salty_northstar",
+      "when": 1740560001056,
+      "tag": "0000_quiet_victor_mancha",
       "breakpoints": true
     }
   ]

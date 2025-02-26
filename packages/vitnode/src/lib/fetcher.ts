@@ -1,4 +1,4 @@
-import { ModuleApi } from '@/api/utils/module';
+import { ModuleApi } from '@/api/lib/module';
 import { ClientRequest, ClientResponse, hc } from 'hono/client';
 import { HonoBase } from 'hono/hono-base';
 import { Env, ResponseFormat, Schema } from 'hono/types';

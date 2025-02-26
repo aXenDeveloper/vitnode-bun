@@ -1,5 +1,5 @@
 import { getTranslations } from 'next-intl/server';
-import { Link } from 'vitnode/utils/navigation';
+import { Link } from 'vitnode/lib/navigation';
 
 export default async function Home({
   params,
