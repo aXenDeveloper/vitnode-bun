@@ -14,7 +14,7 @@ interface Props {
 export const generateMetadataDynamicAdminView = async ({
   params,
 }: Props): Promise<Metadata> => {
-  const { rest, locale } = await params;
+  const { rest } = await params;
   const path = rest.join('/');
 
   const views: Record<string, Promise<Metadata>> = {};

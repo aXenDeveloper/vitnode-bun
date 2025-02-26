@@ -24,7 +24,7 @@ type PathToChain<
         ClientRequest<E extends Record<string, unknown> ? E[Original] : never>
       >;
 
-type Client<T> =
+export type Client<T> =
   T extends HonoBase<Env, infer S, string>
     ? S extends Record<infer K, Schema>
       ? K extends string
@@ -48,24 +48,22 @@ export async function fetcher<T extends ModuleApi<Schema, string, string>>({
     cookies(),
   ]);
 
-  const internalHeaders = {
-    Cookie: cookie.toString(),
-    ['user-agent']: nextInternalHeaders.get('user-agent') ?? 'node',
-    ['x-forwarded-for']:
-      nextInternalHeaders.get('x-forwarded-for') ?? '0.0.0.0',
-    // 'x-vitnode-user-language': cookie.get('NEXT_LOCALE')?.value ?? 'en',
-  };
-
   const client = hc<T['app']>(url.href, {
     fetch: async (input, requestInit) => {
+      const headers = new Headers({
+        'Content-Type': 'application/json',
+        Cookie: cookie.toString(),
+        ['user-agent']: nextInternalHeaders.get('user-agent') ?? 'node',
+        ['x-forwarded-for']:
+          nextInternalHeaders.get('x-forwarded-for') ?? '0.0.0.0',
+        // 'x-vitnode-user-language': cookie.get('NEXT_LOCALE')?.value ?? 'en',
+        ...options?.headers,
+      });
+
       return await fetch(input, {
         ...requestInit,
         ...options,
-        headers: {
-          ...internalHeaders,
-          ...options?.headers,
-          ...requestInit?.headers,
-        },
+        headers,
       });
     },
   });

@@ -1,6 +1,6 @@
 import { createApiRoute } from '@/api/lib/route';
-import { SessionModel } from '@/api/models/session/session';
-import { UserModel } from '@/api/models/user/user';
+import { SessionModel } from '@/api/models/session';
+import { UserModel } from '@/api/models/user';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { z } from 'zod';
 

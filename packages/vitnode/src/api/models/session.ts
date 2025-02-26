@@ -1,35 +1,29 @@
 import { getUserIp } from '@/api/lib/get-user-ip';
-import { signJWT } from '@/api/lib/jwt';
 import { dbClient } from '@/database/client';
 import {
   core_sessions,
   core_sessions_known_devices,
 } from '@/database/schema/sessions';
 import { CONFIG } from '@/lib/config';
+import crypto from 'crypto';
+import { eq } from 'drizzle-orm';
 import { Context, Env, Input } from 'hono';
-import { setCookie } from 'hono/cookie';
-import { HTTPException } from 'hono/http-exception';
-import { jwtVerify } from 'jose';
+import { getCookie, setCookie } from 'hono/cookie';
 
-interface SessionJWTPayload {
-  userId: string;
-}
+import { UserModel } from './user';
 
 export const SessionModel = {
   createSession: async (
-    { userId }: SessionJWTPayload,
+    { userId }: { userId: string },
     c: Context<Env, '/', Input>,
   ) => {
-    const token = await signJWT(
-      { userId },
-      process.env.LOGIN_TOKEN_SECRET ?? '',
-    );
+    const token = crypto.randomBytes(64).toString('hex').normalize();
 
     const [device] = await dbClient
       .insert(core_sessions_known_devices)
       .values({
         ip_address: getUserIp(c.req),
-        user_agent: c.req.header('User-Agent') ?? 'node',
+        user_agent: c.req.header('User-Agent') ?? 'nod  e',
       })
       .returning();
 
@@ -50,17 +44,25 @@ export const SessionModel = {
 
     return { token, deviceId: device.id };
   },
-  verifySession: async ({ token }: { token: string }) => {
-    try {
-      const secret = new TextEncoder().encode(
-        process.env.LOGIN_TOKEN_SECRET ?? '',
-      );
+  verifySession: async (c: Context<Env, '/', Input>) => {
+    const token = getCookie(c, CONFIG.cookie_session);
+    if (!token) return null;
 
-      const data = await jwtVerify<SessionJWTPayload>(token, secret);
+    const [session] = await dbClient
+      .select({
+        token: core_sessions.token,
+        user_id: core_sessions.user_id,
+      })
+      .from(core_sessions)
+      .where(eq(core_sessions.token, token))
+      .limit(1);
 
-      return data;
-    } catch (_) {
-      throw new HTTPException(403);
+    if (!session || session.token !== token) {
+      return null;
     }
+    const user = await UserModel.getUserById(session.user_id);
+    if (!user) return null;
+
+    return user;
   },
 };

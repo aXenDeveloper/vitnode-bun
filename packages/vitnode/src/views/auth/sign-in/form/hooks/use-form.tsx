@@ -7,7 +7,7 @@ import { z } from 'zod';
 
 import { mutationApi } from './mutation-api';
 
-export const useFormSignIn = () => {
+export const useFormSignIn = ({ isAdmin }: { isAdmin?: boolean }) => {
   const [error, setError] = React.useState<'' | 'access_denied'>('');
   const t = useTranslations('core.auth.sign_in');
   const tErrors = useTranslations('core.global.errors');

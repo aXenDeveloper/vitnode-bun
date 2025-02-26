@@ -29,3 +29,29 @@ export default function LocaleLayout({
   );
 }
 ```
+
+## Fetching logs
+
+[Next.js has a build-in fetch cache](https://nextjs.org/docs/app/building-your-application/data-fetching/fetching) that will cache the fetch requests. You can enable the fetch logs by passing the `logging` object in the `next.config.ts` file:
+
+```ts title="next.config.ts"
+import type { NextConfig } from 'next';
+import { vitNodeNextConfig } from 'vitnode/config/next.config';
+
+const nextConfig: NextConfig = {
+  // [!code ++]
+  logging: {
+    // [!code ++]
+    fetches: {
+      // [!code ++]
+      fullUrl: true,
+      // [!code ++]
+    },
+    // [!code ++]
+  },
+};
+
+export default vitNodeNextConfig(nextConfig);
+```
+
+You can read more about it in the [official documentation](https://nextjs.org/docs/app/api-reference/config/next-config-js/logging#fetching).

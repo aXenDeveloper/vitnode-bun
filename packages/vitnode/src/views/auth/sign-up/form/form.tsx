@@ -31,7 +31,7 @@ export const FormSignUp = () => {
           <FormItem>
             <FormLabel>{t('username.label')}</FormLabel>
             <FormControl>
-              <Input className="bg-card" {...field} />
+              <Input {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -45,7 +45,7 @@ export const FormSignUp = () => {
           <FormItem>
             <FormLabel>{t('email.label')}</FormLabel>
             <FormControl>
-              <Input className="bg-card" type="email" {...field} />
+              <Input type="email" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -59,7 +59,7 @@ export const FormSignUp = () => {
           <FormItem>
             <FormLabel>{t('password.label')}</FormLabel>
             <FormControl>
-              <PasswordInput className="bg-card" {...field} />
+              <PasswordInput {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>

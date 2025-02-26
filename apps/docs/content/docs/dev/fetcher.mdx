@@ -33,6 +33,23 @@ const client = await fetcher<UsersTypes>({
 });
 ```
 
+#### Options
+
+You can pass the `options` object to modify the `fetch` function. For example we can pass `cache` option to enable the cache.
+
+```tsx
+const client = await fetcher<UsersTypes>({
+  plugin: 'core',
+  module: 'users',
+  // [!code ++]
+  options: {
+    // [!code ++]
+    cache: 'force-cache',
+    // [!code ++]
+  },
+});
+```
+
   </Step>
 
   <Step>

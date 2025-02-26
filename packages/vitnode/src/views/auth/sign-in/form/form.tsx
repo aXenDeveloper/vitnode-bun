@@ -18,7 +18,7 @@ import { useFormSignIn } from './hooks/use-form';
 
 export const FormSignIn = ({ isAdmin }: { isAdmin?: boolean }) => {
   const t = useTranslations('core.auth.sign_in');
-  const { form, onSubmit, error } = useFormSignIn();
+  const { form, onSubmit, error } = useFormSignIn({ isAdmin });
 
   return (
     <>
@@ -38,7 +38,7 @@ export const FormSignIn = ({ isAdmin }: { isAdmin?: boolean }) => {
             <FormItem>
               <FormLabel>{t('email.label')}</FormLabel>
               <FormControl>
-                <Input className="bg-card" type="email" {...field} />
+                <Input type="email" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -52,7 +52,7 @@ export const FormSignIn = ({ isAdmin }: { isAdmin?: boolean }) => {
             <FormItem>
               <FormLabel>{t('password')}</FormLabel>
               <FormControl>
-                <Input className="bg-card" type="password" {...field} />
+                <Input type="password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

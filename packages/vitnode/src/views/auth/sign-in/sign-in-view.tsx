@@ -1,4 +1,4 @@
-import { CardDescription } from '@/components/ui/card';
+import { Card, CardDescription } from '@/components/ui/card';
 import { Link } from '@/lib/navigation';
 import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
@@ -37,7 +37,9 @@ export const SignInView = () => {
         </CardDescription>
       </div>
 
-      <FormSignIn />
+      <Card className="space-y-4 p-6">
+        <FormSignIn />
+      </Card>
     </div>
   );
 };
