@@ -10,6 +10,9 @@
       "errors": {
         "title": "Oops! Something went wrong.",
         "internal_server_error": "Internal server error."
+      },
+      "user_bar": {
+        "log_out": "Log out"
       }
     },
     "not_found": {

@@ -2,6 +2,7 @@
 
 import { UsersTypes } from '@/api/modules/users/users.module';
 import { fetcher, FetcherInput, handleSetCookiesFetcher } from '@/lib/fetcher';
+import { revalidatePath } from 'next/cache';
 
 export const mutationApi = async (
   input: FetcherInput<UsersTypes, '/sign_in', 'post'>,
@@ -13,6 +14,7 @@ export const mutationApi = async (
 
   const data = await res.sign_in.$post(input);
   await handleSetCookiesFetcher(data);
+  revalidatePath('/', 'layout');
 
   if (data.status === 403) {
     return { message: 'access_denied' } as const;

@@ -3,6 +3,8 @@ import { getSessionApi } from '@/lib/api/get-session-api';
 import { Link } from '@/lib/navigation';
 import { getTranslations } from 'next-intl/server';
 
+import { AuthUserHeader } from './auth/auth';
+
 export const UserHeader = async () => {
   const [t, data] = await Promise.all([
     getTranslations('core.global'),
@@ -22,5 +24,5 @@ export const UserHeader = async () => {
     );
   }
 
-  return <div>auth</div>;
+  return <AuthUserHeader />;
 };

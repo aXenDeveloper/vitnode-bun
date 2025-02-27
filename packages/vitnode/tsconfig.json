@@ -22,5 +22,10 @@
     }
   },
   "exclude": ["node_modules", "eslint.config.mjs"],
-  "include": ["src", "scripts", "global.d.ts"]
+  "include": [
+    "src",
+    "scripts",
+    "global.d.ts",
+    "src/views/layouts/theme/header/user"
+  ]
 }

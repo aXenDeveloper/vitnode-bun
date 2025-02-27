@@ -3,6 +3,7 @@ import { OpenAPIHono } from '@hono/zod-openapi';
 
 import { sessionRoute } from './session';
 import { signInRoute } from './sign-in';
+import { signOutRoute } from './sign-out';
 import { signUpRoute } from './sign-up';
 
 export const usersModule = createModuleApi({
@@ -11,7 +12,8 @@ export const usersModule = createModuleApi({
   routes: new OpenAPIHono()
     .route('/', signUpRoute)
     .route('/', signInRoute)
-    .route('/', sessionRoute),
+    .route('/', sessionRoute)
+    .route('/', signOutRoute),
 });
 
 export type UsersTypes = typeof usersModule;

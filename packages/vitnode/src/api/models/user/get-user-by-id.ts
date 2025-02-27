@@ -15,7 +15,6 @@ export const getUserById = async (id: string) => {
       email_verified: core_users.email_verified,
       group_id: core_users.group_id,
       birthday: core_users.birthday,
-      ip_address: core_users.ip_address,
     })
     .from(core_users)
     .where(eq(core_users.id, id))

@@ -13,7 +13,20 @@ const route = createApiRoute({
       content: {
         'application/json': {
           schema: z.object({
-            user: z.object({ id: z.string() }).nullable(),
+            user: z
+              .object({
+                id: z.string(),
+                email: z.string(),
+                name: z.string(),
+                name_seo: z.string(),
+                joined_at: z.date(),
+                newsletter: z.boolean(),
+                avatar_color: z.string(),
+                email_verified: z.boolean(),
+                group_id: z.string(),
+                birthday: z.date().nullable(),
+              })
+              .nullable(),
           }),
         },
       },

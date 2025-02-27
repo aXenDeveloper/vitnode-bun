@@ -8,7 +8,7 @@ import { CONFIG } from '@/lib/config';
 import crypto from 'crypto';
 import { eq } from 'drizzle-orm';
 import { Context, Env, Input } from 'hono';
-import { getCookie, setCookie } from 'hono/cookie';
+import { deleteCookie, getCookie, setCookie } from 'hono/cookie';
 
 import { UserModel } from './user';
 
@@ -64,5 +64,12 @@ export const SessionModel = {
     if (!user) return null;
 
     return user;
+  },
+  deleteSession: async (c: Context<Env, '/', Input>) => {
+    const token = getCookie(c, CONFIG.cookie_session);
+    if (!token) return;
+
+    await dbClient.delete(core_sessions).where(eq(core_sessions.token, token));
+    deleteCookie(c, CONFIG.cookie_session);
   },
 };
