@@ -22,8 +22,5 @@ const route = createApiRoute({
 });
 
 export const middlewareRoute = new OpenAPIHono().openapi(route, c => {
-  // eslint-disable-next-line no-console
-  console.log('Middleware route');
-
-  return c.json({ id: 'test' });
+  return c.json({ id: 'ffasf' });
 });

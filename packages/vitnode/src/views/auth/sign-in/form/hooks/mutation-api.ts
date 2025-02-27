@@ -14,7 +14,7 @@ export const mutationApi = async (
 
   const data = await res.sign_in.$post(input);
   await handleSetCookiesFetcher(data);
-  revalidatePath('/', 'layout');
+  revalidatePath('/[locale]/(main)', 'layout');
 
   if (data.status === 403) {
     return { message: 'access_denied' } as const;

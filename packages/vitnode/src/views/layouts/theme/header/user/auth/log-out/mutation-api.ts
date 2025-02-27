@@ -11,5 +11,5 @@ export const mutationApi = async () => {
   });
   const data = await res.sign_out.$delete();
   await handleSetCookiesFetcher(data);
-  revalidatePath('/', 'layout');
+  revalidatePath('/[locale]/(main)', 'layout');
 };

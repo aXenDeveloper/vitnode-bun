@@ -6,6 +6,7 @@ import { csrf } from 'hono/csrf';
 import { HTTPException } from 'hono/http-exception';
 
 import { PluginAPI } from './lib/plugin';
+import { globalMiddleware } from './middlewares/global';
 
 interface CORSOptions {
   allowHeaders?: string[];
@@ -24,12 +25,13 @@ interface CSRFOptions {
   origin?: IsAllowedOriginHandler | string | string[];
 }
 
-export function VitNodeAPIInit<T extends Schema>({
+export function VitNodeAPI<T extends Schema>({
   app,
   cors: corsOptions,
   csrf: csrfOptions,
   plugins,
-}: {
+  ...options
+}: Parameters<typeof globalMiddleware>[0] & {
   app: OpenAPIHono<Env, Schema, string>;
   cors?: CORSOptions;
   csrf?: CSRFOptions;
@@ -45,6 +47,7 @@ export function VitNodeAPIInit<T extends Schema>({
   app.use(cors(corsOptions));
   app.use(csrf(csrfOptions));
   app.get('/swagger', swaggerUI({ url: `/api/swagger/doc` }));
+  app.use('*', globalMiddleware(options));
 
   app.onError(error => {
     if (error instanceof HTTPException) {

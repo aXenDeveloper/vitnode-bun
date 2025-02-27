@@ -18,7 +18,7 @@ const route = createApiRoute({
             email: z.string().email().toLowerCase().openapi({
               example: 'test@test.com',
             }),
-            password: z.string().min(8).openapi({
+            password: z.string().openapi({
               example: 'Test123!',
             }),
           }),

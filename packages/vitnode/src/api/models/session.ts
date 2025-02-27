@@ -34,18 +34,22 @@ export const SessionModel = {
       device_id: device.id,
     });
 
-    setCookie(c, CONFIG.cookie_session, token, {
+    setCookie(c, c.get('core').authorization.cookie_name, token, {
       httpOnly: true,
       secure: true,
       sameSite: 'strict',
       path: '/',
+      expires:
+        c.get('core').authorization.cookie_expires > 0
+          ? new Date(Date.now() + c.get('core').authorization.cookie_expires)
+          : undefined,
       domain: CONFIG.frontend.hostname,
     });
 
     return { token, deviceId: device.id };
   },
   verifySession: async (c: Context<Env, '/', Input>) => {
-    const token = getCookie(c, CONFIG.cookie_session);
+    const token = getCookie(c, c.get('core').authorization.cookie_name);
     if (!token) return null;
 
     const [session] = await dbClient
@@ -66,10 +70,10 @@ export const SessionModel = {
     return user;
   },
   deleteSession: async (c: Context<Env, '/', Input>) => {
-    const token = getCookie(c, CONFIG.cookie_session);
+    const token = getCookie(c, c.get('core').authorization.cookie_name);
     if (!token) return;
 
     await dbClient.delete(core_sessions).where(eq(core_sessions.token, token));
-    deleteCookie(c, CONFIG.cookie_session);
+    deleteCookie(c, c.get('core').authorization.cookie_name);
   },
 };

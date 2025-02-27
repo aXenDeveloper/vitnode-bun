@@ -1,12 +1,13 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { handle } from 'hono/vercel';
-import { VitNodeAPIInit } from 'vitnode/api/config';
+import { VitNodeAPI } from 'vitnode/api/config';
 import corePlugin from 'vitnode/api/plugin';
 
 const app = new OpenAPIHono().basePath('/api');
-VitNodeAPIInit({
+VitNodeAPI({
   app,
   plugins: [corePlugin],
+  authorization: {},
 });
 
 export const GET = handle(app);
