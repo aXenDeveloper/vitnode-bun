@@ -47,6 +47,10 @@ export function VitNodeAPIInit<T extends Schema>({
   app.get('/swagger', swaggerUI({ url: `/api/swagger/doc` }));
 
   app.onError(error => {
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
     if (process.env.NODE_ENV === 'development') {
       // eslint-disable-next-line no-console
       console.error(error);
@@ -54,10 +58,6 @@ export function VitNodeAPIInit<T extends Schema>({
       return new Response(error.message, {
         status: 500,
       });
-    }
-
-    if (error instanceof HTTPException) {
-      return error.getResponse();
     }
 
     return new Response('Internal Server Error', {

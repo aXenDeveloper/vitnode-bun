@@ -16,13 +16,13 @@
     "eslint-config-typescript-vitnode": "workspace:*",
     "prettier": "^3.5.2",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "turbo": "^2.4.3",
+    "turbo": "^2.4.4",
     "typescript": "5.7.3"
   },
   "engines": {
     "node": ">=22"
   },
-  "packageManager": "pnpm@10.5.0",
+  "packageManager": "pnpm@10.5.2",
   "workspaces": [
     "apps/*",
     "packages/*",
