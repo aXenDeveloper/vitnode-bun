@@ -12,18 +12,20 @@ import { deleteCookie, getCookie, setCookie } from 'hono/cookie';
 
 import { UserModel } from './user';
 
-export const SessionModel = {
-  createSession: async (
-    { userId }: { userId: string },
-    c: Context<Env, '/', Input>,
-  ) => {
+export class SessionModel {
+  constructor(c: Context<Env, '/', Input>) {
+    this.c = c;
+  }
+  private readonly c: Context<Env, '/', Input>;
+
+  async createSessionByUserId(userId: string) {
     const token = crypto.randomBytes(64).toString('hex').normalize();
 
     const [device] = await dbClient
       .insert(core_sessions_known_devices)
       .values({
-        ip_address: getUserIp(c.req),
-        user_agent: c.req.header('User-Agent') ?? 'nod  e',
+        ip_address: getUserIp(this.c.req),
+        user_agent: this.c.req.header('User-Agent') ?? 'nod  e',
       })
       .returning();
 
@@ -34,22 +36,39 @@ export const SessionModel = {
       device_id: device.id,
     });
 
-    setCookie(c, c.get('core').authorization.cookie_name, token, {
+    setCookie(this.c, this.c.get('core').authorization.cookie_name, token, {
       httpOnly: true,
       secure: true,
       sameSite: 'strict',
       path: '/',
       expires:
-        c.get('core').authorization.cookie_expires > 0
-          ? new Date(Date.now() + c.get('core').authorization.cookie_expires)
+        this.c.get('core').authorization.cookie_expires > 0
+          ? new Date(
+              Date.now() + this.c.get('core').authorization.cookie_expires,
+            )
           : undefined,
       domain: CONFIG.frontend.hostname,
     });
 
     return { token, deviceId: device.id };
-  },
-  verifySession: async (c: Context<Env, '/', Input>) => {
-    const token = getCookie(c, c.get('core').authorization.cookie_name);
+  }
+
+  async deleteSession() {
+    const token = getCookie(
+      this.c,
+      this.c.get('core').authorization.cookie_name,
+    );
+    if (!token) return;
+
+    await dbClient.delete(core_sessions).where(eq(core_sessions.token, token));
+    deleteCookie(this.c, this.c.get('core').authorization.cookie_name);
+  }
+
+  async verifySession() {
+    const token = getCookie(
+      this.c,
+      this.c.get('core').authorization.cookie_name,
+    );
     if (!token) return null;
 
     const [session] = await dbClient
@@ -64,16 +83,9 @@ export const SessionModel = {
     if (!session || session.token !== token) {
       return null;
     }
-    const user = await UserModel.getUserById(session.user_id);
+    const user = await new UserModel().getUserById(session.user_id);
     if (!user) return null;
 
     return user;
-  },
-  deleteSession: async (c: Context<Env, '/', Input>) => {
-    const token = getCookie(c, c.get('core').authorization.cookie_name);
-    if (!token) return;
-
-    await dbClient.delete(core_sessions).where(eq(core_sessions.token, token));
-    deleteCookie(c, c.get('core').authorization.cookie_name);
-  },
-};
+  }
+}

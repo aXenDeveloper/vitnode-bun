@@ -18,7 +18,7 @@ const route = createApiRoute({
 });
 
 export const signOutRoute = new OpenAPIHono().openapi(route, async c => {
-  await SessionModel.deleteSession(c);
+  await new SessionModel(c).deleteSession();
 
   return c.json({});
 });

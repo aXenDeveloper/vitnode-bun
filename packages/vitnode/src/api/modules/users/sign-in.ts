@@ -45,13 +45,8 @@ const route = createApiRoute({
 });
 
 export const signInRoute = new OpenAPIHono().openapi(route, async c => {
-  const data = await UserModel.signInWithPassword(c.req.valid('json'));
-  const token = await SessionModel.createSession(
-    {
-      userId: data.id,
-    },
-    c,
-  );
+  const data = await new UserModel().signInWithPassword(c.req.valid('json'));
+  const token = await new SessionModel(c).createSessionByUserId(data.id);
 
   return c.json({ id: data.id, token });
 });

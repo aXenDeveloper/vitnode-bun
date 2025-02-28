@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next/dist/types';
 
+import { SSOButtons } from '../sso/sso-buttons';
 import { FormSignUp } from './form/form';
 
 export const generateMetadataSignUpView = async (
@@ -39,6 +40,7 @@ export const SignUpView = () => {
 
       <Card className="p-6">
         <FormSignUp />
+        <SSOButtons />
       </Card>
     </div>
   );

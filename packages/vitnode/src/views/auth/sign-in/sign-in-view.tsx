@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next/dist/types';
 
+import { SSOButtons } from '../sso/sso-buttons';
 import { FormSignIn } from './form/form';
 
 export const generateMetadataSignInView = async (
@@ -39,6 +40,7 @@ export const SignInView = () => {
 
       <Card className="space-y-4 p-6">
         <FormSignIn />
+        <SSOButtons />
       </Card>
     </div>
   );

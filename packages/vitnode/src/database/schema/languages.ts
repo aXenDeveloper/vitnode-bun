@@ -12,7 +12,10 @@ export const core_languages = pgTable(
     default: t.boolean().notNull().default(false),
     enabled: t.boolean().notNull().default(true),
     created_at: t.timestamp().notNull().defaultNow(),
-    updated_at: t.timestamp().notNull().defaultNow(),
+    updated_at: t
+      .timestamp()
+      .notNull()
+      .$onUpdate(() => new Date()),
     time_24: t.boolean().notNull().default(false),
     allow_in_input: t.boolean().default(true).notNull(),
   }),

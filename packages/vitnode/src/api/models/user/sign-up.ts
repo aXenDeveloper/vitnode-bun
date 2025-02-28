@@ -106,7 +106,7 @@ export const signUp = async (
 
   const [{ group_id, email_verified }, encryptPassword] = await Promise.all([
     getDefaultData(),
-    PasswordModel.encryptPassword(password),
+    new PasswordModel().encryptPassword(password),
   ]);
   const [data] = await dbClient
     .insert(core_users)

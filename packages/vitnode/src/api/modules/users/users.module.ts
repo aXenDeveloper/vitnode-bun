@@ -6,14 +6,16 @@ import { signInRoute } from './sign-in';
 import { signOutRoute } from './sign-out';
 import { signUpRoute } from './sign-up';
 
-export const usersModule = createModuleApi({
-  name: 'users',
-  plugin: 'core',
-  routes: new OpenAPIHono()
-    .route('/', signUpRoute)
-    .route('/', signInRoute)
-    .route('/', sessionRoute)
-    .route('/', signOutRoute),
-});
+export const usersModule = () => {
+  return createModuleApi({
+    name: 'users',
+    plugin: 'core',
+    routes: new OpenAPIHono()
+      .route('/', signUpRoute)
+      .route('/', signInRoute)
+      .route('/', sessionRoute)
+      .route('/', signOutRoute),
+  });
+};
 
-export type UsersTypes = typeof usersModule;
+export type UsersTypes = ReturnType<typeof usersModule>;

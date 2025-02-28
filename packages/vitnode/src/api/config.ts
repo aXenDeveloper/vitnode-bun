@@ -1,3 +1,4 @@
+import corePlugin from '@/api/plugin';
 import { swaggerUI } from '@hono/swagger-ui';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { Context, Env, Schema } from 'hono';
@@ -40,7 +41,7 @@ export function VitNodeAPI<T extends Schema>({
   app.doc('/swagger/doc', {
     openapi: '3.0.0',
     info: {
-      version: '1.0.0',
+      version: '0.2.0',
       title: 'VitNode API',
     },
   });
@@ -68,7 +69,7 @@ export function VitNodeAPI<T extends Schema>({
     });
   });
 
-  plugins.map(root => {
+  [corePlugin(), ...plugins].map(root => {
     app.route(`/${root.name}`, root.app);
   });
 

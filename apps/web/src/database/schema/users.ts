@@ -50,48 +50,38 @@ export const core_users_relations = relations(core_users, ({ one, many }) => ({
     fields: [core_users.id],
     references: [core_users_confirm_emails.user_id],
   }),
-  sso: many(core_users_sso_tokens),
+  sso: many(core_users_sso),
   forgot_password: one(core_users_forgot_password, {
     fields: [core_users.id],
     references: [core_users_forgot_password.user_id],
   }),
 }));
 
-export const core_users_sso = pgTable('core_users_sso', t => ({
-  code: t.varchar({ length: 100 }).notNull().unique(),
-  client_id: t.varchar({ length: 255 }).notNull(),
-  client_secret: t.varchar({ length: 255 }).notNull(),
-  enabled: t.boolean().notNull().default(false),
-}));
-
-export const core_users_sso_tokens = pgTable(
-  'core_users_sso_tokens',
+export const core_users_sso = pgTable(
+  'core_users_sso',
   t => ({
-    id: t.uuid().defaultRandom().primaryKey(),
     user_id: t
       .uuid()
       .references(() => core_users.id, {
         onDelete: 'cascade',
       })
       .notNull(),
-    provider: t
-      .varchar({ length: 100 })
-      .references(() => core_users_sso.code, {
-        onDelete: 'no action',
-      })
-      .notNull(),
     provider_id: t.varchar({ length: 255 }).notNull(),
+    provider_account_id: t.varchar({ length: 255 }).notNull(),
     created_at: t.timestamp().notNull().defaultNow(),
-    updated_at: t.timestamp().notNull().defaultNow(),
+    updated_at: t
+      .timestamp()
+      .notNull()
+      .$onUpdate(() => new Date()),
   }),
-  t => [index('core_users_sso_tokens_user_id_idx').on(t.user_id)],
+  t => [index('core_users_sso_user_id_idx').on(t.user_id)],
 );
 
-export const core_users_sso_tokens_relations = relations(
-  core_users_sso_tokens,
+export const core_users_sso_relations = relations(
+  core_users_sso,
   ({ one }) => ({
     user: one(core_users, {
-      fields: [core_users_sso_tokens.user_id],
+      fields: [core_users_sso.user_id],
       references: [core_users.id],
     }),
   }),

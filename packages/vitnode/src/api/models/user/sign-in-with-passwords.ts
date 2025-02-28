@@ -26,7 +26,7 @@ export const signInWithPassword = async ({
     throw new HTTPException(403);
   }
 
-  const validPassword = await PasswordModel.verifyPassword(
+  const validPassword = await new PasswordModel().verifyPassword(
     password,
     user.password,
   );

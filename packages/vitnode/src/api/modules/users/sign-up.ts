@@ -50,7 +50,7 @@ const route = createApiRoute({
 });
 
 export const signUpRoute = new OpenAPIHono().openapi(route, async c => {
-  const data = await UserModel.signUp(c.req.valid('json'), c.req);
+  const data = await new UserModel().signUp(c.req.valid('json'), c.req);
 
   return c.json({ id: data.id });
 });

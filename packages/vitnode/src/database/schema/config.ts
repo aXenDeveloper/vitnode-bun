@@ -26,5 +26,8 @@ export const core_config = pgTable('core_config', t => ({
   auth_lock_register: t.boolean().notNull().default(false),
   auth_require_confirm_email: t.boolean().notNull().default(false),
   admin_note: t.text().notNull().default('Enter your note here. :)'),
-  admin_note_updated_at: t.timestamp().notNull().defaultNow(),
+  admin_note_updated_at: t
+    .timestamp()
+    .notNull()
+    .$onUpdate(() => new Date()),
 }));

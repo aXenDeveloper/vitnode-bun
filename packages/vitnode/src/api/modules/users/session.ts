@@ -36,7 +36,7 @@ const route = createApiRoute({
 });
 
 export const sessionRoute = new OpenAPIHono().openapi(route, async c => {
-  const user = await SessionModel.verifySession(c);
+  const user = await new SessionModel(c).verifySession();
 
   return c.json({
     user,
