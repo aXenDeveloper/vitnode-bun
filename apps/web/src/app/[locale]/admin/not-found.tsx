@@ -1,5 +1,5 @@
-import { NotFoundView } from 'vitnode/views/not-found/not-found';
+import { ErrorView } from 'vitnode/views/error/error-view';
 
 export default function NotFoundPage() {
-  return <NotFoundView />;
+  return <ErrorView code={404} />;
 }

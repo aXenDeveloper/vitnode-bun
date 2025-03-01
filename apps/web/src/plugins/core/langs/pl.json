@@ -7,18 +7,37 @@
       "cancel": "Cancel",
       "optional": "Optional",
       "loading": "Loading...",
+      "or": "or",
+      "back_home": "Back to home",
+      "go_back": "Go back",
       "errors": {
         "title": "Oops! Something went wrong.",
-        "internal_server_error": "Internal server error."
+        "internal_server_error": "Internal server error.",
+        "404": {
+          "title": "Page Not Found",
+          "desc": "Oops! The page you're looking for doesn't exist."
+        },
+        "500": {
+          "title": "Internal Server Error",
+          "desc": "Sorry, we're experiencing technical difficulties on our server."
+        },
+        "400": {
+          "title": "Bad Request",
+          "desc": "The request couldn't be processed due to invalid parameters."
+        },
+        "403": {
+          "title": "Forbidden",
+          "desc": "You don't have permission to access this resource."
+        }
+      },
+      "user_bar": {
+        "log_out": "Log out"
       }
     },
-    "not_found": {
-      "title": "Page Not Found",
-      "desc": "Oops! The page you're looking for doesn't exist.",
-      "back_home": "Back to home",
-      "go_back": "Go back"
-    },
     "auth": {
+      "sso": {
+        "access_denied": "You have denied access to the application or the request has expired. Please try again."
+      },
       "sign_up": {
         "desc": "You already have an account? <link>Sign in</link>.",
         "submit": "Sign up",

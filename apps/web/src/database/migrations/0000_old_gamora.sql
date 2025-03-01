@@ -11,13 +11,13 @@ CREATE TABLE "core_config" (
 	"auth_lock_register" boolean DEFAULT false NOT NULL,
 	"auth_require_confirm_email" boolean DEFAULT false NOT NULL,
 	"admin_note" text DEFAULT 'Enter your note here. :)' NOT NULL,
-	"admin_note_updated_at" timestamp DEFAULT now() NOT NULL
+	"admin_note_updated_at" timestamp NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "core_groups" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp NOT NULL,
 	"protected" boolean DEFAULT false NOT NULL,
 	"default" boolean DEFAULT false NOT NULL,
 	"root" boolean DEFAULT false NOT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE "core_languages" (
 	"default" boolean DEFAULT false NOT NULL,
 	"enabled" boolean DEFAULT true NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp NOT NULL,
 	"time_24" boolean DEFAULT false NOT NULL,
 	"allow_in_input" boolean DEFAULT true NOT NULL,
 	CONSTRAINT "core_languages_code_unique" UNIQUE("code")
@@ -71,7 +71,7 @@ CREATE TABLE "core_sessions_known_devices" (
 --> statement-breakpoint
 CREATE TABLE "core_users" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"name_seo" varchar(255) NOT NULL,
+	"name_code" varchar(255) NOT NULL,
 	"name" varchar(255) NOT NULL,
 	"email" varchar(255) NOT NULL,
 	"password" varchar,
@@ -83,7 +83,7 @@ CREATE TABLE "core_users" (
 	"birthday" timestamp,
 	"ip_address" varchar(40) NOT NULL,
 	"language" varchar(5) DEFAULT 'en' NOT NULL,
-	CONSTRAINT "core_users_name_seo_unique" UNIQUE("name_seo"),
+	CONSTRAINT "core_users_name_code_unique" UNIQUE("name_code"),
 	CONSTRAINT "core_users_name_unique" UNIQUE("name"),
 	CONSTRAINT "core_users_email_unique" UNIQUE("email")
 );
@@ -109,20 +109,11 @@ CREATE TABLE "core_users_forgot_password" (
 );
 --> statement-breakpoint
 CREATE TABLE "core_users_sso" (
-	"code" varchar(100) NOT NULL,
-	"client_id" varchar(255) NOT NULL,
-	"client_secret" varchar(255) NOT NULL,
-	"enabled" boolean DEFAULT false NOT NULL,
-	CONSTRAINT "core_users_sso_code_unique" UNIQUE("code")
-);
---> statement-breakpoint
-CREATE TABLE "core_users_sso_tokens" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" uuid NOT NULL,
-	"provider" varchar(100) NOT NULL,
-	"provider_id" varchar(255) NOT NULL,
+	"provider" varchar(255) NOT NULL,
+	"provider_account_id" varchar(255) NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"updated_at" timestamp NOT NULL
 );
 --> statement-breakpoint
 ALTER TABLE "core_languages_words" ADD CONSTRAINT "core_languages_words_language_code_core_languages_code_fk" FOREIGN KEY ("language_code") REFERENCES "public"."core_languages"("code") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
@@ -132,14 +123,13 @@ ALTER TABLE "core_users" ADD CONSTRAINT "core_users_group_id_core_groups_id_fk" 
 ALTER TABLE "core_users" ADD CONSTRAINT "core_users_language_core_languages_code_fk" FOREIGN KEY ("language") REFERENCES "public"."core_languages"("code") ON DELETE set default ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "core_users_confirm_emails" ADD CONSTRAINT "core_users_confirm_emails_user_id_core_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."core_users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "core_users_forgot_password" ADD CONSTRAINT "core_users_forgot_password_user_id_core_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."core_users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "core_users_sso_tokens" ADD CONSTRAINT "core_users_sso_tokens_user_id_core_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."core_users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "core_users_sso_tokens" ADD CONSTRAINT "core_users_sso_tokens_provider_core_users_sso_code_fk" FOREIGN KEY ("provider") REFERENCES "public"."core_users_sso"("code") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "core_users_sso" ADD CONSTRAINT "core_users_sso_user_id_core_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."core_users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "core_languages_code_idx" ON "core_languages" USING btree ("code");--> statement-breakpoint
 CREATE INDEX "core_languages_name_idx" ON "core_languages" USING btree ("name");--> statement-breakpoint
 CREATE INDEX "core_languages_words_lang_code_idx" ON "core_languages_words" USING btree ("language_code");--> statement-breakpoint
 CREATE INDEX "core_sessions_user_id_idx" ON "core_sessions" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "core_sessions_known_devices_ip_address_idx" ON "core_sessions_known_devices" USING btree ("ip_address");--> statement-breakpoint
-CREATE INDEX "core_users_name_seo_idx" ON "core_users" USING btree ("name_seo");--> statement-breakpoint
+CREATE INDEX "core_users_name_code_idx" ON "core_users" USING btree ("name_code");--> statement-breakpoint
 CREATE INDEX "core_users_name_idx" ON "core_users" USING btree ("name");--> statement-breakpoint
 CREATE INDEX "core_users_email_idx" ON "core_users" USING btree ("email");--> statement-breakpoint
-CREATE INDEX "core_users_sso_tokens_user_id_idx" ON "core_users_sso_tokens" USING btree ("user_id");
+CREATE INDEX "core_users_sso_user_id_idx" ON "core_users_sso" USING btree ("user_id");

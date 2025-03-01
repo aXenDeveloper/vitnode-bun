@@ -73,7 +73,7 @@ export const initialDataForDatabase = async () => {
         guest: true,
         files_allow_upload: false,
       })
-      .returning();
+      .returning({ id: core_groups.id });
 
     await dbClient.insert(core_languages_words).values({
       language_code: 'en',
@@ -90,7 +90,7 @@ export const initialDataForDatabase = async () => {
         protected: true,
         default: true,
       })
-      .returning();
+      .returning({ id: core_groups.id });
 
     await dbClient.insert(core_languages_words).values({
       language_code: 'en',
@@ -107,7 +107,7 @@ export const initialDataForDatabase = async () => {
         protected: true,
         color: 'hsl(122, 80%, 45%)',
       })
-      .returning();
+      .returning({ id: core_groups.id });
 
     await dbClient.insert(core_languages_words).values({
       language_code: 'en',
@@ -125,7 +125,7 @@ export const initialDataForDatabase = async () => {
         root: true,
         color: 'hsl(0, 100%, 50%)',
       })
-      .returning();
+      .returning({ id: core_groups.id });
 
     await dbClient.insert(core_languages_words).values({
       language_code: 'en',

@@ -31,7 +31,7 @@ export default function LocaleLayout(
   return (
     <RootLayout
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      debug
+      // debug
       theme={{
         defaultTheme: 'dark',
       }}

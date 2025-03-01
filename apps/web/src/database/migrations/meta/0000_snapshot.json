@@ -1,5 +1,5 @@
 {
-  "id": "a4242c21-4028-4997-8354-65a4a315726a",
+  "id": "74e0a4e8-a834-434b-a49b-79ec54e1ab63",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -90,8 +90,7 @@
           "name": "admin_note_updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": true
         }
       },
       "indexes": {},
@@ -124,8 +123,7 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": true
         },
         "protected": {
           "name": "protected",
@@ -253,8 +251,7 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": true
         },
         "time_24": {
           "name": "time_24",
@@ -565,8 +562,8 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "name_seo": {
-          "name": "name_seo",
+        "name_code": {
+          "name": "name_code",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
@@ -643,11 +640,11 @@
         }
       },
       "indexes": {
-        "core_users_name_seo_idx": {
-          "name": "core_users_name_seo_idx",
+        "core_users_name_code_idx": {
+          "name": "core_users_name_code_idx",
           "columns": [
             {
-              "expression": "name_seo",
+              "expression": "name_code",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -719,11 +716,11 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "core_users_name_seo_unique": {
-          "name": "core_users_name_seo_unique",
+        "core_users_name_code_unique": {
+          "name": "core_users_name_code_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "name_seo"
+            "name_code"
           ]
         },
         "core_users_name_unique": {
@@ -896,59 +893,6 @@
       "name": "core_users_sso",
       "schema": "",
       "columns": {
-        "code": {
-          "name": "code",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "client_id": {
-          "name": "client_id",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "client_secret": {
-          "name": "client_secret",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "enabled": {
-          "name": "enabled",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "core_users_sso_code_unique": {
-          "name": "core_users_sso_code_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "code"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.core_users_sso_tokens": {
-      "name": "core_users_sso_tokens",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
         "user_id": {
           "name": "user_id",
           "type": "uuid",
@@ -957,12 +901,12 @@
         },
         "provider": {
           "name": "provider",
-          "type": "varchar(100)",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
         },
-        "provider_id": {
-          "name": "provider_id",
+        "provider_account_id": {
+          "name": "provider_account_id",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
@@ -978,13 +922,12 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": true
         }
       },
       "indexes": {
-        "core_users_sso_tokens_user_id_idx": {
-          "name": "core_users_sso_tokens_user_id_idx",
+        "core_users_sso_user_id_idx": {
+          "name": "core_users_sso_user_id_idx",
           "columns": [
             {
               "expression": "user_id",
@@ -1000,9 +943,9 @@
         }
       },
       "foreignKeys": {
-        "core_users_sso_tokens_user_id_core_users_id_fk": {
-          "name": "core_users_sso_tokens_user_id_core_users_id_fk",
-          "tableFrom": "core_users_sso_tokens",
+        "core_users_sso_user_id_core_users_id_fk": {
+          "name": "core_users_sso_user_id_core_users_id_fk",
+          "tableFrom": "core_users_sso",
           "tableTo": "core_users",
           "columnsFrom": [
             "user_id"
@@ -1011,19 +954,6 @@
             "id"
           ],
           "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "core_users_sso_tokens_provider_core_users_sso_code_fk": {
-          "name": "core_users_sso_tokens_provider_core_users_sso_code_fk",
-          "tableFrom": "core_users_sso_tokens",
-          "tableTo": "core_users_sso",
-          "columnsFrom": [
-            "provider"
-          ],
-          "columnsTo": [
-            "code"
-          ],
-          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },

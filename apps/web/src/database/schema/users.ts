@@ -8,7 +8,7 @@ export const core_users = pgTable(
   'core_users',
   t => ({
     id: t.uuid().defaultRandom().primaryKey(),
-    name_seo: t.varchar({ length: 255 }).notNull().unique(),
+    name_code: t.varchar({ length: 255 }).notNull().unique(),
     name: t.varchar({ length: 255 }).notNull().unique(),
     email: t.varchar({ length: 255 }).notNull().unique(),
     password: t.varchar(),
@@ -31,7 +31,7 @@ export const core_users = pgTable(
       }),
   }),
   t => [
-    index('core_users_name_seo_idx').on(t.name_seo),
+    index('core_users_name_code_idx').on(t.name_code),
     index('core_users_name_idx').on(t.name),
     index('core_users_email_idx').on(t.email),
   ],

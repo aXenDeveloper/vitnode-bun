@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next/dist/types';
 
-import { SSOButtons } from '../sso/sso-buttons';
+import { SSOButtons } from '../sso/buttons/sso-buttons';
 import { FormSignIn } from './form/form';
 
 export const generateMetadataSignInView = async (

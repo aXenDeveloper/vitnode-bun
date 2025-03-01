@@ -7,7 +7,7 @@ const route = createApiRoute({
   method: 'get',
   description: 'Verify session',
   plugin: 'core',
-  path: '/session',
+  path: '/',
   responses: {
     200: {
       content: {
@@ -18,7 +18,7 @@ const route = createApiRoute({
                 id: z.string(),
                 email: z.string(),
                 name: z.string(),
-                name_seo: z.string(),
+                name_code: z.string(),
                 joined_at: z.date(),
                 newsletter: z.boolean(),
                 avatar_color: z.string(),

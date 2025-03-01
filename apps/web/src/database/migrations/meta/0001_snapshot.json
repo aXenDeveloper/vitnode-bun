@@ -1,6 +1,6 @@
 {
-  "id": "039c200c-576a-4233-af99-d6aeb0c30b1f",
-  "prevId": "a4242c21-4028-4997-8354-65a4a315726a",
+  "id": "7264c830-0386-4ac4-a05c-cfe61b0eeac8",
+  "prevId": "74e0a4e8-a834-434b-a49b-79ec54e1ab63",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -562,8 +562,8 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "name_seo": {
-          "name": "name_seo",
+        "name_code": {
+          "name": "name_code",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
@@ -640,11 +640,11 @@
         }
       },
       "indexes": {
-        "core_users_name_seo_idx": {
-          "name": "core_users_name_seo_idx",
+        "core_users_name_code_idx": {
+          "name": "core_users_name_code_idx",
           "columns": [
             {
-              "expression": "name_seo",
+              "expression": "name_code",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -716,11 +716,11 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "core_users_name_seo_unique": {
-          "name": "core_users_name_seo_unique",
+        "core_users_name_code_unique": {
+          "name": "core_users_name_code_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "name_seo"
+            "name_code"
           ]
         },
         "core_users_name_unique": {
@@ -899,8 +899,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "provider": {
-          "name": "provider",
+        "provider_id": {
+          "name": "provider_id",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true

@@ -8,8 +8,6 @@ import { and, count, eq, or } from 'drizzle-orm';
 import { HonoRequest } from 'hono';
 import { HTTPException } from 'hono/http-exception';
 
-import { PasswordModel } from '../password';
-
 const getDefaultData = async (): Promise<{
   email_verified: boolean;
   group_id: string;
@@ -66,12 +64,12 @@ export const signUp = async (
     email,
     name,
     newsletter,
-    password,
+    hashedPassword,
   }: {
     email: string;
+    hashedPassword: string | undefined;
     name: string;
     newsletter?: boolean;
-    password: string;
   },
   req: HonoRequest,
 ) => {
@@ -79,13 +77,13 @@ export const signUp = async (
   const checkIfUserExist = await dbClient
     .select({
       email: core_users.email,
-      name_seo: core_users.name_seo,
+      name_code: core_users.name_code,
     })
     .from(core_users)
     .where(
       or(
         eq(core_users.email, email),
-        eq(core_users.name_seo, convertToNameSEO),
+        eq(core_users.name_code, convertToNameSEO),
       ),
     );
 
@@ -96,7 +94,7 @@ export const signUp = async (
     });
   }
   const findName = checkIfUserExist.find(
-    user => user.name_seo === convertToNameSEO,
+    user => user.name_code === convertToNameSEO,
   );
   if (findName) {
     throw new HTTPException(400, {
@@ -104,19 +102,16 @@ export const signUp = async (
     });
   }
 
-  const [{ group_id, email_verified }, encryptPassword] = await Promise.all([
-    getDefaultData(),
-    new PasswordModel().encryptPassword(password),
-  ]);
+  const { group_id, email_verified } = await getDefaultData();
   const [data] = await dbClient
     .insert(core_users)
     .values({
       email,
       name,
-      name_seo: convertToNameSEO,
+      name_code: convertToNameSEO,
       // TODO: Handle newsletter only if email is allowed
       newsletter,
-      password: encryptPassword,
+      password: hashedPassword,
       avatar_color: generateAvatarColor(name),
       group_id,
       email_verified,

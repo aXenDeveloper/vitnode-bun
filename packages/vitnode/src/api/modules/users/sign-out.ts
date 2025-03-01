@@ -6,7 +6,7 @@ const route = createApiRoute({
   method: 'delete',
   description: 'Sign out the current user',
   plugin: 'core',
-  path: '/sign_out',
+  path: '/',
   responses: {
     200: {
       description: 'User signed out',

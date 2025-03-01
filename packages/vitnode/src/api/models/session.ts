@@ -27,7 +27,7 @@ export class SessionModel {
         ip_address: getUserIp(this.c.req),
         user_agent: this.c.req.header('User-Agent') ?? 'nod  e',
       })
-      .returning();
+      .returning({ id: core_sessions_known_devices.id });
 
     await dbClient.insert(core_sessions).values({
       token,

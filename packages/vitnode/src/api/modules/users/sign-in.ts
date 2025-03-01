@@ -8,7 +8,7 @@ const route = createApiRoute({
   method: 'post',
   description: 'Sign in with email and password',
   plugin: 'core',
-  path: '/sign_in',
+  path: '/',
   request: {
     body: {
       required: true,
@@ -46,7 +46,7 @@ const route = createApiRoute({
 
 export const signInRoute = new OpenAPIHono().openapi(route, async c => {
   const data = await new UserModel().signInWithPassword(c.req.valid('json'));
-  const token = await new SessionModel(c).createSessionByUserId(data.id);
+  const { token } = await new SessionModel(c).createSessionByUserId(data.id);
 
   return c.json({ id: data.id, token });
 });

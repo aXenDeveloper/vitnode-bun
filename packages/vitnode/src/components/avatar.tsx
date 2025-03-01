@@ -16,7 +16,7 @@ export const Avatar = ({
   'alt' | 'height' | 'src' | 'width'
 > & {
   size: number;
-  user: { avatar_color: string; name: string; name_seo: string };
+  user: { avatar_color: string; name: string; name_code: string };
 }) => {
   return (
     <Image

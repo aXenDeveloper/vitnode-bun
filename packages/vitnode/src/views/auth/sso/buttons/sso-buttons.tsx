@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/button';
-import { Link } from '@/lib/navigation';
 import { useTranslations } from 'next-intl';
+
+import { ButtonSSOButtons } from './client';
 
 export const SSOButtons = () => {
   const t = useTranslations('core.global');
@@ -17,17 +17,10 @@ export const SSOButtons = () => {
       </div>
 
       <div className="space-y-4">
-        <Button asChild className="bg-card w-full" variant="outline">
-          <Link href={`/login/sso/facebook`}>Facebook</Link>
-        </Button>
-
-        <Button asChild className="bg-card w-full" variant="outline">
-          <Link href={`/login/sso/google`}>Google</Link>
-        </Button>
-
-        <Button asChild className="bg-card w-full" variant="outline">
-          <Link href={`/login/sso/google`}>GitHub</Link>
-        </Button>
+        <ButtonSSOButtons providerId="discord">Discord</ButtonSSOButtons>
+        <ButtonSSOButtons providerId="facebook">Facebook</ButtonSSOButtons>
+        <ButtonSSOButtons providerId="google">Google</ButtonSSOButtons>
+        <ButtonSSOButtons providerId="github">GitHub</ButtonSSOButtons>
       </div>
     </>
   );

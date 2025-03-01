@@ -10,12 +10,14 @@ import {
   generateMetadataSignUpView,
   SignUpView,
 } from './auth/sign-up/sign-up-view';
+import { CallbackSSOView } from './auth/sso/callback/callback-sso-view';
 
 interface Props {
   params: Promise<{
     locale: string;
     rest: string[];
   }>;
+  searchParams: Promise<Record<string, string>>;
 }
 
 export const generateMetadataDynamicView = async ({
@@ -32,10 +34,19 @@ export const generateMetadataDynamicView = async ({
   return await views[path];
 };
 
-export const DynamicView = async ({ params }: Props) => {
+export const DynamicView = async ({ params, searchParams }: Props) => {
   const { rest, locale } = await params;
   setRequestLocale(locale);
   const path = rest.join('/');
+
+  // Check for dynamic pattern routes first
+  if (rest.length >= 3 && rest[0] === 'login' && rest[1] === 'sso') {
+    const providerId = rest[2];
+
+    return (
+      <CallbackSSOView providerId={providerId} searchParams={searchParams} />
+    );
+  }
 
   const views = {
     register: <SignUpView />,

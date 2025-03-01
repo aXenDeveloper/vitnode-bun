@@ -1,4 +1,5 @@
 import { createApiRoute } from '@/api/lib/route';
+import { PasswordModel } from '@/api/models/password';
 import { UserModel } from '@/api/models/user';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { z } from 'zod';
@@ -9,7 +10,7 @@ const route = createApiRoute({
   method: 'post',
   description: 'Create a new user',
   plugin: 'core',
-  path: '/sign_up',
+  path: '/',
   request: {
     body: {
       required: true,
@@ -50,7 +51,13 @@ const route = createApiRoute({
 });
 
 export const signUpRoute = new OpenAPIHono().openapi(route, async c => {
-  const data = await new UserModel().signUp(c.req.valid('json'), c.req);
+  const hashedPassword = await new PasswordModel().encryptPassword(
+    c.req.valid('json').password,
+  );
+  const data = await new UserModel().signUp(
+    { ...c.req.valid('json'), hashedPassword },
+    c.req,
+  );
 
   return c.json({ id: data.id });
 });

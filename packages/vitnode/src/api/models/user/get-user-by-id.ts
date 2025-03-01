@@ -8,7 +8,7 @@ export const getUserById = async (id: string) => {
       id: core_users.id,
       email: core_users.email,
       name: core_users.name,
-      name_seo: core_users.name_seo,
+      name_code: core_users.name_code,
       joined_at: core_users.joined_at,
       newsletter: core_users.newsletter,
       avatar_color: core_users.avatar_color,
