@@ -10,7 +10,7 @@ export interface SSOApiPlugin {
   fetchUser: (args: {
     access_token: string;
     token_type: string;
-  }) => Promise<{ email: string; id: string; username?: string }>;
+  }) => Promise<{ email: string; id: string; username: string | undefined }>;
   getUrl: () => string;
   id: string;
 }

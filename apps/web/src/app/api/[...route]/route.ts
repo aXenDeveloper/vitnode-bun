@@ -2,6 +2,7 @@ import { OpenAPIHono } from '@hono/zod-openapi';
 import { handle } from 'hono/vercel';
 import { VitNodeAPI } from 'vitnode/api/config';
 import { DiscordSSOApiPlugin } from 'vitnode/api/plugins/sso/discord';
+import { GoogleSSOApiPlugin } from 'vitnode/api/plugins/sso/google';
 
 const app = new OpenAPIHono().basePath('/api');
 VitNodeAPI({
@@ -10,6 +11,10 @@ VitNodeAPI({
   authorization: {
     ssoPlugins: [
       new DiscordSSOApiPlugin({
+        clientId: '',
+        clientSecret: '',
+      }),
+      new GoogleSSOApiPlugin({
         clientId: '',
         clientSecret: '',
       }),

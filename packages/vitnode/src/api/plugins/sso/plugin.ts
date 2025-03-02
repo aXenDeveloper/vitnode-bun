@@ -9,10 +9,4 @@ export class SSOModelPlugin {
     access_token: z.string(),
     token_type: z.string(),
   });
-
-  protected readonly userSchema = z.object({
-    id: z.string(),
-    email: z.string(),
-    username: z.string().optional(),
-  });
 }

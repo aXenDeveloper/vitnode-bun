@@ -3,13 +3,379 @@ title: Custom SSO
 description: xddd
 ---
 
+## Api
+
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
 <Steps>
   <Step>
-  ## test
+  ### Create plugin class
 
-test
+Create new file and create a class that extends `SSOModelPlugin` _(for access to parent class)_ and implements `SSOApiPlugin` _(for type-safe)_.
+
+```ts title="src/utils/sso/google-api.ts"
+import { SSOApiPlugin } from 'vitnode/api/models/sso';
+import { SSOModelPlugin } from 'vitnode/api/plugins/sso/plugin';
+
+export class GoogleSSOApiPlugin extends SSOModelPlugin implements SSOApiPlugin {
+  readonly id = 'discord';
+}
+```
 
   </Step>
+  <Step>
+
+### Client ID and secret
+
+Add `clientId` and `clientSecret` to the constructor.
+
+```ts title="src/utils/sso/google-api.ts"
+import { SSOApiPlugin } from 'vitnode/api/models/sso';
+import { SSOModelPlugin } from 'vitnode/api/plugins/sso/plugin';
+
+export class GoogleSSOApiPlugin extends SSOModelPlugin implements SSOApiPlugin {
+  // [!code ++]
+  constructor({
+    // [!code ++]
+    clientId,
+    // [!code ++]
+    clientSecret,
+    // [!code ++]
+  }: {
+    // [!code ++]
+    clientId: string;
+    // [!code ++]
+    clientSecret: string;
+    // [!code ++]
+  }) {
+    // [!code ++]
+    super();
+    // [!code ++]
+    this.clientId = clientId;
+    // [!code ++]
+    this.clientSecret = clientSecret;
+    // [!code ++]
+  }
+
+  private readonly clientId: string; // [!code ++]
+  private readonly clientSecret: string; // [!code ++]
+  readonly id = 'google';
+}
+```
+
+  </Step>
+  <Step>
+
+### `getUrl` method
+
+Implement `getUrl` method inside your class that returns the URL for the SSO provider.
+
+This url should contain `scope` to get access to `id`, `email` and `username` _(optional)_.
+
+<Callout title="redirect_uri">
+  You can use `this.redirectUri('{your_provider_id}')` to get the redirect URI
+  for the SSO provider.
+</Callout>
+
+```ts title="src/utils/sso/google-api.ts"
+getUrl = () => {
+  const url = new URL('https://accounts.google.com/o/oauth2/auth');
+  url.searchParams.set('client_id', this.clientId);
+  url.searchParams.set('redirect_uri', this.redirectUri(this.id));
+  url.searchParams.set('response_type', 'code');
+  url.searchParams.set('scope', 'openid profile email');
+
+  return url.toString();
+};
+```
+
+  </Step>
+
+<Step>
+
+### `fetchToken` method
+
+First implement `POST` call from `fetch()` to get `access_token` and `token_type`:
+
+```ts title="src/utils/sso/google-api.ts"
+fetchToken = async (code: string) => {
+  const res = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Accept: 'application/json',
+    },
+    body: new URLSearchParams({
+      code,
+      redirect_uri: this.redirectUri(this.id),
+      grant_type: 'authorization_code',
+      client_id: this.clientId,
+      client_secret: this.clientSecret,
+    }),
+  });
+};
+```
+
+#### Error handling
+
+Next let's validate the code errors. It will help you to get the right message on the client. For example when user denied access to the app you can show him the message that he denied access.
+
+```ts title="src/utils/sso/google-api.ts"
+import { HTTPException } from 'hono/http-exception'; // [!code ++]
+import { ContentfulStatusCode } from 'hono/utils/http-status'; // [!code ++]
+
+fetchToken = async (code: string) => {
+  const res = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Accept: 'application/json',
+    },
+    body: new URLSearchParams({
+      code,
+      redirect_uri: this.redirectUri(this.id),
+      grant_type: 'authorization_code',
+      client_id: this.clientId,
+      client_secret: this.clientSecret,
+    }),
+  });
+
+  // [!code ++]
+  if (!res.ok) {
+    // [!code ++]
+    throw new HTTPException(+res.status.toString() as ContentfulStatusCode, {
+      // [!code ++]
+      message: 'Internal error requesting token',
+      // [!code ++]
+    });
+    // [!code ++]
+  }
+};
+```
+
+#### Parse response
+
+Now let's parse the response and return the `access_token` and `token_type`. We will use `zod` to validate the response.
+
+```ts title="src/utils/sso/google-api.ts"
+fetchToken = async (code: string) => {
+  const res = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Accept: 'application/json',
+    },
+    body: new URLSearchParams({
+      code,
+      redirect_uri: this.redirectUri(this.id),
+      grant_type: 'authorization_code',
+      client_id: this.clientId,
+      client_secret: this.clientSecret,
+    }),
+  });
+
+  if (!res.ok) {
+    throw new HTTPException(+res.status.toString() as ContentfulStatusCode, {
+      message: 'Internal error requesting token',
+    });
+  }
+
+  // [!code ++]
+  const { data, error } = this.tokenSchema.safeParse(await res.json());
+  // [!code ++]
+  if (error || !data) {
+    // [!code ++]
+    throw new HTTPException(400, {
+      // [!code ++]
+      message: 'Invalid token response',
+      // [!code ++]
+    });
+    // [!code ++]
+  }
+  // [!code ++]
+
+  // [!code ++]
+  return data;
+};
+```
+
+</Step>
+
+<Step>
+
+### `fetchUser` method
+
+#### User schema
+
+Based on documentation of the SSO provider, create a schema for the user data.
+
+```ts title="src/utils/sso/google-api.ts"
+export class GoogleSSOApiPlugin extends SSOModelPlugin implements SSOApiPlugin {
+  constructor({
+    clientId,
+    clientSecret,
+  }: {
+    clientId: string;
+    clientSecret: string;
+  }) {
+    super();
+    this.clientId = clientId;
+    this.clientSecret = clientSecret;
+  }
+
+  private readonly clientId: string;
+  private readonly clientSecret: string;
+  // [!code ++]
+  private readonly userSchema = z.object({
+    // [!code ++]
+    id: z.string(),
+    // [!code ++]
+    email: z.string(),
+    // [!code ++]
+    name: z.string(),
+    // [!code ++]
+  });
+}
+```
+
+#### Fetch user
+
+Now let's implement `fetchUser` method that will fetch user data from the SSO provider and validate it with the schema.
+
+This function should return the user data `id`, `email` and `username` _(optional)_.
+
+```ts title="src/utils/sso/google-api.ts"
+fetchUser = async ({
+  token_type,
+  access_token,
+}: {
+  access_token: string;
+  token_type: string;
+}) => {
+  const res = await fetch('https://www.googleapis.com/oauth2/v1/userinfo', {
+    headers: {
+      Authorization: `${token_type} ${access_token}`,
+    },
+  });
+  const { data, error } = this.userSchema.safeParse(await res.json());
+  if (error || !data) {
+    throw new HTTPException(400, {
+      message: 'Invalid user response',
+    });
+  }
+
+  return {
+    ...data,
+    username: data.name,
+  };
+};
+```
+
+#### Validate active email
+
+Some OAuth2 providers show the user email even if it's not verified. If API returns some validate fields like `verified_email` you can add it to the schema and validate it.
+
+```ts title="src/utils/sso/google-api.ts"
+export class GoogleSSOApiPlugin extends SSOModelPlugin implements SSOApiPlugin {
+  constructor({
+    clientId,
+    clientSecret,
+  }: {
+    clientId: string;
+    clientSecret: string;
+  }) {
+    super();
+    this.clientId = clientId;
+    this.clientSecret = clientSecret;
+  }
+
+  private readonly clientId: string;
+  private readonly clientSecret: string;
+  private readonly userSchema = z.object({
+    id: z.string(),
+    email: z.string(),
+    name: z.string(),
+    // [!code ++]
+    verified_email: z.boolean(),
+  });
+}
+```
+
+```ts title="src/utils/sso/google-api.ts"
+fetchUser = async ({
+  token_type,
+  access_token,
+}: {
+  access_token: string;
+  token_type: string;
+}) => {
+  const res = await fetch('https://www.googleapis.com/oauth2/v1/userinfo', {
+    headers: {
+      Authorization: `${token_type} ${access_token}`,
+    },
+  });
+  const { data, error } = this.userSchema.safeParse(await res.json());
+  if (error || !data) {
+    throw new HTTPException(400, {
+      message: 'Invalid user response',
+    });
+  }
+
+  // [!code ++]
+  if (!data.verified_email) {
+    // [!code ++]
+    throw new HTTPException(400, {
+      // [!code ++]
+      message: 'Email not verified',
+      // [!code ++]
+    });
+    // [!code ++]
+  }
+
+  return {
+    ...data,
+    username: data.name,
+  };
+};
+```
+
+</Step>
+
+<Step>
+
+### Register plugin
+
+Register your plugin in the API route file. Initialize the `GoogleSSOApiPlugin` class with `clientId` and `clientSecret` inside `authorization.ssoPlugins` array.
+
+```ts title="src/app/api/[...route]/route.ts"
+import { OpenAPIHono } from '@hono/zod-openapi';
+import { handle } from 'hono/vercel';
+import { VitNodeAPI } from 'vitnode/api/config';
+import { GoogleSSOApiPlugin } from '@/utils/seo/google'; // [!code ++]
+
+const app = new OpenAPIHono().basePath('/api');
+VitNodeAPI({
+  app,
+  plugins: [],
+  // [!code ++]
+  authorization: {
+    // [!code ++]
+    ssoPlugins: [
+      // [!code ++]
+      new GoogleSSOApiPlugin({
+        // [!code ++]
+        clientId: process.env.GOOGLE_CLIENT_ID!,
+        // [!code ++]
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        // [!code ++]
+      }),
+      // [!code ++]
+    ],
+    // [!code ++]
+  },
+});
+```
+
+</Step>
+
   </Steps>

@@ -4,10 +4,7 @@ import { HTTPException } from 'hono/http-exception';
 import { ContentfulStatusCode } from 'hono/utils/http-status';
 import { z } from 'zod';
 
-export class DiscordSSOApiPlugin
-  extends SSOModelPlugin
-  implements SSOApiPlugin
-{
+export class GoogleSSOApiPlugin extends SSOModelPlugin implements SSOApiPlugin {
   constructor({
     clientId,
     clientSecret,
@@ -25,11 +22,12 @@ export class DiscordSSOApiPlugin
   private readonly userSchema = z.object({
     id: z.string(),
     email: z.string(),
-    username: z.string(),
+    name: z.string(),
+    verified_email: z.boolean(),
   });
 
   fetchToken = async (code: string) => {
-    const res = await fetch('https://discord.com/api/oauth2/token', {
+    const res = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -66,31 +64,41 @@ export class DiscordSSOApiPlugin
   }: {
     access_token: string;
     token_type: string;
-  }): ReturnType<SSOApiPlugin['fetchUser']> => {
-    const res = await fetch('https://discord.com/api/users/@me', {
+  }) => {
+    const res = await fetch('https://www.googleapis.com/oauth2/v1/userinfo', {
       headers: {
         Authorization: `${token_type} ${access_token}`,
       },
     });
-    const { data, error } = this.userSchema.safeParse(await res.json());
+    const dataFromRes = await res.json();
+    const { data, error } = this.userSchema.safeParse(dataFromRes);
     if (error || !data) {
       throw new HTTPException(400, {
         message: 'Invalid user response',
       });
     }
 
-    return data;
+    if (!data.verified_email) {
+      throw new HTTPException(400, {
+        message: 'Email not verified',
+      });
+    }
+
+    return {
+      ...data,
+      username: data.name,
+    };
   };
 
   getUrl = () => {
-    const url = new URL('https://discord.com/oauth2/authorize');
+    const url = new URL('https://accounts.google.com/o/oauth2/auth');
     url.searchParams.set('client_id', this.clientId);
     url.searchParams.set('redirect_uri', this.redirectUri(this.id));
     url.searchParams.set('response_type', 'code');
-    url.searchParams.set('scope', 'identify email');
+    url.searchParams.set('scope', 'openid profile email');
 
     return url.toString();
   };
 
-  readonly id = 'discord';
+  readonly id = 'google';
 }
