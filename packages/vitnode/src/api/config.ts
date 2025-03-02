@@ -69,7 +69,7 @@ export function VitNodeAPI<T extends Schema>({
     });
   });
 
-  [corePlugin(), ...plugins].map(root => {
+  [corePlugin, ...plugins].map(root => {
     app.route(`/${root.name}`, root.app);
   });
 

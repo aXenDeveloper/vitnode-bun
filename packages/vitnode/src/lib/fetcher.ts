@@ -33,7 +33,9 @@ export type Client<T> =
       : never
     : never;
 
-export async function fetcher<T extends ModuleApi<Schema, string, string>>({
+export async function fetcher<
+  T extends ModuleApi<Env, Schema, string, string>,
+>({
   plugin,
   module,
   options,
@@ -71,31 +73,33 @@ export async function fetcher<T extends ModuleApi<Schema, string, string>>({
   return client as unknown as UnionToIntersection<Client<T['app']>>;
 }
 
-type SchemaOf<T extends ModuleApi<Schema, string, string>> =
-  T extends ModuleApi<infer S, string, string> ? S : never;
+type SchemaOf<E extends Env, T extends ModuleApi<E, Schema, string, string>> =
+  T extends ModuleApi<E, infer S, string, string> ? S : never;
 
 type MethodsForEndpoint<
-  T extends ModuleApi<Schema, string, string>,
-  P extends keyof SchemaOf<T>,
+  E extends Env,
+  T extends ModuleApi<E, Schema, string, string>,
+  P extends keyof SchemaOf<E, T>,
 > = {
-  [K in Extract<keyof SchemaOf<T>[P], `$${string}`>]: K extends `$${infer U}`
+  [K in Extract<keyof SchemaOf<E, T>[P], `$${string}`>]: K extends `$${infer U}`
     ? Lowercase<U>
     : never;
-}[Extract<keyof SchemaOf<T>[P], `$${string}`>];
+}[Extract<keyof SchemaOf<E, T>[P], `$${string}`>];
 
 export type FetcherInput<
-  T extends ModuleApi<Schema, string, string>,
-  P extends keyof SchemaOf<T>,
-  M extends MethodsForEndpoint<T, P>,
+  T extends ModuleApi<E, Schema, string, string>,
+  P extends keyof SchemaOf<E, T>,
+  M extends MethodsForEndpoint<E, T, P>,
+  E extends Env = Env,
 > = {
-  [K in Extract<keyof SchemaOf<T>[P], `$${string}`>]: Lowercase<
+  [K in Extract<keyof SchemaOf<E, T>[P], `$${string}`>]: Lowercase<
     K extends `$${infer U}` ? U : never
   > extends M
-    ? SchemaOf<T>[P][K] extends { input: infer I }
+    ? SchemaOf<E, T>[P][K] extends { input: infer I }
       ? I
       : never
     : never;
-}[Extract<keyof SchemaOf<T>[P], `$${string}`>];
+}[Extract<keyof SchemaOf<E, T>[P], `$${string}`>];
 
 export async function handleSetCookiesFetcher<
   T,

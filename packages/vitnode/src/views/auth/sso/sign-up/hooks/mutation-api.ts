@@ -12,6 +12,7 @@ export const mutationApi = async (
     plugin: 'core',
     module: 'users',
   });
+
   const data = await res.sso[':providerId'].sign_up.$post(input);
 
   if (data.status !== 200) {

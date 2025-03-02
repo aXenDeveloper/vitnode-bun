@@ -12,11 +12,11 @@ import { deleteCookie, getCookie, setCookie } from 'hono/cookie';
 
 import { UserModel } from './user';
 
-export class SessionModel {
-  constructor(c: Context<Env, '/', Input>) {
+export class SessionModel<T extends Env> {
+  constructor(c: Context<T, '/', Input>) {
     this.c = c;
   }
-  private readonly c: Context<Env, '/', Input>;
+  private readonly c: Context<T, '/', Input>;
 
   async createSessionByUserId(userId: string) {
     const token = crypto.randomBytes(64).toString('hex').normalize();

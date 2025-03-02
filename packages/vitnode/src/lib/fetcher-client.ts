@@ -1,12 +1,14 @@
 import { ModuleApi } from '@/api/lib/module';
-import { Schema } from 'hono';
+import { Env, Schema } from 'hono';
 import { hc } from 'hono/client';
 import { UnionToIntersection } from 'hono/utils/types';
 
 import { CONFIG } from './config';
 import { Client } from './fetcher';
 
-export function fetcherClient<T extends ModuleApi<Schema, string, string>>({
+export function fetcherClient<
+  T extends ModuleApi<Env, Schema, string, string>,
+>({
   plugin,
   module,
   options,

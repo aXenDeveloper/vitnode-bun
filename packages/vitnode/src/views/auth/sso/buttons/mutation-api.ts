@@ -13,9 +13,10 @@ export const mutationApi = async (providerId: string) => {
   const req = await client.sso[':providerId'].$post({
     param: { providerId },
   });
-  if (req.status === 200) {
-    const data = await req.json();
-
-    await redirect(data.url);
+  if (req.status !== 200) {
+    return { message: 'Something is wrong' };
   }
+
+  const data = await req.json();
+  await redirect(data.url);
 };

@@ -47,8 +47,7 @@ const route = createApiRoute({
 export const signUpSSORoute = new OpenAPIHono().openapi(route, async c => {
   const { providerId } = c.req.valid('param');
   const { access_token, token_type, name } = c.req.valid('json');
-  const sso = new SSOModel();
-  const userFromSSO = await sso.fetchUser({
+  const userFromSSO = await new SSOModel(c).fetchUser({
     access_token,
     token_type,
     providerId,

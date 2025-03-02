@@ -10,12 +10,13 @@ export interface PluginAPI<T extends Schema, Plugin extends string> {
 
 export function createPluginApi<
   T extends Schema,
+  E extends Env = Env,
   Plugin extends string = string,
 >({
   name,
   modules,
 }: {
-  modules: ModuleApi<T, string, Plugin>[];
+  modules: ModuleApi<E, T, string, Plugin>[];
   name: Plugin;
 }): PluginAPI<T, Plugin> {
   const root = new OpenAPIHono();
