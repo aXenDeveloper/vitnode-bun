@@ -27,13 +27,10 @@ export const useFormSignIn = ({ isAdmin }: { isAdmin?: boolean }) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setError('');
     const mutation = await mutationApi({
-      json: values,
+      json: { ...values, isAdmin },
     });
 
-    if (!mutation?.message) {
-      return;
-    }
-
+    if (!mutation?.message) return;
     if (mutation?.message !== 'Internal Server Error') {
       setError(mutation.message);
 

@@ -39,5 +39,17 @@ VitNodeAPI({
       type: 'number',
       default: '1000 * 60 * 60 * 24 * 90',
     },
+    device_cookie_name: {
+      description:
+        'The name of the cookie that will be used to store the device token.',
+      type: 'string',
+      default: 'vitnode-device',
+    },
+    device_cookie_expires: {
+      description:
+        'The time in milliseconds that the device cookie will expire.',
+      type: 'number',
+      default: '1000 * 60 * 60 * 24 * 365',
+    },
   }}
 />

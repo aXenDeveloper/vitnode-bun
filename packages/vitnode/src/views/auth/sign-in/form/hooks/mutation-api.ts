@@ -23,6 +23,12 @@ export const mutationApi = async (
   }
 
   await handleSetCookiesFetcher(data);
+  if (input.json.isAdmin) {
+    revalidatePath('/[locale]/admin', 'layout');
+    await redirect('/admin/core');
+
+    return;
+  }
   revalidatePath('/[locale]/(main)', 'layout');
   await redirect('/');
 };

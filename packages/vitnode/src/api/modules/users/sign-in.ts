@@ -1,5 +1,6 @@
 import { createApiRoute } from '@/api/lib/route';
 import { SessionModel } from '@/api/models/session';
+import { SessionAdminModel } from '@/api/models/session-admin';
 import { UserModel } from '@/api/models/user';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { z } from 'zod';
@@ -20,6 +21,9 @@ const route = createApiRoute({
             }),
             password: z.string().openapi({
               example: 'Test123!',
+            }),
+            isAdmin: z.boolean().optional().openapi({
+              example: false,
             }),
           }),
         },
@@ -45,7 +49,16 @@ const route = createApiRoute({
 });
 
 export const signInRoute = new OpenAPIHono().openapi(route, async c => {
-  const data = await new UserModel().signInWithPassword(c.req.valid('json'));
+  const { password, isAdmin, email } = c.req.valid('json');
+  const data = await new UserModel().signInWithPassword({ password, email });
+
+  if (isAdmin) {
+    const { token } = await new SessionAdminModel(c).createSessionByUserId(
+      data.id,
+    );
+
+    return c.json({ id: data.id, token });
+  }
   const { token } = await new SessionModel(c).createSessionByUserId(data.id);
 
   return c.json({ id: data.id, token });
