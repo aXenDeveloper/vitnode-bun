@@ -1,8 +1,11 @@
-export const removeSpecialCharacters = (text: string): string =>
+export const removeSpecialCharacters = (
+  text: string,
+  replaceSpace = true,
+): string =>
   text
     .trimStart()
     .trimEnd()
-    .replace(/\s/g, '-')
+    .replace(replaceSpace ? /\s/g : '', '-')
     .normalize('NFD')
     .replace(/\p{Diacritic}/gu, '')
     .replace(/[#%&?^|'{}\\/]/g, '')

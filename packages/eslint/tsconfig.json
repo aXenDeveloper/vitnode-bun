@@ -16,6 +16,7 @@
     "strictPropertyInitialization": false,
     "strictBindCallApply": false,
     "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "erasableSyntaxOnly": true
   }
 }

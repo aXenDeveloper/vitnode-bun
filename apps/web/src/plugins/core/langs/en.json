@@ -36,11 +36,7 @@
     },
     "auth": {
       "sso": {
-        "access_denied": "You have denied access to the application or the request has expired. Please try again.",
-        "sign_up": {
-          "title": "Almost there!",
-          "desc": "Please complete your registration for <email></email>"
-        }
+        "access_denied": "You have denied access to the application or the request has expired. Please try again."
       },
       "sign_up": {
         "desc": "You already have an account? <link>Sign in</link>.",

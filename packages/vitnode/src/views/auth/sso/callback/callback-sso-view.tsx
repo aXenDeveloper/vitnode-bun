@@ -3,7 +3,6 @@ import { fetcher } from '@/lib/fetcher';
 import { ErrorView } from '@/views/error/error-view';
 import { getTranslations } from 'next-intl/server';
 
-import { SignUpSSOView } from '../sign-up/sign-up-sso-view';
 import { ClientCallbackSSO } from './client/client';
 
 export const CallbackSSOView = async ({
@@ -34,11 +33,6 @@ export const CallbackSSOView = async ({
 
   if (res.status !== 200) {
     return <ErrorView code={res.status} />;
-  }
-
-  const data = await res.json();
-  if (!data.user) {
-    return <SignUpSSOView providerId={providerId} {...data} />;
   }
 
   return (

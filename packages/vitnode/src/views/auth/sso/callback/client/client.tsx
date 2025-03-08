@@ -25,7 +25,7 @@ export const ClientCallbackSSO = ({
 
       return '';
     },
-    retry: 0,
+    retry: false,
   });
 
   if (isError) {
