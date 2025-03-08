@@ -5,7 +5,7 @@ export const removeSpecialCharacters = (
   text
     .trimStart()
     .trimEnd()
-    .replace(replaceSpace ? /\s/g : '', '-')
+    .replace(/\s/g, replaceSpace ? '-' : ' ')
     .normalize('NFD')
     .replace(/\p{Diacritic}/gu, '')
     .replace(/[#%&?^|'{}\\/]/g, '')
