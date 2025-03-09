@@ -1,3 +1,4 @@
+import { Avatar } from '@/components/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,9 +10,14 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { SidebarMenuButton } from '@/components/ui/sidebar';
 import { SidebarMenu, SidebarMenuItem } from '@/components/ui/sidebar-server';
+import { getSessionAdminApi } from '@/lib/api/get-session-admin-api';
 import { BadgeCheck, ChevronsUpDown, LogOut } from 'lucide-react';
 
-export const UserFooterSidebarAdmin = () => {
+export const UserFooterSidebarAdmin = async () => {
+  const session = await getSessionAdminApi();
+  if (!session) return null;
+  const { user } = session;
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -21,10 +27,10 @@ export const UserFooterSidebarAdmin = () => {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               size="lg"
             >
-              xd
+              <Avatar size={28} user={user} />
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">Test123</span>
-                <span className="truncate text-xs">test@test.com</span>
+                <span className="truncate font-medium">{user.name}</span>
+                <span className="truncate text-xs">{user.email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>

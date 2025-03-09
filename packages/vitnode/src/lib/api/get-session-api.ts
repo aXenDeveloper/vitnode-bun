@@ -11,7 +11,5 @@ export const getSessionApi = async () => {
     },
   });
 
-  const data = await client.session.$get();
-
-  return data.json();
+  return await client.session.$get();
 };

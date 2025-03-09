@@ -2,10 +2,13 @@ import { dbClient } from '@/database/client';
 import { core_admin_sessions } from '@/database/schema/admins';
 import { CONFIG } from '@/lib/config';
 import crypto from 'crypto';
+import { and, eq, gt } from 'drizzle-orm';
 import { Context, Env, Input } from 'hono';
-import { setCookie } from 'hono/cookie';
+import { deleteCookie, getCookie, setCookie } from 'hono/cookie';
+import { HTTPException } from 'hono/http-exception';
 
 import { DeviceModel } from './device';
+import { UserModel } from './user';
 
 export class SessionAdminModel<T extends Env> extends DeviceModel<T> {
   constructor(c: Context<T, '/', Input>) {
@@ -42,5 +45,53 @@ export class SessionAdminModel<T extends Env> extends DeviceModel<T> {
     );
 
     return { token, deviceId };
+  }
+
+  async deleteSession() {
+    const token = getCookie(
+      this.c,
+      this.c.get('core').authorization.admin_cookie_name,
+    );
+    if (!token) return;
+
+    await dbClient
+      .delete(core_admin_sessions)
+      .where(eq(core_admin_sessions.token, token));
+    deleteCookie(this.c, this.c.get('core').authorization.admin_cookie_name);
+  }
+
+  async verifySession() {
+    const token = getCookie(
+      this.c,
+      this.c.get('core').authorization.admin_cookie_name,
+    );
+    if (!token) throw new HTTPException(403);
+    const deviceId = getCookie(
+      this.c,
+      this.c.get('core').authorization.device_cookie_name,
+    );
+    if (!deviceId) throw new HTTPException(403);
+
+    const [session] = await dbClient
+      .select({
+        token: core_admin_sessions.token,
+        user_id: core_admin_sessions.user_id,
+      })
+      .from(core_admin_sessions)
+      .where(
+        and(
+          eq(core_admin_sessions.token, token),
+          gt(core_admin_sessions.expires_at, new Date()),
+        ),
+      )
+      .limit(1);
+
+    if (!session || session.token !== token) {
+      throw new HTTPException(403);
+    }
+    const user = await new UserModel().getUserById(session.user_id);
+    if (!user) throw new HTTPException(403);
+
+    return user;
   }
 }

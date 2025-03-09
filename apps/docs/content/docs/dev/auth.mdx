@@ -28,13 +28,13 @@ VitNodeAPI({
 
 <TypeTable
   type={{
-    ['cookie_name']: {
+    cookie_name: {
       description:
         'The name of the cookie that will be used to store the session token.',
       type: 'string',
       default: 'vitnode-auth',
     },
-    ['cookie_expires']: {
+    cookie_expires: {
       description: 'The time in milliseconds that the cookie will expire.',
       type: 'number',
       default: '1000 * 60 * 60 * 24 * 90',
@@ -50,6 +50,18 @@ VitNodeAPI({
         'The time in milliseconds that the device cookie will expire.',
       type: 'number',
       default: '1000 * 60 * 60 * 24 * 365',
+    },
+    admin_cookie_name: {
+      description:
+        'The name of the cookie that will be used to store the admin token.',
+      type: 'string',
+      default: 'vitnode-admin',
+    },
+    admin_cookie_expires: {
+      description:
+        'The time in milliseconds that the admin cookie will expire.',
+      type: 'number',
+      default: '1000 * 60 * 60 * 24 * 1',
     },
   }}
 />

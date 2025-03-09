@@ -6,12 +6,13 @@ import { getTranslations } from 'next-intl/server';
 import { AuthUserHeader } from './auth/auth';
 
 export const UserHeader = async () => {
-  const [t, data] = await Promise.all([
+  const [t, res] = await Promise.all([
     getTranslations('core.global'),
     getSessionApi(),
   ]);
+  const session = await res.json();
 
-  if (!data.user) {
+  if (!session.user) {
     return (
       <>
         <Button asChild variant="ghost">

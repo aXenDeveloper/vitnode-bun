@@ -13,11 +13,11 @@ import { getTranslations } from 'next-intl/server';
 import { LogOutAuthUserHeader } from './log-out/log-out';
 
 export const AuthUserHeader = async () => {
-  const [t, { user }] = await Promise.all([
+  const [t, res] = await Promise.all([
     getTranslations('core.global.user_bar'),
     getSessionApi(),
   ]);
-
+  const { user } = await res.json();
   if (!user) return null;
 
   return (
