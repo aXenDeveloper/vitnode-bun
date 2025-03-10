@@ -12,7 +12,7 @@ export const getSessionAdminApi = async () => {
     },
   });
 
-  const res = await client.users.session.$get();
+  const res = await client.session.$get();
   if (res.status !== 200) {
     await redirect('/admin');
 

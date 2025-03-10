@@ -13,6 +13,8 @@ import { SidebarMenu, SidebarMenuItem } from '@/components/ui/sidebar-server';
 import { getSessionAdminApi } from '@/lib/api/get-session-admin-api';
 import { BadgeCheck, ChevronsUpDown, LogOut } from 'lucide-react';
 
+import { SignOutUserFooterSidebarAdmin } from './sign-out';
+
 export const UserFooterSidebarAdmin = async () => {
   const session = await getSessionAdminApi();
   if (!session) return null;
@@ -54,10 +56,10 @@ export const UserFooterSidebarAdmin = async () => {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <SignOutUserFooterSidebarAdmin>
               <LogOut />
               Log out
-            </DropdownMenuItem>
+            </SignOutUserFooterSidebarAdmin>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

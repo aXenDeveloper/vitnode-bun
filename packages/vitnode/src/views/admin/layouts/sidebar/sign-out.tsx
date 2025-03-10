@@ -1,10 +1,9 @@
 'use client';
 
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
+import { signOutMutationApi } from '@/views/layouts/theme/header/user/auth/log-out/mutation-api';
 
-import { signOutMutationApi } from './mutation-api';
-
-export const LogOutAuthUserHeader = ({
+export const SignOutUserFooterSidebarAdmin = ({
   children,
 }: {
   children: React.ReactNode;
@@ -12,7 +11,7 @@ export const LogOutAuthUserHeader = ({
   return (
     <DropdownMenuItem
       onClick={async () => {
-        await signOutMutationApi({});
+        await signOutMutationApi({ isAdmin: true });
       }}
     >
       {children}
