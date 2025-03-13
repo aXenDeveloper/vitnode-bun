@@ -1,6 +1,7 @@
 'use client';
 
 import { Loader } from '@/components/ui/loader';
+import { useRouter } from '@/lib/navigation';
 import { ErrorView } from '@/views/error/error-view';
 import { useQuery } from '@tanstack/react-query';
 
@@ -13,6 +14,7 @@ export const ClientCallbackSSO = ({
   code: string;
   providerId: string;
 }) => {
+  const { replace } = useRouter();
   const { isError } = useQuery({
     queryKey: ['core.auth.sso.callback.sign-up', providerId, code],
     queryFn: async () => {
@@ -20,6 +22,7 @@ export const ClientCallbackSSO = ({
       if (mutation?.error) {
         throw new Error(mutation.error);
       }
+      replace('/');
 
       return '';
     },

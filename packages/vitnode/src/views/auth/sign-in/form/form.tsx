@@ -21,7 +21,7 @@ export const FormSignIn = ({ isAdmin }: { isAdmin?: boolean }) => {
   const { form, onSubmit, error } = useFormSignIn({ isAdmin });
 
   return (
-    <>
+    <div className="space-y-4">
       {error && (
         <Alert variant="destructive">
           <AlertCircle className="size-4" />
@@ -61,6 +61,6 @@ export const FormSignIn = ({ isAdmin }: { isAdmin?: boolean }) => {
 
         <FormButtonSubmit className="w-full">{t('submit')}</FormButtonSubmit>
       </Form>
-    </>
+    </div>
   );
 };

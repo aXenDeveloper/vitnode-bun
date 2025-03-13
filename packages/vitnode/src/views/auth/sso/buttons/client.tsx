@@ -17,7 +17,7 @@ export const ButtonSSOButtons = ({
 
   return (
     <Button
-      className="bg-card w-full"
+      className="bg-card w-[calc(50%-0.5rem)]"
       onClick={async () => {
         const mutation = await mutationApi(providerId);
 

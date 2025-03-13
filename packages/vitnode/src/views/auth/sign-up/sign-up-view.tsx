@@ -23,24 +23,27 @@ export const SignUpView = () => {
 
   return (
     <div className="mx-auto max-w-md px-4 py-10">
-      <div className="mb-10 space-y-2 text-center">
-        <h1 className="text-3xl font-semibold leading-none tracking-tight">
-          {tGlobal('register')}
-        </h1>
-        <CardDescription>
-          {t.rich('desc', {
+      <Card className="bg-muted p-0">
+        <div className="bg-card rounded-xl p-6">
+          <div className="mb-10 space-y-2 text-center">
+            <h1 className="text-2xl font-semibold leading-none tracking-tight">
+              {tGlobal('register')}
+            </h1>
+            <CardDescription>{t('desc')}</CardDescription>
+          </div>
+          <FormSignUp />
+          <SSOButtons />
+        </div>
+
+        <div className="text-accent-foreground p-6 text-center text-sm">
+          {t.rich('already_have_account', {
             link: text => (
-              <Link className="text-primary" href="/login">
+              <Link className="font-semibold" href="/login">
                 {text}
               </Link>
             ),
           })}
-        </CardDescription>
-      </div>
-
-      <Card className="p-6">
-        <FormSignUp />
-        <SSOButtons />
+        </div>
       </Card>
     </div>
   );

@@ -36,10 +36,12 @@
     },
     "auth": {
       "sso": {
+        "or": "Or continue With",
         "access_denied": "You have denied access to the application or the request has expired. Please try again."
       },
       "sign_up": {
-        "desc": "You already have an account? <link>Sign in</link>.",
+        "desc": "Hello there! Create your account to get started.",
+        "already_have_account": "You already have an account? <link>Sign in</link>.",
         "submit": "Sign up",
         "username": {
           "label": "Username",
@@ -75,7 +77,8 @@
         }
       },
       "sign_in": {
-        "desc": "Don't have an account? <link>Sign up</link>.",
+        "desc": "Welcome back! Sign in to your account.",
+        "do_not_have_account": "Don't have an account? <link>Sign up</link>.",
         "email": {
           "label": "Email",
           "invalid": "Invalid email address."

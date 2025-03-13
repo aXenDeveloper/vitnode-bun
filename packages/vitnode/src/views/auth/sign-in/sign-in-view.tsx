@@ -22,25 +22,29 @@ export const SignInView = () => {
   const tGlobal = useTranslations('core.global');
 
   return (
-    <div className="mx-auto max-w-md space-y-4 px-4 py-10">
-      <div className="mb-10 space-y-2 text-center">
-        <h1 className="text-3xl font-semibold leading-none tracking-tight">
-          {tGlobal('login')}
-        </h1>
-        <CardDescription>
-          {t.rich('desc', {
+    <div className="mx-auto max-w-md px-4 py-10">
+      <Card className="bg-muted p-0">
+        <div className="bg-card rounded-xl p-6">
+          <div className="mb-10 space-y-2 text-center">
+            <h1 className="text-2xl font-semibold leading-none tracking-tight">
+              {tGlobal('login')}
+            </h1>
+            <CardDescription>{t('desc')}</CardDescription>
+          </div>
+
+          <FormSignIn />
+          <SSOButtons />
+        </div>
+
+        <div className="text-accent-foreground p-6 text-center text-sm">
+          {t.rich('do_not_have_account', {
             link: text => (
-              <Link className="text-primary" href="/register">
+              <Link className="font-semibold" href="/register">
                 {text}
               </Link>
             ),
           })}
-        </CardDescription>
-      </div>
-
-      <Card className="space-y-4 p-6">
-        <FormSignIn />
-        <SSOButtons />
+        </div>
       </Card>
     </div>
   );
