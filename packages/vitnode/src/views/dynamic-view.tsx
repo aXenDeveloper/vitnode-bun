@@ -39,8 +39,7 @@ export const DynamicView = async ({ params, searchParams }: Props) => {
   setRequestLocale(locale);
   const path = rest.join('/');
 
-  // Check for dynamic pattern routes first
-  if (rest.length >= 3 && rest[0] === 'login' && rest[1] === 'sso') {
+  if (rest[0] === 'login' && rest[1] === 'sso' && rest[2] && !rest[3]) {
     const providerId = rest[2];
 
     return (

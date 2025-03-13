@@ -1,5 +1,8 @@
 import { dbClient } from '@/database/client';
-import { core_admin_sessions } from '@/database/schema/admins';
+import {
+  core_admin_permissions,
+  core_admin_sessions,
+} from '@/database/schema/admins';
 import { CONFIG } from '@/lib/config';
 import crypto from 'crypto';
 import { and, eq, gt } from 'drizzle-orm';
@@ -15,7 +18,19 @@ export class SessionAdminModel<T extends Env> extends DeviceModel<T> {
     super(c);
   }
 
+  async checkIfUserIsAdmin(userId: string) {
+    const [permission] = await dbClient
+      .select()
+      .from(core_admin_permissions)
+      .where(eq(core_admin_permissions.user_id, userId))
+      .limit(1);
+
+    return !!permission;
+  }
+
   async createSessionByUserId(userId: string) {
+    const isAdmin = await this.checkIfUserIsAdmin(userId);
+    if (!isAdmin) throw new HTTPException(403);
     const token = crypto.randomBytes(64).toString('hex').normalize();
     const deviceId = await this.getDeviceId();
 

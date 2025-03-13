@@ -88,6 +88,7 @@ export class DiscordSSOApiPlugin
     url.searchParams.set('redirect_uri', this.redirectUri(this.id));
     url.searchParams.set('response_type', 'code');
     url.searchParams.set('scope', 'identify email');
+    url.searchParams.set('state', 'isAdmin');
 
     return url.toString();
   };

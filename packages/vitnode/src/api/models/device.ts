@@ -64,7 +64,7 @@ export class DeviceModel<T extends Env> {
         .where(eq(core_sessions_known_devices.id, deviceIdFromCookie));
 
       if (!device) {
-        await this.createDevice();
+        return await this.createDevice();
       }
 
       await dbClient
@@ -74,7 +74,6 @@ export class DeviceModel<T extends Env> {
           user_agent: this.getUserAgent(),
         })
         .where(eq(core_sessions_known_devices.id, deviceIdFromCookie));
-      this.setCookieDevice(device.id);
 
       return device.id;
     }

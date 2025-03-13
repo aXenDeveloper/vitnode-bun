@@ -1,12 +1,14 @@
 /* eslint-disable no-console */
 
 import { dbClient } from '@/database/client.js';
+import { core_admin_permissions } from '@/database/schema/admins.js';
 import { core_config } from '@/database/schema/config.js';
 import { core_groups } from '@/database/schema/groups.js';
 import {
   core_languages,
   core_languages_words,
 } from '@/database/schema/languages.js';
+import { core_moderators_permissions } from '@/database/schema/moderators.js';
 import { count } from 'drizzle-orm';
 
 import { runInteractiveShellCommand } from './run-interactive-shell-command.js';
@@ -109,6 +111,11 @@ export const initialDataForDatabase = async () => {
       })
       .returning({ id: core_groups.id });
 
+    await dbClient.insert(core_moderators_permissions).values({
+      group_id: moderatorGroup.id,
+      protected: true,
+    });
+
     await dbClient.insert(core_languages_words).values({
       language_code: 'en',
       plugin_code: 'core',
@@ -134,6 +141,11 @@ export const initialDataForDatabase = async () => {
       value: 'Administrator',
       table_name: 'core_groups',
       variable: 'name',
+    });
+
+    await dbClient.insert(core_admin_permissions).values({
+      group_id: adminGroup.id,
+      protected: true,
     });
   }
 };

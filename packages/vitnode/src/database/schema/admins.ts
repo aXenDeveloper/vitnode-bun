@@ -8,7 +8,7 @@ import { core_users } from './users';
 export const core_admin_permissions = pgTable(
   'core_admin_permissions',
   t => ({
-    id: t.serial().primaryKey(),
+    id: t.uuid().defaultRandom().primaryKey(),
     group_id: t.uuid().references(() => core_groups.id, {
       onDelete: 'cascade',
     }),
@@ -16,7 +16,10 @@ export const core_admin_permissions = pgTable(
       onDelete: 'cascade',
     }),
     created_at: t.timestamp().notNull().defaultNow(),
-    updated_at: t.timestamp().notNull().defaultNow(),
+    updated_at: t
+      .timestamp()
+      .notNull()
+      .$onUpdate(() => new Date()),
     protected: t.boolean().notNull().default(false),
     // data: t.jsonb().$type<{ permissions: PermissionsStaffArgs[] }>().default({
     //   permissions: [],

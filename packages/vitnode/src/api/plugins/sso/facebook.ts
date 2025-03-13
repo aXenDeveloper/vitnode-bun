@@ -85,6 +85,7 @@ export class FacebookSSOApiPlugin
     url.searchParams.set('redirect_uri', this.redirectUri(this.id));
     url.searchParams.set('scope', 'public_profile,email');
     url.searchParams.set('response_type', 'code');
+    url.searchParams.set('state', 'isAdmin');
 
     return url.toString();
   };

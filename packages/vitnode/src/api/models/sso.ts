@@ -16,7 +16,7 @@ export interface SSOApiPlugin {
     access_token: string;
     token_type: string;
   }) => Promise<{ email: string; id: string; username: string }>;
-  getUrl: () => string;
+  getUrl: (props: { state: string }) => string;
   id: string;
 }
 
@@ -61,38 +61,6 @@ export class SSOModel extends SSOModelPlugin {
     return { userId: data.id };
   };
 
-  private async fetchToken({
-    code,
-    providerId,
-  }: {
-    code: string;
-    providerId: string;
-  }) {
-    const provider = this.plugins.find(p => p.id === providerId);
-    if (!provider) {
-      throw new HTTPException(404);
-    }
-
-    return provider.fetchToken(code);
-  }
-
-  private async fetchUser({
-    access_token,
-    token_type,
-    providerId,
-  }: {
-    access_token: string;
-    providerId: string;
-    token_type: string;
-  }) {
-    const provider = this.plugins.find(p => p.id === providerId);
-    if (!provider) {
-      throw new HTTPException(404);
-    }
-
-    return provider.fetchUser({ access_token, token_type });
-  }
-
   async callback({
     code,
     providerId,
@@ -102,8 +70,13 @@ export class SSOModel extends SSOModelPlugin {
   }): Promise<{
     userId: string;
   }> {
-    const ssoToken = await this.fetchToken({ code, providerId });
-    const userFromSSO = await this.fetchUser({ ...ssoToken, providerId });
+    const provider = this.plugins.find(p => p.id === providerId);
+    if (!provider) {
+      throw new HTTPException(404);
+    }
+
+    const ssoToken = await provider.fetchToken(code);
+    const userFromSSO = await provider.fetchUser(ssoToken);
 
     return await dbClient.transaction(async tx => {
       const [dataSSOFromDb] = await tx
@@ -164,6 +137,8 @@ export class SSOModel extends SSOModelPlugin {
       throw new HTTPException(404);
     }
 
-    return provider.getUrl();
+    const state = '12344';
+
+    return provider.getUrl({ state });
   }
 }
