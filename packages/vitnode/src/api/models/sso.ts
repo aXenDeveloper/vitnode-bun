@@ -1,8 +1,11 @@
 import { dbClient } from '@/database/client';
 import { core_users, core_users_sso } from '@/database/schema/users';
+import { CONFIG } from '@/lib/config';
 import { removeSpecialCharacters } from '@/lib/special-characters';
+import crypto from 'crypto';
 import { and, eq } from 'drizzle-orm';
 import { Context, Env, Input } from 'hono';
+import { deleteCookie, getCookie, setCookie } from 'hono/cookie';
 import { HTTPException } from 'hono/http-exception';
 
 import { SSOModelPlugin } from '../plugins/sso/plugin';
@@ -28,6 +31,7 @@ export class SSOModel extends SSOModelPlugin {
   }
 
   private readonly c: Context<Env, '/', Input>;
+
   private readonly plugins: SSOApiPlugin[];
 
   private readonly signUpUser = async ({
@@ -61,15 +65,54 @@ export class SSOModel extends SSOModelPlugin {
     return { userId: data.id };
   };
 
+  private checkState(stateFromFetch: string) {
+    const stateFromCookies = getCookie(
+      this.c,
+      `${this.c.get('core').authorization.cookie_name}--state-sso`,
+    );
+    if (!stateFromCookies || stateFromCookies !== stateFromFetch) {
+      throw new HTTPException(400, {
+        message: 'Invalid state',
+      });
+    }
+
+    deleteCookie(
+      this.c,
+      `${this.c.get('core').authorization.cookie_name}--state-sso`,
+    );
+  }
+
+  private generateState() {
+    const state = crypto.randomBytes(64).toString('hex').normalize();
+
+    setCookie(
+      this.c,
+      `${this.c.get('core').authorization.cookie_name}--state-sso`,
+      state,
+      {
+        httpOnly: true,
+        secure: this.c.get('core').authorization.cookie_secure,
+        sameSite: 'strict',
+        path: '/',
+        domain: CONFIG.frontend.hostname,
+      },
+    );
+
+    return state;
+  }
+
   async callback({
     code,
     providerId,
+    state,
   }: {
     code: string;
     providerId: string;
+    state: string;
   }): Promise<{
     userId: string;
   }> {
+    this.checkState(state);
     const provider = this.plugins.find(p => p.id === providerId);
     if (!provider) {
       throw new HTTPException(404);
@@ -137,8 +180,6 @@ export class SSOModel extends SSOModelPlugin {
       throw new HTTPException(404);
     }
 
-    const state = '12344';
-
-    return provider.getUrl({ state });
+    return provider.getUrl({ state: this.generateState() });
   }
 }

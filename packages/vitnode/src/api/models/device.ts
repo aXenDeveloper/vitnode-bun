@@ -38,7 +38,7 @@ export class DeviceModel<T extends Env> {
       deviceId,
       {
         httpOnly: true,
-        secure: true,
+        secure: this.c.get('core').authorization.cookie_secure,
         sameSite: 'strict',
         path: '/',
         domain: CONFIG.frontend.hostname,

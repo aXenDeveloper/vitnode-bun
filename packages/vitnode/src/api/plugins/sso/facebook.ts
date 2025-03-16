@@ -29,7 +29,7 @@ export class FacebookSSOApiPlugin
     email: z.string(),
   });
 
-  fetchToken = async (code: string) => {
+  fetchToken: SSOApiPlugin['fetchToken'] = async code => {
     const url = new URL('https://graph.facebook.com/v22.0/oauth/access_token');
     url.searchParams.set('code', code);
     url.searchParams.set('redirect_uri', this.redirectUri(this.id));
@@ -52,12 +52,7 @@ export class FacebookSSOApiPlugin
     return data;
   };
 
-  fetchUser = async ({
-    access_token,
-  }: {
-    access_token: string;
-    token_type: string;
-  }): ReturnType<SSOApiPlugin['fetchUser']> => {
+  fetchUser: SSOApiPlugin['fetchUser'] = async ({ access_token }) => {
     const url = new URL('https://graph.facebook.com/v22.0/me');
     url.searchParams.set('fields', 'id,name,email');
     url.searchParams.set('access_token', access_token);
@@ -79,13 +74,13 @@ export class FacebookSSOApiPlugin
     return { ...userData, username: userData.name };
   };
 
-  getUrl = () => {
+  getUrl: SSOApiPlugin['getUrl'] = ({ state }) => {
     const url = new URL('https://www.facebook.com/v22.0/dialog/oauth');
     url.searchParams.set('client_id', this.clientId);
     url.searchParams.set('redirect_uri', this.redirectUri(this.id));
     url.searchParams.set('scope', 'public_profile,email');
     url.searchParams.set('response_type', 'code');
-    url.searchParams.set('state', 'isAdmin');
+    url.searchParams.set('state', state);
 
     return url.toString();
   };

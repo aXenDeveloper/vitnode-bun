@@ -10,15 +10,17 @@ import { mutationApi } from './mutation-api';
 export const ClientCallbackSSO = ({
   providerId,
   code,
+  state,
 }: {
   code: string;
   providerId: string;
+  state: string;
 }) => {
   const { replace } = useRouter();
   const { isError } = useQuery({
     queryKey: ['core.auth.sso.callback.sign-up', providerId, code],
     queryFn: async () => {
-      const mutation = await mutationApi({ providerId, code });
+      const mutation = await mutationApi({ providerId, code, state });
       if (mutation?.error) {
         throw new Error(mutation.error);
       }

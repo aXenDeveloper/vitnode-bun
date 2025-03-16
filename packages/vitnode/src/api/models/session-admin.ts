@@ -49,7 +49,7 @@ export class SessionAdminModel<T extends Env> extends DeviceModel<T> {
       token,
       {
         httpOnly: true,
-        secure: true,
+        secure: this.c.get('core').authorization.cookie_secure,
         sameSite: 'strict',
         path: '/admin',
         expires: new Date(

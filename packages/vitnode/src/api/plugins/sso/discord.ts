@@ -28,7 +28,7 @@ export class DiscordSSOApiPlugin
     username: z.string(),
   });
 
-  fetchToken = async (code: string) => {
+  fetchToken: SSOApiPlugin['fetchToken'] = async code => {
     const res = await fetch('https://discord.com/api/oauth2/token', {
       method: 'POST',
       headers: {
@@ -60,13 +60,10 @@ export class DiscordSSOApiPlugin
     return data;
   };
 
-  fetchUser = async ({
+  fetchUser: SSOApiPlugin['fetchUser'] = async ({
     token_type,
     access_token,
-  }: {
-    access_token: string;
-    token_type: string;
-  }): ReturnType<SSOApiPlugin['fetchUser']> => {
+  }) => {
     const res = await fetch('https://discord.com/api/users/@me', {
       headers: {
         Authorization: `${token_type} ${access_token}`,
@@ -82,13 +79,13 @@ export class DiscordSSOApiPlugin
     return data;
   };
 
-  getUrl = () => {
+  getUrl: SSOApiPlugin['getUrl'] = ({ state }) => {
     const url = new URL('https://discord.com/oauth2/authorize');
     url.searchParams.set('client_id', this.clientId);
     url.searchParams.set('redirect_uri', this.redirectUri(this.id));
     url.searchParams.set('response_type', 'code');
     url.searchParams.set('scope', 'identify email');
-    url.searchParams.set('state', 'isAdmin');
+    url.searchParams.set('state', state);
 
     return url.toString();
   };

@@ -63,5 +63,11 @@ VitNodeAPI({
       type: 'number',
       default: '1000 * 60 * 60 * 24 * 1',
     },
+    cookie_secure: {
+      description:
+        'If true, the cookie will only be sent over HTTPS. If you are using a reverse proxy, you may need to set this to false.',
+      type: 'boolean',
+      default: 'true',
+    },
   }}
 />

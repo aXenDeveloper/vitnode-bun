@@ -78,16 +78,21 @@ This url should contain `scope` to get access to `id`, `email` and `username` _(
 </Callout>
 
 ```ts title="src/utils/sso/google-api.ts"
-getUrl = () => {
+getUrl: SSOApiPlugin['getUrl'] = ({ state }) => {
   const url = new URL('https://accounts.google.com/o/oauth2/auth');
   url.searchParams.set('client_id', this.clientId);
   url.searchParams.set('redirect_uri', this.redirectUri(this.id));
   url.searchParams.set('response_type', 'code');
   url.searchParams.set('scope', 'openid profile email');
+  url.searchParams.set('state', state);
 
   return url.toString();
 };
 ```
+
+<Callout type="warn" title="State for CSRF">
+  Remember to always use `state` parameter to prevent CSRF attacks.
+</Callout>
 
   </Step>
 
@@ -98,7 +103,7 @@ getUrl = () => {
 First implement `POST` call from `fetch()` to get `access_token` and `token_type`:
 
 ```ts title="src/utils/sso/google-api.ts"
-fetchToken = async (code: string) => {
+fetchToken: SSOApiPlugin['fetchToken'] = async code => {
   const res = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
     headers: {
@@ -124,7 +129,7 @@ Next let's validate the code errors. It will help you to get the right message o
 import { HTTPException } from 'hono/http-exception'; // [!code ++]
 import { ContentfulStatusCode } from 'hono/utils/http-status'; // [!code ++]
 
-fetchToken = async (code: string) => {
+fetchToken: SSOApiPlugin['fetchToken'] = async code => {
   const res = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
     headers: {
@@ -158,7 +163,7 @@ fetchToken = async (code: string) => {
 Now let's parse the response and return the `access_token` and `token_type`. We will use `zod` to validate the response.
 
 ```ts title="src/utils/sso/google-api.ts"
-fetchToken = async (code: string) => {
+fetchToken: SSOApiPlugin['fetchToken'] = async code => {
   const res = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
     headers: {
@@ -245,13 +250,7 @@ Now let's implement `fetchUser` method that will fetch user data from the SSO pr
 This function should return the user data `id`, `email` and `username` _(optional)_.
 
 ```ts title="src/utils/sso/google-api.ts"
-fetchUser = async ({
-  token_type,
-  access_token,
-}: {
-  access_token: string;
-  token_type: string;
-}) => {
+fetchUser: SSOApiPlugin['fetchUser'] = async ({ token_type, access_token }) => {
   const res = await fetch('https://www.googleapis.com/oauth2/v1/userinfo', {
     headers: {
       Authorization: `${token_type} ${access_token}`,
@@ -302,13 +301,7 @@ export class GoogleSSOApiPlugin extends SSOModelPlugin implements SSOApiPlugin {
 ```
 
 ```ts title="src/utils/sso/google-api.ts"
-fetchUser = async ({
-  token_type,
-  access_token,
-}: {
-  access_token: string;
-  token_type: string;
-}) => {
+fetchUser: SSOApiPlugin['fetchUser'] = async ({ token_type, access_token }) => {
   const res = await fetch('https://www.googleapis.com/oauth2/v1/userinfo', {
     headers: {
       Authorization: `${token_type} ${access_token}`,

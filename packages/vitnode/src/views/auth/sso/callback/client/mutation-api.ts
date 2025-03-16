@@ -7,9 +7,11 @@ import { revalidatePath } from 'next/cache';
 export const mutationApi = async ({
   code,
   providerId,
+  state,
 }: {
   code: string;
   providerId: string;
+  state: string;
 }) => {
   const client = await fetcher<UsersTypes>({
     plugin: 'core',
@@ -20,6 +22,7 @@ export const mutationApi = async ({
     param: { providerId },
     query: {
       code,
+      state,
     },
   });
   await handleSetCookiesFetcher(res);

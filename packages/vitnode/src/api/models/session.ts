@@ -29,7 +29,7 @@ export class SessionModel<T extends Env> extends DeviceModel<T> {
 
     setCookie(this.c, this.c.get('core').authorization.cookie_name, token, {
       httpOnly: true,
-      secure: true,
+      secure: this.c.get('core').authorization.cookie_secure,
       sameSite: 'strict',
       path: '/',
       expires:

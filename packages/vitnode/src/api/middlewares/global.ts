@@ -10,6 +10,7 @@ declare module 'hono' {
         admin_cookie_name: string;
         cookie_expires: number;
         cookie_name: string;
+        cookie_secure: boolean;
         device_cookie_expires: number;
         device_cookie_name: string;
         ssoPlugins: SSOApiPlugin[];
@@ -26,6 +27,7 @@ export const globalMiddleware = ({
     admin_cookie_name?: string;
     cookie_expires?: number;
     cookie_name?: string;
+    cookie_secure?: boolean;
     device_cookie_expires?: number;
     device_cookie_name?: string;
     ssoPlugins?: SSOApiPlugin[];
@@ -45,6 +47,7 @@ export const globalMiddleware = ({
         admin_cookie_name: authorization?.admin_cookie_name ?? 'vitnode-admin',
         admin_cookie_expires:
           authorization?.admin_cookie_expires ?? 1000 * 60 * 60 * 24 * 1, // 1 day
+        cookie_secure: authorization?.cookie_secure ?? true,
       },
     });
 

@@ -10,7 +10,7 @@ export const CallbackSSOView = async ({
   providerId: string;
   searchParams: Promise<Record<string, string>>;
 }) => {
-  const [{ code, error }, t] = await Promise.all([
+  const [{ code, error, state }, t] = await Promise.all([
     searchParams,
     getTranslations('core.auth.sso'),
   ]);
@@ -19,5 +19,7 @@ export const CallbackSSOView = async ({
     return <ErrorView code={403} customDescription={t('access_denied')} />;
   }
 
-  return <ClientCallbackSSO code={code} providerId={providerId} />;
+  return (
+    <ClientCallbackSSO code={code} providerId={providerId} state={state} />
+  );
 };

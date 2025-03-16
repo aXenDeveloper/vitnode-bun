@@ -1,7 +1,7 @@
 'use server';
 
 import { UsersTypes } from '@/api/modules/users/users.module';
-import { fetcher } from '@/lib/fetcher';
+import { fetcher, handleSetCookiesFetcher } from '@/lib/fetcher';
 import { redirect } from '@/lib/navigation';
 
 export const mutationApi = async (providerId: string) => {
@@ -13,6 +13,7 @@ export const mutationApi = async (providerId: string) => {
   const res = await client.sso[':providerId'].$post({
     param: { providerId },
   });
+  await handleSetCookiesFetcher(res);
 
   if (res.status !== 200) {
     return { message: 'Something is wrong' };

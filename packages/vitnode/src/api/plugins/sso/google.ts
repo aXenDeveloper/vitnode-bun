@@ -26,7 +26,7 @@ export class GoogleSSOApiPlugin extends SSOModelPlugin implements SSOApiPlugin {
     verified_email: z.boolean(),
   });
 
-  fetchToken = async (code: string) => {
+  fetchToken: SSOApiPlugin['fetchToken'] = async code => {
     const res = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
       headers: {
@@ -58,12 +58,9 @@ export class GoogleSSOApiPlugin extends SSOModelPlugin implements SSOApiPlugin {
     return data;
   };
 
-  fetchUser = async ({
+  fetchUser: SSOApiPlugin['fetchUser'] = async ({
     token_type,
     access_token,
-  }: {
-    access_token: string;
-    token_type: string;
   }) => {
     const res = await fetch('https://www.googleapis.com/oauth2/v1/userinfo', {
       headers: {
@@ -90,13 +87,13 @@ export class GoogleSSOApiPlugin extends SSOModelPlugin implements SSOApiPlugin {
     };
   };
 
-  getUrl = () => {
+  getUrl: SSOApiPlugin['getUrl'] = ({ state }) => {
     const url = new URL('https://accounts.google.com/o/oauth2/auth');
     url.searchParams.set('client_id', this.clientId);
     url.searchParams.set('redirect_uri', this.redirectUri(this.id));
     url.searchParams.set('response_type', 'code');
     url.searchParams.set('scope', 'openid profile email');
-    url.searchParams.set('state', 'isAdmin');
+    url.searchParams.set('state', state);
 
     return url.toString();
   };

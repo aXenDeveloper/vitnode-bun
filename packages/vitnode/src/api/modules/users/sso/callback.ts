@@ -15,6 +15,7 @@ const route = createApiRoute({
     }),
     query: z.object({
       code: z.string(),
+      state: z.string(),
     }),
   },
   responses: {
@@ -34,8 +35,8 @@ const route = createApiRoute({
 
 export const callbackRoute = new OpenAPIHono().openapi(route, async c => {
   const { providerId } = c.req.valid('param');
-  const { code } = c.req.valid('query');
-  const sso = await new SSOModel(c).callback({ providerId, code });
+  const { code, state } = c.req.valid('query');
+  const sso = await new SSOModel(c).callback({ providerId, code, state });
   const { token } = await new SessionModel(c).createSessionByUserId(sso.userId);
 
   return c.json({ id: sso.userId, token });
