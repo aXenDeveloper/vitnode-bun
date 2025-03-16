@@ -31,7 +31,6 @@ export class SSOModel extends SSOModelPlugin {
   }
 
   private readonly c: Context<Env, '/', Input>;
-
   private readonly plugins: SSOApiPlugin[];
 
   private readonly signUpUser = async ({
@@ -65,42 +64,6 @@ export class SSOModel extends SSOModelPlugin {
     return { userId: data.id };
   };
 
-  private checkState(stateFromFetch: string) {
-    const stateFromCookies = getCookie(
-      this.c,
-      `${this.c.get('core').authorization.cookie_name}--state-sso`,
-    );
-    if (!stateFromCookies || stateFromCookies !== stateFromFetch) {
-      throw new HTTPException(400, {
-        message: 'Invalid state',
-      });
-    }
-
-    deleteCookie(
-      this.c,
-      `${this.c.get('core').authorization.cookie_name}--state-sso`,
-    );
-  }
-
-  private generateState() {
-    const state = crypto.randomBytes(64).toString('hex').normalize();
-
-    setCookie(
-      this.c,
-      `${this.c.get('core').authorization.cookie_name}--state-sso`,
-      state,
-      {
-        httpOnly: true,
-        secure: this.c.get('core').authorization.cookie_secure,
-        sameSite: 'strict',
-        path: '/',
-        domain: CONFIG.frontend.hostname,
-      },
-    );
-
-    return state;
-  }
-
   async callback({
     code,
     providerId,
@@ -112,7 +75,7 @@ export class SSOModel extends SSOModelPlugin {
   }): Promise<{
     userId: string;
   }> {
-    this.checkState(state);
+    await this.verifyState(state);
     const provider = this.plugins.find(p => p.id === providerId);
     if (!provider) {
       throw new HTTPException(404);
@@ -174,12 +137,72 @@ export class SSOModel extends SSOModelPlugin {
     });
   }
 
-  getUrl(providerId: string) {
+  async encryptState() {
+    const state = crypto.randomBytes(8).toString('hex');
+    const encryptedState = await new Promise<string>((resolve, reject) => {
+      const salt = crypto.randomBytes(4).toString('hex');
+
+      crypto.scrypt(state, salt, 16, (err, derivedKey) => {
+        if (err) reject(err);
+
+        resolve(salt + ':' + derivedKey.toString('hex'));
+      });
+    });
+
+    setCookie(
+      this.c,
+      `${this.c.get('core').authorization.cookie_name}--state-sso`,
+      encryptedState,
+      {
+        httpOnly: true,
+        secure: this.c.get('core').authorization.cookie_secure,
+        sameSite: 'strict',
+        path: '/',
+        domain: CONFIG.frontend.hostname,
+      },
+    );
+
+    return state;
+  }
+
+  async getUrl(providerId: string) {
     const provider = this.plugins.find(p => p.id === providerId);
     if (!provider) {
       throw new HTTPException(404);
     }
 
-    return provider.getUrl({ state: this.generateState() });
+    return provider.getUrl({ state: await this.encryptState() });
+  }
+
+  async verifyState(state: string) {
+    const storedState = getCookie(
+      this.c,
+      `${this.c.get('core').authorization.cookie_name}--state-sso`,
+    );
+    if (!storedState) {
+      throw new HTTPException(400, {
+        message: 'Invalid state',
+      });
+    }
+
+    const isValid = await new Promise<boolean>((resolve, reject) => {
+      const [salt, storedHash] = storedState.split(':');
+
+      crypto.scrypt(state, salt, 16, (err, derivedKey) => {
+        if (err) reject(err);
+        resolve(storedHash === derivedKey.toString('hex'));
+      });
+    });
+
+    if (!isValid) {
+      throw new HTTPException(400, {
+        message: 'Invalid state',
+      });
+    }
+
+    deleteCookie(
+      this.c,
+      `${this.c.get('core').authorization.cookie_name}--state-sso`,
+    );
   }
 }

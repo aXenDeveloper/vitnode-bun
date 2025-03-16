@@ -25,9 +25,9 @@ const route = createApiRoute({
   },
 });
 
-export const createUrlRoute = new OpenAPIHono().openapi(route, c => {
+export const createUrlRoute = new OpenAPIHono().openapi(route, async c => {
   const { providerId } = c.req.valid('param');
-  const url = new SSOModel(c).getUrl(providerId);
+  const url = await new SSOModel(c).getUrl(providerId);
 
   return c.json({
     url,
