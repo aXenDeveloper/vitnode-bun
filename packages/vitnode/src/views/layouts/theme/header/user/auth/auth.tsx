@@ -3,21 +3,14 @@ import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { getSessionApi } from '@/lib/api/get-session-api';
-import { LogOutIcon } from 'lucide-react';
-import { getTranslations } from 'next-intl/server';
 
-import { LogOutAuthUserHeader } from './log-out/log-out';
+import { ClientAuthUserHeader } from './client';
 
 export const AuthUserHeader = async () => {
-  const [t, res] = await Promise.all([
-    getTranslations('core.global.user_bar'),
-    getSessionApi(),
-  ]);
-  const { user } = await res.json();
+  const { user } = await getSessionApi();
   if (!user) return null;
 
   return (
@@ -29,14 +22,7 @@ export const AuthUserHeader = async () => {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-64 p-2">
-        {/* <DropdownMenuSeparator /> */}
-
-        <DropdownMenuGroup>
-          <LogOutAuthUserHeader>
-            <LogOutIcon />
-            <span>{t('log_out')}</span>
-          </LogOutAuthUserHeader>
-        </DropdownMenuGroup>
+        <ClientAuthUserHeader user={user} />
       </DropdownMenuContent>
     </DropdownMenu>
   );

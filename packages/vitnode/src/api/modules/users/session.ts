@@ -1,5 +1,6 @@
 import { createApiRoute } from '@/api/lib/route';
 import { SessionModel } from '@/api/models/session';
+import { SessionAdminModel } from '@/api/models/session-admin';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { z } from 'zod';
 
@@ -25,6 +26,7 @@ const route = createApiRoute({
                 email_verified: z.boolean(),
                 group_id: z.string(),
                 birthday: z.date().nullable(),
+                isAdmin: z.boolean(),
               })
               .nullable(),
           }),
@@ -37,8 +39,14 @@ const route = createApiRoute({
 
 export const sessionRoute = new OpenAPIHono().openapi(route, async c => {
   const user = await new SessionModel(c).verifySession();
+  const admin = new SessionAdminModel(c);
 
   return c.json({
-    user,
+    user: user
+      ? {
+          ...user,
+          isAdmin: await admin.checkIfUserIsAdmin(user.id),
+        }
+      : null,
   });
 });

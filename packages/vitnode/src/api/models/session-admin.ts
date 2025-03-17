@@ -5,7 +5,7 @@ import {
 } from '@/database/schema/admins';
 import { CONFIG } from '@/lib/config';
 import crypto from 'crypto';
-import { and, eq, gt } from 'drizzle-orm';
+import { and, eq, gt, or } from 'drizzle-orm';
 import { Context, Env, Input } from 'hono';
 import { deleteCookie, getCookie, setCookie } from 'hono/cookie';
 import { HTTPException } from 'hono/http-exception';
@@ -19,10 +19,18 @@ export class SessionAdminModel<T extends Env> extends DeviceModel<T> {
   }
 
   async checkIfUserIsAdmin(userId: string) {
+    const user = await new UserModel().getUserById(userId);
+    if (!user) return false;
+
     const [permission] = await dbClient
       .select()
       .from(core_admin_permissions)
-      .where(eq(core_admin_permissions.user_id, userId))
+      .where(
+        or(
+          eq(core_admin_permissions.user_id, user.id),
+          eq(core_admin_permissions.group_id, user.group_id),
+        ),
+      )
       .limit(1);
 
     return !!permission;

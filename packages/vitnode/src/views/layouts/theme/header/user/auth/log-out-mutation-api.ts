@@ -5,7 +5,7 @@ import { fetcher, handleSetCookiesFetcher } from '@/lib/fetcher';
 import { redirect } from '@/lib/navigation';
 import { revalidatePath } from 'next/cache';
 
-export const signOutMutationApi = async ({
+export const logOutMutationApi = async ({
   isAdmin = false,
 }: {
   isAdmin?: boolean;

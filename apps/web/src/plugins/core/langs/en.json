@@ -31,7 +31,8 @@
         }
       },
       "user_bar": {
-        "log_out": "Log out"
+        "log_out": "Log out",
+        "admin_cp": "Admin CP"
       }
     },
     "auth": {
