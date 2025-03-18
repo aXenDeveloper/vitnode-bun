@@ -11,7 +11,7 @@ export const getMiddlewareApi = async () => {
     },
   });
 
-  const data = await client.index.$get();
+  const res = await client.index.$get();
 
-  return data;
+  return await res.json();
 };

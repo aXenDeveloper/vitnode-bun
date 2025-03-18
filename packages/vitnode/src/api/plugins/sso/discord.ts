@@ -91,4 +91,5 @@ export class DiscordSSOApiPlugin
   };
 
   readonly id = 'discord';
+  readonly name = 'Discord';
 }

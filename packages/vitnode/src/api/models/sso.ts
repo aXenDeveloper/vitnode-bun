@@ -21,6 +21,7 @@ export interface SSOApiPlugin {
   }) => Promise<{ email: string; id: string; username: string }>;
   getUrl: (props: { state: string }) => string;
   id: string;
+  name: string;
 }
 
 export class SSOModel extends SSOModelPlugin {

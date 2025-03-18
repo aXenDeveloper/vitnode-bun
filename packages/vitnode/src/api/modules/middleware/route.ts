@@ -12,7 +12,7 @@ const route = createApiRoute({
       content: {
         'application/json': {
           schema: z.object({
-            id: z.string(),
+            sso: z.array(z.object({ id: z.string(), name: z.string() })),
           }),
         },
       },
@@ -22,5 +22,7 @@ const route = createApiRoute({
 });
 
 export const middlewareRoute = new OpenAPIHono().openapi(route, c => {
-  return c.json({ id: 'ffasf' });
+  const sso = c.get('core').authorization.ssoPlugins;
+
+  return c.json({ sso: sso.map(s => ({ id: s.id, name: s.name })) });
 });

@@ -86,4 +86,5 @@ export class FacebookSSOApiPlugin
   };
 
   readonly id = 'facebook';
+  readonly name = 'Facebook';
 }

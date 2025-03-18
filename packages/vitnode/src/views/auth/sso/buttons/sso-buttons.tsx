@@ -1,9 +1,21 @@
-import { useTranslations } from 'next-intl';
+import { Skeleton } from '@/components/ui/skeleton';
+import { getMiddlewareApi } from '@/lib/api/get-middleware-api';
+import { getTranslations } from 'next-intl/server';
 
 import { ButtonSSOButtons } from './client';
 
-export const SSOButtons = () => {
-  const t = useTranslations('core.auth.sso');
+export const SSOButtonsSkeleton = () => {
+  return (
+    <div className="flex gap-4">
+      <Skeleton className="mt-6 h-8 w-full" />
+      <Skeleton className="mt-6 h-8 w-full" />
+    </div>
+  );
+};
+
+export const SSOButtons = async () => {
+  const t = await getTranslations('core.auth.sso');
+  const { sso } = await getMiddlewareApi();
 
   return (
     <>
@@ -16,12 +28,15 @@ export const SSOButtons = () => {
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-center gap-4">
-        <ButtonSSOButtons providerId="discord">Discord</ButtonSSOButtons>
-        <ButtonSSOButtons providerId="facebook">Facebook</ButtonSSOButtons>
-        <ButtonSSOButtons providerId="google">Google</ButtonSSOButtons>
-        <ButtonSSOButtons providerId="github">GitHub</ButtonSSOButtons>
-      </div>
+      {sso.length > 0 && (
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          {sso.map(provider => (
+            <ButtonSSOButtons key={provider.id} providerId={provider.id}>
+              {provider.name}
+            </ButtonSSOButtons>
+          ))}
+        </div>
+      )}
     </>
   );
 };

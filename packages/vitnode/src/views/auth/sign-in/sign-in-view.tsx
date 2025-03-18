@@ -3,8 +3,9 @@ import { Link } from '@/lib/navigation';
 import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next/dist/types';
+import React from 'react';
 
-import { SSOButtons } from '../sso/buttons/sso-buttons';
+import { SSOButtons, SSOButtonsSkeleton } from '../sso/buttons/sso-buttons';
 import { FormSignIn } from './form/form';
 
 export const generateMetadataSignInView = async (
@@ -31,9 +32,11 @@ export const SignInView = () => {
             </h1>
             <CardDescription>{t('desc')}</CardDescription>
           </div>
-
           <FormSignIn />
-          <SSOButtons />
+
+          <React.Suspense fallback={<SSOButtonsSkeleton />}>
+            <SSOButtons />
+          </React.Suspense>
         </div>
 
         <div className="text-accent-foreground p-6 text-center text-sm">

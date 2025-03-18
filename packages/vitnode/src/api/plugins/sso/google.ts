@@ -99,4 +99,5 @@ export class GoogleSSOApiPlugin extends SSOModelPlugin implements SSOApiPlugin {
   };
 
   readonly id = 'google';
+  readonly name = 'Google';
 }
