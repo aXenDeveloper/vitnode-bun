@@ -1,4 +1,4 @@
-import { cn } from '@/lib/cn';
+import { cn } from '@/lib/utils';
 import Image from 'next/image';
 
 const generateLetterPhoto = (letter: string, color: string) =>

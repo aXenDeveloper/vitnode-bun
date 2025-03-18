@@ -1,16 +1,16 @@
 'use client';
 
 import { Label } from '@/components/ui/label';
-import { cn } from '@/lib/cn';
+import { cn } from '@/lib/utils';
 import * as LabelPrimitive from '@radix-ui/react-label';
 import { Slot } from '@radix-ui/react-slot';
 import { useTranslations } from 'next-intl';
 import * as React from 'react';
 import {
   Controller,
-  ControllerProps,
-  FieldPath,
-  FieldValues,
+  type ControllerProps,
+  type FieldPath,
+  type FieldValues,
   FormProvider,
   SubmitHandler,
   useFormContext,
@@ -124,34 +124,32 @@ function FormItem({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
-const FormLabel = ({
-  children,
+function FormLabel({
   className,
+  children,
   optional,
   ...props
-}: React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> & {
+}: React.ComponentProps<typeof LabelPrimitive.Root> & {
   optional?: boolean;
-}) => {
-  const { error, formItemId } = useFormField();
+}) {
   const t = useTranslations('core.global');
+  const { error, formItemId } = useFormField();
 
   return (
     <Label
-      className={cn(
-        error && 'text-destructive',
-        className,
-        'flex flex-wrap gap-2',
-      )}
+      className={cn('data-[error=true]:text-destructive', className)}
+      data-error={!!error}
+      data-slot="form-label"
       htmlFor={formItemId}
       {...props}
     >
-      <span>{children}</span>
+      {children}
       {optional && (
         <span className="text-muted-foreground text-xs">{t('optional')}</span>
       )}
     </Label>
   );
-};
+}
 
 function FormControl({ ...props }: React.ComponentProps<typeof Slot>) {
   const { error, formItemId, formDescriptionId, formMessageId } =
@@ -185,7 +183,7 @@ function FormDescription({ className, ...props }: React.ComponentProps<'p'>) {
 
 function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
   const { error, formMessageId } = useFormField();
-  const body = error ? String(error?.message) : props.children;
+  const body = error ? String(error?.message ?? '') : props.children;
 
   if (!body) {
     return null;
@@ -193,7 +191,7 @@ function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
 
   return (
     <p
-      className={cn('text-destructive text-sm font-medium', className)}
+      className={cn('text-destructive text-sm', className)}
       data-slot="form-message"
       id={formMessageId}
       {...props}

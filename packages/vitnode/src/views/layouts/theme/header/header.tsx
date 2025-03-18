@@ -1,7 +1,7 @@
 import { ThemeSwitcher } from '@/components/switchers/theme-switcher';
 import { Skeleton } from '@/components/ui/skeleton';
-import { cn } from '@/lib/cn';
 import { Link } from '@/lib/navigation';
+import { cn } from '@/lib/utils';
 import { Suspense } from 'react';
 
 import { UserHeader } from './user/user';

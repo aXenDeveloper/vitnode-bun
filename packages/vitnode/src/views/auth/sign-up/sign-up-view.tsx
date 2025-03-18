@@ -23,7 +23,7 @@ export const SignUpView = () => {
 
   return (
     <div className="mx-auto max-w-md px-4 py-10">
-      <Card className="bg-muted p-0">
+      <Card className="bg-muted gap-0 p-0">
         <div className="bg-card rounded-xl p-6">
           <div className="mb-10 space-y-2 text-center">
             <h1 className="text-2xl font-semibold leading-none tracking-tight">
