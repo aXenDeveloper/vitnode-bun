@@ -11,15 +11,15 @@ VitNodeAPI({
   plugins: [],
   authorization: {
     ssoPlugins: [
-      new DiscordSSOApiPlugin({
+      DiscordSSOApiPlugin({
         clientId: process.env.DISCORD_CLIENT_ID ?? '',
         clientSecret: process.env.DISCORD_CLIENT_SECRET ?? '',
       }),
-      new GoogleSSOApiPlugin({
+      GoogleSSOApiPlugin({
         clientId: process.env.GOOGLE_CLIENT_ID ?? '',
         clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
       }),
-      new FacebookSSOApiPlugin({
+      FacebookSSOApiPlugin({
         clientId: process.env.FACEBOOK_CLIENT_ID ?? '',
         clientSecret: process.env.FACEBOOK_CLIENT_SECRET ?? '',
       }),

@@ -9,58 +9,22 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 
 <Steps>
   <Step>
-  ### Create plugin class
+  ### Create plugin function
 
-Create new file and create a class that extends `SSOModelPlugin` _(for access to parent class)_ and implements `SSOApiPlugin` _(for type-safe)_.
+Create new file and create a function that has `SSOModelPlugin` type with `id` and `redirectUri` variables.
 
-```ts title="src/utils/sso/google-api.ts"
-import { SSOApiPlugin } from 'vitnode/api/models/sso';
-import { SSOModelPlugin } from 'vitnode/api/plugins/sso/plugin';
+```ts title="src/utils/sso/discord-api.ts"
+import { SSOApiPlugin, getRedirectUri } from 'vitnode/api/models/sso';
 
-export class GoogleSSOApiPlugin extends SSOModelPlugin implements SSOApiPlugin {
-  readonly id = 'discord';
-}
-```
+export const DiscordSSOApiPlugin: SSOApiPlugin = ({
+  clientId,
+  clientSecret,
+}) => {
+  const id = 'discord';
+  const redirectUri = getRedirectUri(id);
 
-  </Step>
-  <Step>
-
-### Client ID and secret
-
-Add `clientId` and `clientSecret` to the constructor.
-
-```ts title="src/utils/sso/google-api.ts"
-import { SSOApiPlugin } from 'vitnode/api/models/sso';
-import { SSOModelPlugin } from 'vitnode/api/plugins/sso/plugin';
-
-export class GoogleSSOApiPlugin extends SSOModelPlugin implements SSOApiPlugin {
-  // [!code ++]
-  constructor({
-    // [!code ++]
-    clientId,
-    // [!code ++]
-    clientSecret,
-    // [!code ++]
-  }: {
-    // [!code ++]
-    clientId: string;
-    // [!code ++]
-    clientSecret: string;
-    // [!code ++]
-  }) {
-    // [!code ++]
-    super();
-    // [!code ++]
-    this.clientId = clientId;
-    // [!code ++]
-    this.clientSecret = clientSecret;
-    // [!code ++]
-  }
-
-  private readonly clientId: string; // [!code ++]
-  private readonly clientSecret: string; // [!code ++]
-  readonly id = 'google';
-}
+  return { id, name: 'Discord' };
+};
 ```
 
   </Step>
@@ -68,25 +32,42 @@ export class GoogleSSOApiPlugin extends SSOModelPlugin implements SSOApiPlugin {
 
 ### `getUrl` method
 
-Implement `getUrl` method inside your class that returns the URL for the SSO provider.
+Implement `getUrl` method inside your function that returns the URL for the SSO provider.
 
 This url should contain `scope` to get access to `id`, `email` and `username` _(optional)_.
 
-<Callout title="redirect_uri">
-  You can use `this.redirectUri('{your_provider_id}')` to get the redirect URI
-  for the SSO provider.
-</Callout>
+```ts title="src/utils/sso/discord-api.ts"
+export const DiscordSSOApiPlugin: SSOApiPlugin = ({
+  clientId,
+  clientSecret,
+}) => {
+  const id = 'discord';
+  const redirectUri = getRedirectUri(id);
 
-```ts title="src/utils/sso/google-api.ts"
-getUrl: SSOApiPlugin['getUrl'] = ({ state }) => {
-  const url = new URL('https://accounts.google.com/o/oauth2/auth');
-  url.searchParams.set('client_id', this.clientId);
-  url.searchParams.set('redirect_uri', this.redirectUri(this.id));
-  url.searchParams.set('response_type', 'code');
-  url.searchParams.set('scope', 'openid profile email');
-  url.searchParams.set('state', state);
+  return {
+    id,
+    name: 'Discord',
+    // [!code ++]
+    getUrl: ({ state }) => {
+      // [!code ++]
+      const url = new URL('https://discord.com/oauth2/authorize');
+      // [!code ++]
+      url.searchParams.set('client_id', clientId);
+      // [!code ++]
+      url.searchParams.set('redirect_uri', redirectUri);
+      // [!code ++]
+      url.searchParams.set('response_type', 'code');
+      // [!code ++]
+      url.searchParams.set('scope', 'identify email');
+      // [!code ++]
+      url.searchParams.set('state', state);
+      // [!code ++]
 
-  return url.toString();
+      // [!code ++]
+      return url.toString();
+      // [!code ++]
+    },
+  };
 };
 ```
 
@@ -100,24 +81,53 @@ getUrl: SSOApiPlugin['getUrl'] = ({ state }) => {
 
 ### `fetchToken` method
 
-First implement `POST` call from `fetch()` to get `access_token` and `token_type`:
+Lets implement `POST` call from `fetch()` to get `access_token` and `token_type`:
 
-```ts title="src/utils/sso/google-api.ts"
-fetchToken: SSOApiPlugin['fetchToken'] = async code => {
-  const res = await fetch('https://oauth2.googleapis.com/token', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      Accept: 'application/json',
+```ts title="src/utils/sso/discord-api.ts"
+export const DiscordSSOApiPlugin: SSOApiPlugin = ({
+  clientId,
+  clientSecret,
+}) => {
+  const id = 'discord';
+  const redirectUri = getRedirectUri(id);
+
+  return {
+    id,
+    name: 'Discord',
+    getUrl: ({ state }) => {},
+    // [!code ++]
+    fetchToken: async code => {
+      // [!code ++]
+      const res = await fetch('https://discord.com/api/oauth2/token', {
+        // [!code ++]
+        method: 'POST',
+        // [!code ++]
+        headers: {
+          // [!code ++]
+          'Content-Type': 'application/x-www-form-urlencoded',
+          // [!code ++]
+          Accept: 'application/json',
+          // [!code ++]
+        },
+        // [!code ++]
+        body: new URLSearchParams({
+          // [!code ++]
+          code,
+          // [!code ++]
+          redirect_uri: redirectUri,
+          // [!code ++]
+          grant_type: 'authorization_code',
+          // [!code ++]
+          client_id: clientId,
+          // [!code ++]
+          client_secret: clientSecret,
+          // [!code ++]
+        }),
+        // [!code ++]
+      });
+      // [!code ++]
     },
-    body: new URLSearchParams({
-      code,
-      redirect_uri: this.redirectUri(this.id),
-      grant_type: 'authorization_code',
-      client_id: this.clientId,
-      client_secret: this.clientSecret,
-    }),
-  });
+  };
 };
 ```
 
@@ -125,36 +135,55 @@ fetchToken: SSOApiPlugin['fetchToken'] = async code => {
 
 Next let's validate the code errors. It will help you to get the right message on the client. For example when user denied access to the app you can show him the message that he denied access.
 
-```ts title="src/utils/sso/google-api.ts"
+```ts title="src/utils/sso/discord-api.ts"
 import { HTTPException } from 'hono/http-exception'; // [!code ++]
 import { ContentfulStatusCode } from 'hono/utils/http-status'; // [!code ++]
 
-fetchToken: SSOApiPlugin['fetchToken'] = async code => {
-  const res = await fetch('https://oauth2.googleapis.com/token', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      Accept: 'application/json',
-    },
-    body: new URLSearchParams({
-      code,
-      redirect_uri: this.redirectUri(this.id),
-      grant_type: 'authorization_code',
-      client_id: this.clientId,
-      client_secret: this.clientSecret,
-    }),
-  });
+export const DiscordSSOApiPlugin: SSOApiPlugin = ({
+  clientId,
+  clientSecret,
+}) => {
+  const id = 'discord';
+  const redirectUri = getRedirectUri(id);
 
-  // [!code ++]
-  if (!res.ok) {
-    // [!code ++]
-    throw new HTTPException(+res.status.toString() as ContentfulStatusCode, {
+  return {
+    id,
+    name: 'Discord',
+    getUrl: ({ state }) => {},
+    fetchToken: async code => {
+      const res = await fetch('https://discord.com/api/oauth2/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Accept: 'application/json',
+        },
+        body: new URLSearchParams({
+          code,
+          redirect_uri: redirectUri,
+          grant_type: 'authorization_code',
+          client_id: clientId,
+          client_secret: clientSecret,
+        }),
+      });
+
       // [!code ++]
-      message: 'Internal error requesting token',
-      // [!code ++]
-    });
-    // [!code ++]
-  }
+      if (!res.ok) {
+        // [!code ++]
+        throw new HTTPException(
+          // [!code ++]
+          +res.status.toString() as ContentfulStatusCode,
+          // [!code ++]
+          {
+            // [!code ++]
+            message: 'Internal error requesting token',
+            // [!code ++]
+          },
+          // [!code ++]
+        );
+        // [!code ++]
+      }
+    },
+  };
 };
 ```
 
@@ -162,45 +191,69 @@ fetchToken: SSOApiPlugin['fetchToken'] = async code => {
 
 Now let's parse the response and return the `access_token` and `token_type`. We will use `zod` to validate the response.
 
-```ts title="src/utils/sso/google-api.ts"
-fetchToken: SSOApiPlugin['fetchToken'] = async code => {
-  const res = await fetch('https://oauth2.googleapis.com/token', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      Accept: 'application/json',
-    },
-    body: new URLSearchParams({
-      code,
-      redirect_uri: this.redirectUri(this.id),
-      grant_type: 'authorization_code',
-      client_id: this.clientId,
-      client_secret: this.clientSecret,
-    }),
+```ts title="src/utils/sso/discord-api.ts"
+export const DiscordSSOApiPlugin: SSOApiPlugin = ({
+  clientId,
+  clientSecret,
+}) => {
+  const id = 'discord';
+  const redirectUri = getRedirectUri(id);
+  // [!code ++]
+  const tokenSchema = z.object({
+    // [!code ++]
+    access_token: z.string(),
+    // [!code ++]
+    token_type: z.string(),
+    // [!code ++]
   });
 
-  if (!res.ok) {
-    throw new HTTPException(+res.status.toString() as ContentfulStatusCode, {
-      message: 'Internal error requesting token',
-    });
-  }
+  return {
+    id,
+    name: 'Discord',
+    getUrl: ({ state }) => {},
+    fetchToken: async code => {
+      const res = await fetch('https://discord.com/api/oauth2/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Accept: 'application/json',
+        },
+        body: new URLSearchParams({
+          code,
+          redirect_uri: redirectUri,
+          grant_type: 'authorization_code',
+          client_id: clientId,
+          client_secret: clientSecret,
+        }),
+      });
 
-  // [!code ++]
-  const { data, error } = this.tokenSchema.safeParse(await res.json());
-  // [!code ++]
-  if (error || !data) {
-    // [!code ++]
-    throw new HTTPException(400, {
-      // [!code ++]
-      message: 'Invalid token response',
-      // [!code ++]
-    });
-    // [!code ++]
-  }
-  // [!code ++]
+      if (!res.ok) {
+        throw new HTTPException(
+          +res.status.toString() as ContentfulStatusCode,
+          {
+            message: 'Internal error requesting token',
+          },
+        );
+      }
 
-  // [!code ++]
-  return data;
+      // [!code ++]
+      const { data, error } = tokenSchema.safeParse(await res.json());
+      // [!code ++]
+      if (error || !data) {
+        // [!code ++]
+        throw new HTTPException(400, {
+          // [!code ++]
+          message: 'Invalid token response',
+          // [!code ++]
+        });
+        // [!code ++]
+      }
+      // [!code ++]
+
+      // [!code ++]
+      return data;
+    },
+  };
 };
 ```
 
@@ -210,127 +263,77 @@ fetchToken: SSOApiPlugin['fetchToken'] = async code => {
 
 ### `fetchUser` method
 
-#### User schema
-
-Based on documentation of the SSO provider, create a schema for the user data.
-
-```ts title="src/utils/sso/google-api.ts"
-export class GoogleSSOApiPlugin extends SSOModelPlugin implements SSOApiPlugin {
-  constructor({
-    clientId,
-    clientSecret,
-  }: {
-    clientId: string;
-    clientSecret: string;
-  }) {
-    super();
-    this.clientId = clientId;
-    this.clientSecret = clientSecret;
-  }
-
-  private readonly clientId: string;
-  private readonly clientSecret: string;
-  // [!code ++]
-  private readonly userSchema = z.object({
-    // [!code ++]
-    id: z.string(),
-    // [!code ++]
-    email: z.string(),
-    // [!code ++]
-    name: z.string(),
-    // [!code ++]
-  });
-}
-```
-
-#### Fetch user
-
 Now let's implement `fetchUser` method that will fetch user data from the SSO provider and validate it with the schema.
 
 This function should return the user data `id`, `email` and `username` _(optional)_.
 
-```ts title="src/utils/sso/google-api.ts"
-fetchUser: SSOApiPlugin['fetchUser'] = async ({ token_type, access_token }) => {
-  const res = await fetch('https://www.googleapis.com/oauth2/v1/userinfo', {
-    headers: {
-      Authorization: `${token_type} ${access_token}`,
-    },
+```ts title="src/utils/sso/discord-api.ts"
+export const DiscordSSOApiPlugin: SSOApiPlugin = ({
+  clientId,
+  clientSecret,
+}) => {
+  const id = 'discord';
+  const redirectUri = getRedirectUri(id);
+  const tokenSchema = z.object({
+    access_token: z.string(),
+    token_type: z.string(),
   });
-  const { data, error } = this.userSchema.safeParse(await res.json());
-  if (error || !data) {
-    throw new HTTPException(400, {
-      message: 'Invalid user response',
-    });
-  }
-
-  return {
-    ...data,
-    username: data.name,
-  };
-};
-```
-
-#### Validate active email
-
-Some OAuth2 providers show the user email even if it's not verified. If API returns some validate fields like `verified_email` you can add it to the schema and validate it.
-
-```ts title="src/utils/sso/google-api.ts"
-export class GoogleSSOApiPlugin extends SSOModelPlugin implements SSOApiPlugin {
-  constructor({
-    clientId,
-    clientSecret,
-  }: {
-    clientId: string;
-    clientSecret: string;
-  }) {
-    super();
-    this.clientId = clientId;
-    this.clientSecret = clientSecret;
-  }
-
-  private readonly clientId: string;
-  private readonly clientSecret: string;
-  private readonly userSchema = z.object({
-    id: z.string(),
-    email: z.string(),
-    name: z.string(),
-    // [!code ++]
-    verified_email: z.boolean(),
-  });
-}
-```
-
-```ts title="src/utils/sso/google-api.ts"
-fetchUser: SSOApiPlugin['fetchUser'] = async ({ token_type, access_token }) => {
-  const res = await fetch('https://www.googleapis.com/oauth2/v1/userinfo', {
-    headers: {
-      Authorization: `${token_type} ${access_token}`,
-    },
-  });
-  const { data, error } = this.userSchema.safeParse(await res.json());
-  if (error || !data) {
-    throw new HTTPException(400, {
-      message: 'Invalid user response',
-    });
-  }
-
   // [!code ++]
-  if (!data.verified_email) {
+  const userSchema = z.object({
     // [!code ++]
-    throw new HTTPException(400, {
-      // [!code ++]
-      message: 'Email not verified',
-      // [!code ++]
-    });
+    id: z.string(),
     // [!code ++]
-  }
+    email: z.string(),
+    // [!code ++]
+    username: z.string(),
+    // [!code ++]
+  });
 
   return {
-    ...data,
-    username: data.name,
+    id,
+    name: 'Discord',
+    getUrl: ({ state }) => {},
+    // [!code ++]
+    fetchToken: async code => {},
+    // [!code ++]
+    fetchUser: async ({ token_type, access_token }) => {
+      // [!code ++]
+      const res = await fetch('https://discord.com/api/users/@me', {
+        // [!code ++]
+        headers: {
+          // [!code ++]
+          Authorization: `${token_type} ${access_token}`,
+          // [!code ++]
+        },
+        // [!code ++]
+      });
+      // [!code ++]
+      const { data, error } = userSchema.safeParse(await res.json());
+      // [!code ++]
+      if (error || !data) {
+        // [!code ++]
+        throw new HTTPException(400, {
+          // [!code ++]
+          message: 'Invalid user response',
+          // [!code ++]
+        });
+        // [!code ++]
+      }
+      // [!code ++]
+
+      // [!code ++]
+      return data;
+      // [!code ++]
+    },
   };
 };
 ```
+
+<Callout type="warn" title="Validate active email">
+  Some OAuth2 providers show the user email even if it's not verified. If API
+  returns some validate fields like `verified_email` you can add it to the
+  schema and validate it.
+</Callout>
 
 </Step>
 
@@ -338,13 +341,13 @@ fetchUser: SSOApiPlugin['fetchUser'] = async ({ token_type, access_token }) => {
 
 ### Register plugin
 
-Register your plugin in the API route file. Initialize the `GoogleSSOApiPlugin` class with `clientId` and `clientSecret` inside `authorization.ssoPlugins` array.
+Register your plugin in the API route file. Initialize the `DiscordSSOApiPlugin` class with `clientId` and `clientSecret` inside `authorization.ssoPlugins` array.
 
 ```ts title="src/app/api/[...route]/route.ts"
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { handle } from 'hono/vercel';
 import { VitNodeAPI } from 'vitnode/api/config';
-import { GoogleSSOApiPlugin } from '@/utils/seo/google'; // [!code ++]
+import { DiscordSSOApiPlugin } from '@/utils/seo/discord'; // [!code ++]
 
 const app = new OpenAPIHono().basePath('/api');
 VitNodeAPI({
@@ -355,11 +358,11 @@ VitNodeAPI({
     // [!code ++]
     ssoPlugins: [
       // [!code ++]
-      new GoogleSSOApiPlugin({
+      DiscordSSOApiPlugin({
         // [!code ++]
-        clientId: process.env.GOOGLE_CLIENT_ID!,
+        clientId: process.env.DISCORD_CLIENT_ID ?? '',
         // [!code ++]
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        clientSecret: process.env.DISCORD_CLIENT_SECRET ?? '',
         // [!code ++]
       }),
       // [!code ++]

@@ -8,10 +8,12 @@ import { Context, Env, Input } from 'hono';
 import { deleteCookie, getCookie, setCookie } from 'hono/cookie';
 import { HTTPException } from 'hono/http-exception';
 
-import { SSOModelPlugin } from '../plugins/sso/plugin';
 import { UserModel } from './user';
 
-export interface SSOApiPlugin {
+export type SSOApiPlugin = (props: {
+  clientId: string;
+  clientSecret: string;
+}) => {
   fetchToken: (
     code: string,
   ) => Promise<{ access_token: string; token_type: string }>;
@@ -22,17 +24,19 @@ export interface SSOApiPlugin {
   getUrl: (props: { state: string }) => string;
   id: string;
   name: string;
-}
+};
 
-export class SSOModel extends SSOModelPlugin {
+export const getRedirectUri = (code: string) =>
+  new URL(`${CONFIG.frontend.href}login/sso/${code}`).toString();
+
+export class SSOModel {
   constructor(c: Context<Env, '/', Input>) {
-    super();
     this.c = c;
     this.plugins = c.get('core').authorization.ssoPlugins;
   }
 
   private readonly c: Context<Env, '/', Input>;
-  private readonly plugins: SSOApiPlugin[];
+  private readonly plugins: ReturnType<SSOApiPlugin>[];
 
   private readonly signUpUser = async ({
     providerId,

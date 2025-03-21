@@ -13,7 +13,7 @@ declare module 'hono' {
         cookie_secure: boolean;
         device_cookie_expires: number;
         device_cookie_name: string;
-        ssoPlugins: SSOApiPlugin[];
+        ssoPlugins: ReturnType<SSOApiPlugin>[];
       };
     };
   }
@@ -30,7 +30,7 @@ export const globalMiddleware = ({
     cookie_secure?: boolean;
     device_cookie_expires?: number;
     device_cookie_name?: string;
-    ssoPlugins?: SSOApiPlugin[];
+    ssoPlugins?: ReturnType<SSOApiPlugin>[];
   };
 }) => {
   return async (c: Context<Env, '*'>, next: Next) => {
