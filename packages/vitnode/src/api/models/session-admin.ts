@@ -80,7 +80,9 @@ export class SessionAdminModel<T extends Env> extends DeviceModel<T> {
     await dbClient
       .delete(core_admin_sessions)
       .where(eq(core_admin_sessions.token, token));
-    deleteCookie(this.c, this.c.get('core').authorization.admin_cookie_name);
+    deleteCookie(this.c, this.c.get('core').authorization.admin_cookie_name, {
+      path: '/admin',
+    });
   }
 
   async verifySession() {

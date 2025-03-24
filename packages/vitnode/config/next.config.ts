@@ -12,6 +12,9 @@ dotenv.config({
 export const vitNodeNextConfig = (config: NextConfig): NextConfig =>
   withNextIntl({
     ...config,
+    devIndicators: {
+      position: 'bottom-right',
+    },
     env: {
       ...config.env,
       POSTGRES_URL: process.env.POSTGRES_URL ?? '',
