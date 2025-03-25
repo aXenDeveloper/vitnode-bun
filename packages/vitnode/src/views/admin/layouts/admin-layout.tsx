@@ -1,10 +1,10 @@
-import { ThemeSwitcher } from '@/components/switchers/theme-switcher';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { SidebarInset } from '@/components/ui/sidebar-server';
 import { getSessionAdminApi } from '@/lib/api/get-session-admin-api';
 import { cookies } from 'next/headers';
 
 import { SidebarAdmin } from './sidebar/sidebar';
+import { UserBarAdmin } from './user-bar/user-bar';
 
 export const AdminLayout = async ({
   children,
@@ -22,7 +22,9 @@ export const AdminLayout = async ({
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="-ml-1" />
-          <ThemeSwitcher />
+          <div className="ml-auto flex items-center justify-center gap-2">
+            <UserBarAdmin />
+          </div>
         </header>
         {children}
       </SidebarInset>
