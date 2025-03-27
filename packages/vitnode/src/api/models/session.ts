@@ -27,9 +27,9 @@ export class SessionModel<T extends Env> extends DeviceModel<T> {
       device_id: deviceId,
     });
 
-    setCookie(this.c, this.c.get('core').authorization.cookie_name, token, {
+    setCookie(this.c, this.c.get('core').authorization.cookieName, token, {
       httpOnly: true,
-      secure: this.c.get('core').authorization.cookie_secure,
+      secure: this.c.get('core').authorization.cookieSecure,
       sameSite: 'strict',
       path: '/',
       expires:
@@ -47,23 +47,23 @@ export class SessionModel<T extends Env> extends DeviceModel<T> {
   async deleteSession() {
     const token = getCookie(
       this.c,
-      this.c.get('core').authorization.cookie_name,
+      this.c.get('core').authorization.cookieName,
     );
     if (!token) return;
 
     await dbClient.delete(core_sessions).where(eq(core_sessions.token, token));
-    deleteCookie(this.c, this.c.get('core').authorization.cookie_name);
+    deleteCookie(this.c, this.c.get('core').authorization.cookieName);
   }
 
   async verifySession() {
     const token = getCookie(
       this.c,
-      this.c.get('core').authorization.cookie_name,
+      this.c.get('core').authorization.cookieName,
     );
     if (!token) return null;
     const deviceId = getCookie(
       this.c,
-      this.c.get('core').authorization.device_cookie_name,
+      this.c.get('core').authorization.deviceCookieName,
     );
     if (!deviceId) return null;
 

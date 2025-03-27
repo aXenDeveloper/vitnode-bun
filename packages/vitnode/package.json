@@ -69,6 +69,7 @@
     "clsx": "^2.1.1",
     "next-themes": "^0.4.6",
     "postgres": "^3.4.5",
+    "resend": "^4.2.0",
     "tailwind-merge": "^3.0.2",
     "vaul": "^1.1.2"
   }

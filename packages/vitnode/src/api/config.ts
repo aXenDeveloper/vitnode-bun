@@ -7,7 +7,7 @@ import { csrf } from 'hono/csrf';
 import { HTTPException } from 'hono/http-exception';
 
 import { PluginAPI } from './lib/plugin';
-import { globalMiddleware } from './middlewares/global';
+import { globalMiddleware } from './middlewares/global/global';
 
 interface CORSOptions {
   allowHeaders?: string[];

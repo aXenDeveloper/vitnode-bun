@@ -34,16 +34,16 @@ export class DeviceModel<T extends Env> {
   private setCookieDevice(deviceId: string) {
     setCookie(
       this.c,
-      this.c.get('core').authorization.device_cookie_name,
+      this.c.get('core').authorization.deviceCookieName,
       deviceId,
       {
         httpOnly: true,
-        secure: this.c.get('core').authorization.cookie_secure,
+        secure: this.c.get('core').authorization.cookieSecure,
         sameSite: 'strict',
         path: '/',
         domain: CONFIG.frontend.hostname,
         expires: new Date(
-          Date.now() + this.c.get('core').authorization.device_cookie_expires,
+          Date.now() + this.c.get('core').authorization.deviceCookieExpires,
         ),
       },
     );
@@ -52,7 +52,7 @@ export class DeviceModel<T extends Env> {
   async getDeviceId() {
     const deviceIdFromCookie = getCookie(
       this.c,
-      this.c.get('core').authorization.device_cookie_name,
+      this.c.get('core').authorization.deviceCookieName,
     );
 
     if (deviceIdFromCookie) {

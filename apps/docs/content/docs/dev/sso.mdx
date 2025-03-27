@@ -1,9 +1,9 @@
 ---
-title: Custom SSO
+title: Single Sign-On (SSO)
 description: xddd
 ---
 
-## Api
+## Custom SSO Provider
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
@@ -16,10 +16,13 @@ Create new file and create a function that has `SSOModelPlugin` type with `id` a
 ```ts title="src/utils/sso/discord-api.ts"
 import { SSOApiPlugin, getRedirectUri } from 'vitnode/api/models/sso';
 
-export const DiscordSSOApiPlugin: SSOApiPlugin = ({
+export const DiscordSSOApiPlugin = ({
   clientId,
   clientSecret,
-}) => {
+}: {
+  clientId: string;
+  clientSecret: string;
+}): SSOApiPlugin => {
   const id = 'discord';
   const redirectUri = getRedirectUri(id);
 
@@ -37,10 +40,13 @@ Implement `getUrl` method inside your function that returns the URL for the SSO 
 This url should contain `scope` to get access to `id`, `email` and `username` _(optional)_.
 
 ```ts title="src/utils/sso/discord-api.ts"
-export const DiscordSSOApiPlugin: SSOApiPlugin = ({
+export const DiscordSSOApiPlugin = ({
   clientId,
   clientSecret,
-}) => {
+}: {
+  clientId: string;
+  clientSecret: string;
+}): SSOApiPlugin => {
   const id = 'discord';
   const redirectUri = getRedirectUri(id);
 
@@ -84,10 +90,13 @@ export const DiscordSSOApiPlugin: SSOApiPlugin = ({
 Lets implement `POST` call from `fetch()` to get `access_token` and `token_type`:
 
 ```ts title="src/utils/sso/discord-api.ts"
-export const DiscordSSOApiPlugin: SSOApiPlugin = ({
+export const DiscordSSOApiPlugin = ({
   clientId,
   clientSecret,
-}) => {
+}: {
+  clientId: string;
+  clientSecret: string;
+}): SSOApiPlugin => {
   const id = 'discord';
   const redirectUri = getRedirectUri(id);
 
@@ -139,10 +148,13 @@ Next let's validate the code errors. It will help you to get the right message o
 import { HTTPException } from 'hono/http-exception'; // [!code ++]
 import { ContentfulStatusCode } from 'hono/utils/http-status'; // [!code ++]
 
-export const DiscordSSOApiPlugin: SSOApiPlugin = ({
+export const DiscordSSOApiPlugin = ({
   clientId,
   clientSecret,
-}) => {
+}: {
+  clientId: string;
+  clientSecret: string;
+}): SSOApiPlugin => {
   const id = 'discord';
   const redirectUri = getRedirectUri(id);
 
@@ -192,10 +204,13 @@ export const DiscordSSOApiPlugin: SSOApiPlugin = ({
 Now let's parse the response and return the `access_token` and `token_type`. We will use `zod` to validate the response.
 
 ```ts title="src/utils/sso/discord-api.ts"
-export const DiscordSSOApiPlugin: SSOApiPlugin = ({
+export const DiscordSSOApiPlugin = ({
   clientId,
   clientSecret,
-}) => {
+}: {
+  clientId: string;
+  clientSecret: string;
+}): SSOApiPlugin => {
   const id = 'discord';
   const redirectUri = getRedirectUri(id);
   // [!code ++]
@@ -268,10 +283,13 @@ Now let's implement `fetchUser` method that will fetch user data from the SSO pr
 This function should return the user data `id`, `email` and `username` _(optional)_.
 
 ```ts title="src/utils/sso/discord-api.ts"
-export const DiscordSSOApiPlugin: SSOApiPlugin = ({
+export const DiscordSSOApiPlugin = ({
   clientId,
   clientSecret,
-}) => {
+}: {
+  clientId: string;
+  clientSecret: string;
+}): SSOApiPlugin => {
   const id = 'discord';
   const redirectUri = getRedirectUri(id);
   const tokenSchema = z.object({
@@ -293,7 +311,6 @@ export const DiscordSSOApiPlugin: SSOApiPlugin = ({
     id,
     name: 'Discord',
     getUrl: ({ state }) => {},
-    // [!code ++]
     fetchToken: async code => {},
     // [!code ++]
     fetchUser: async ({ token_type, access_token }) => {

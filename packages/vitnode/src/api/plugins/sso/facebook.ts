@@ -3,10 +3,13 @@ import { HTTPException } from 'hono/http-exception';
 import { ContentfulStatusCode } from 'hono/utils/http-status';
 import { z } from 'zod';
 
-export const FacebookSSOApiPlugin: SSOApiPlugin = ({
+export const FacebookSSOApiPlugin = ({
   clientId,
   clientSecret,
-}) => {
+}: {
+  clientId: string;
+  clientSecret: string;
+}): SSOApiPlugin => {
   const id = 'facebook';
   const redirectUri = getRedirectUri(id);
   const tokenSchema = z.object({

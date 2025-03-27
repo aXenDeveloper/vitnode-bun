@@ -10,10 +10,7 @@ import { HTTPException } from 'hono/http-exception';
 
 import { UserModel } from './user';
 
-export type SSOApiPlugin = (props: {
-  clientId: string;
-  clientSecret: string;
-}) => {
+export interface SSOApiPlugin {
   fetchToken: (
     code: string,
   ) => Promise<{ access_token: string; token_type: string }>;
@@ -24,7 +21,7 @@ export type SSOApiPlugin = (props: {
   getUrl: (props: { state: string }) => string;
   id: string;
   name: string;
-};
+}
 
 export const getRedirectUri = (code: string) =>
   new URL(`${CONFIG.frontend.href}login/sso/${code}`).toString();
@@ -36,7 +33,7 @@ export class SSOModel {
   }
 
   private readonly c: Context<Env, '/', Input>;
-  private readonly plugins: ReturnType<SSOApiPlugin>[];
+  private readonly plugins: SSOApiPlugin[];
 
   private readonly signUpUser = async ({
     providerId,
@@ -156,11 +153,11 @@ export class SSOModel {
 
     setCookie(
       this.c,
-      `${this.c.get('core').authorization.cookie_name}--state-sso`,
+      `${this.c.get('core').authorization.cookieName}--state-sso`,
       encryptedState,
       {
         httpOnly: true,
-        secure: this.c.get('core').authorization.cookie_secure,
+        secure: this.c.get('core').authorization.cookieSecure,
         sameSite: 'strict',
         path: '/',
         domain: CONFIG.frontend.hostname,
@@ -182,7 +179,7 @@ export class SSOModel {
   async verifyState(state: string) {
     const storedState = getCookie(
       this.c,
-      `${this.c.get('core').authorization.cookie_name}--state-sso`,
+      `${this.c.get('core').authorization.cookieName}--state-sso`,
     );
     if (!storedState) {
       throw new HTTPException(400, {
@@ -207,7 +204,7 @@ export class SSOModel {
 
     deleteCookie(
       this.c,
-      `${this.c.get('core').authorization.cookie_name}--state-sso`,
+      `${this.c.get('core').authorization.cookieName}--state-sso`,
     );
   }
 }

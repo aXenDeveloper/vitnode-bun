@@ -3,10 +3,13 @@ import { HTTPException } from 'hono/http-exception';
 import { ContentfulStatusCode } from 'hono/utils/http-status';
 import { z } from 'zod';
 
-export const DiscordSSOApiPlugin: SSOApiPlugin = ({
+export const DiscordSSOApiPlugin = ({
   clientId,
   clientSecret,
-}) => {
+}: {
+  clientId: string;
+  clientSecret: string;
+}): SSOApiPlugin => {
   const id = 'discord';
   const redirectUri = getRedirectUri(id);
   const userSchema = z.object({

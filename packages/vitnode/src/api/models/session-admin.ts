@@ -46,26 +46,21 @@ export class SessionAdminModel<T extends Env> extends DeviceModel<T> {
       token,
       user_id: userId,
       expires_at: new Date(
-        Date.now() + this.c.get('core').authorization.admin_cookie_expires,
+        Date.now() + this.c.get('core').authorization.adminCookieExpires,
       ),
       device_id: deviceId,
     });
 
-    setCookie(
-      this.c,
-      this.c.get('core').authorization.admin_cookie_name,
-      token,
-      {
-        httpOnly: true,
-        secure: this.c.get('core').authorization.cookie_secure,
-        sameSite: 'strict',
-        path: '/admin',
-        expires: new Date(
-          Date.now() + this.c.get('core').authorization.admin_cookie_expires,
-        ),
-        domain: CONFIG.frontend.hostname,
-      },
-    );
+    setCookie(this.c, this.c.get('core').authorization.adminCookieName, token, {
+      httpOnly: true,
+      secure: this.c.get('core').authorization.cookieSecure,
+      sameSite: 'strict',
+      path: '/admin',
+      expires: new Date(
+        Date.now() + this.c.get('core').authorization.adminCookieExpires,
+      ),
+      domain: CONFIG.frontend.hostname,
+    });
 
     return { token, deviceId };
   }
@@ -73,14 +68,14 @@ export class SessionAdminModel<T extends Env> extends DeviceModel<T> {
   async deleteSession() {
     const token = getCookie(
       this.c,
-      this.c.get('core').authorization.admin_cookie_name,
+      this.c.get('core').authorization.adminCookieName,
     );
     if (!token) return;
 
     await dbClient
       .delete(core_admin_sessions)
       .where(eq(core_admin_sessions.token, token));
-    deleteCookie(this.c, this.c.get('core').authorization.admin_cookie_name, {
+    deleteCookie(this.c, this.c.get('core').authorization.adminCookieName, {
       path: '/admin',
     });
   }
@@ -88,12 +83,12 @@ export class SessionAdminModel<T extends Env> extends DeviceModel<T> {
   async verifySession() {
     const token = getCookie(
       this.c,
-      this.c.get('core').authorization.admin_cookie_name,
+      this.c.get('core').authorization.adminCookieName,
     );
     if (!token) throw new HTTPException(403);
     const deviceId = getCookie(
       this.c,
-      this.c.get('core').authorization.device_cookie_name,
+      this.c.get('core').authorization.deviceCookieName,
     );
     if (!deviceId) throw new HTTPException(403);
 

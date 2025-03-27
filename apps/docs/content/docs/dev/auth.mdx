@@ -28,7 +28,7 @@ VitNodeAPI({
 
 <TypeTable
   type={{
-    cookie_name: {
+    cookieName: {
       description:
         'The name of the cookie that will be used to store the session token.',
       type: 'string',
@@ -39,31 +39,31 @@ VitNodeAPI({
       type: 'number',
       default: '1000 * 60 * 60 * 24 * 90',
     },
-    device_cookie_name: {
+    deviceCookieName: {
       description:
         'The name of the cookie that will be used to store the device token.',
       type: 'string',
       default: 'vitnode-device',
     },
-    device_cookie_expires: {
+    deviceCookieExpires: {
       description:
         'The time in milliseconds that the device cookie will expire.',
       type: 'number',
       default: '1000 * 60 * 60 * 24 * 365',
     },
-    admin_cookie_name: {
+    adminCookieName: {
       description:
         'The name of the cookie that will be used to store the admin token.',
       type: 'string',
       default: 'vitnode-admin',
     },
-    admin_cookie_expires: {
+    adminCookieExpires: {
       description:
         'The time in milliseconds that the admin cookie will expire.',
       type: 'number',
       default: '1000 * 60 * 60 * 24 * 1',
     },
-    cookie_secure: {
+    cookieSecure: {
       description:
         'If true, the cookie will only be sent over HTTPS. If you are using a reverse proxy, you may need to set this to false.',
       type: 'boolean',
