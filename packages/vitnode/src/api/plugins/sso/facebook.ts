@@ -7,8 +7,8 @@ export const FacebookSSOApiPlugin = ({
   clientId,
   clientSecret,
 }: {
-  clientId: string;
-  clientSecret: string;
+  clientId: string | undefined;
+  clientSecret: string | undefined;
 }): SSOApiPlugin => {
   const id = 'facebook';
   const redirectUri = getRedirectUri(id);
@@ -21,6 +21,10 @@ export const FacebookSSOApiPlugin = ({
     name: z.string(),
     email: z.string(),
   });
+
+  if (!clientId || !clientSecret) {
+    throw new Error('Missing Facebook client ID or secret');
+  }
 
   return {
     id,

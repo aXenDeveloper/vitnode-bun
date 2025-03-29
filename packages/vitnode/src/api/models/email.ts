@@ -3,14 +3,11 @@ import { HTTPException } from 'hono/http-exception';
 
 export interface EmailApiPlugin {
   sendEmail: (args: {
+    html: string;
     replyTo?: string;
     site: ContextVariableMap['core']['site'];
     subject: string;
-    tags?: {
-      name: string;
-      value: string;
-    }[];
-    to: string[];
+    to: string;
   }) => Promise<void>;
 }
 
@@ -26,13 +23,10 @@ export class EmailModel<T extends Env> {
   }
 
   async send(args: {
+    html: string;
     replyTo?: string;
     subject: string;
-    tags?: {
-      name: string;
-      value: string;
-    }[];
-    to: string[];
+    to: string;
   }) {
     const core = this.c.get('core');
     const provider = core.emailProvider;

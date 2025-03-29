@@ -4,11 +4,11 @@ import { ContentfulStatusCode } from 'hono/utils/http-status';
 import { z } from 'zod';
 
 export const DiscordSSOApiPlugin = ({
-  clientId,
-  clientSecret,
+  clientId = '',
+  clientSecret = '',
 }: {
-  clientId: string;
-  clientSecret: string;
+  clientId: string | undefined;
+  clientSecret: string | undefined;
 }): SSOApiPlugin => {
   const id = 'discord';
   const redirectUri = getRedirectUri(id);
@@ -21,6 +21,10 @@ export const DiscordSSOApiPlugin = ({
     access_token: z.string(),
     token_type: z.string(),
   });
+
+  if (!clientId || !clientSecret) {
+    throw new Error('Missing Discord client ID or secret');
+  }
 
   return {
     fetchToken: async code => {

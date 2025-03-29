@@ -26,7 +26,11 @@ export const middlewareModule = createModuleApi({
     }),
     async c => {
       const email = new EmailModel(c);
-      await email.send({ to: ['ithereplay@gmail.com'], subject: 'test' });
+      await email.send({
+        to: 'ithereplay@gmail.com',
+        subject: 'test',
+        html: 'test',
+      });
 
       return c.json('Hello, world!');
     },

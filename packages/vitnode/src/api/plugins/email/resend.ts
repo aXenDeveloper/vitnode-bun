@@ -5,19 +5,22 @@ export const ResendEmailPlugin = ({
   apiKey,
   from,
 }: {
-  apiKey: string;
-  from: string;
+  apiKey: string | undefined;
+  from: string | undefined;
 }): EmailApiPlugin => {
+  if (!apiKey || !from) {
+    throw new Error('Missing Resend configuration');
+  }
+
   return {
-    sendEmail: async ({ to, subject, replyTo, tags, site }) => {
+    sendEmail: async ({ to, subject, replyTo, site, html }) => {
       const resend = new Resend(apiKey);
       const { error } = await resend.emails.send({
         from: `${site.nameShort ?? site.name} <${from}>`,
         to,
         subject,
         replyTo,
-        tags,
-        html: '<strong>it works!</strong>',
+        html,
       });
 
       if (error) {

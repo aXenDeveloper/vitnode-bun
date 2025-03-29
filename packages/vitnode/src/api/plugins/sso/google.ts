@@ -7,8 +7,8 @@ export const GoogleSSOApiPlugin = ({
   clientId,
   clientSecret,
 }: {
-  clientId: string;
-  clientSecret: string;
+  clientId: string | undefined;
+  clientSecret: string | undefined;
 }): SSOApiPlugin => {
   const id = 'google';
   const redirectUri = getRedirectUri(id);
@@ -22,6 +22,10 @@ export const GoogleSSOApiPlugin = ({
     name: z.string(),
     verified_email: z.boolean(),
   });
+
+  if (!clientId || !clientSecret) {
+    throw new Error('Missing Google client ID or secret');
+  }
 
   return {
     id,
