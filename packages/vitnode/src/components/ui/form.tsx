@@ -36,11 +36,7 @@ function Form<
     >,
     'children'
   >;
-  onSubmit: TTransformedValues extends undefined
-    ? SubmitHandler<TFieldValues>
-    : TTransformedValues extends FieldValues
-      ? SubmitHandler<TTransformedValues>
-      : never;
+  onSubmit: SubmitHandler<TTransformedValues>;
 }) {
   return (
     <FormProvider {...form}>
