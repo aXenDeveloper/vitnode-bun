@@ -1,3 +1,4 @@
+import { ThemeSwitcher } from '@/components/switchers/theme-switcher';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { SidebarInset } from '@/components/ui/sidebar-server';
 import { getSessionAdminApi } from '@/lib/api/get-session-admin-api';
@@ -12,9 +13,10 @@ export const AdminLayout = async ({
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 }) => {
+  const session = await getSessionAdminApi();
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get('sidebar_state')?.value === 'true';
-  await getSessionAdminApi();
+  if (!session) return null;
 
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
@@ -22,8 +24,10 @@ export const AdminLayout = async ({
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="-ml-1" />
-          <div className="ml-auto flex items-center justify-center gap-2">
-            <UserBarAdmin />
+
+          <div className="ml-auto flex items-center justify-center gap-2 px-2">
+            <ThemeSwitcher />
+            <UserBarAdmin user={session.user} />
           </div>
         </header>
         {children}

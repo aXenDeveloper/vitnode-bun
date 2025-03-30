@@ -1,3 +1,5 @@
+'use client';
+
 import { Avatar } from '@/components/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -9,11 +11,12 @@ import { getSessionAdminApi } from '@/lib/api/get-session-admin-api';
 
 import { ClientUserBarAdmin } from './client';
 
-export const UserBarAdmin = async () => {
-  const session = await getSessionAdminApi();
-  if (!session) return null;
-  const { user } = session;
-
+export const UserBarAdmin = ({
+  user,
+}: Pick<
+  NonNullable<Awaited<ReturnType<typeof getSessionAdminApi>>>,
+  'user'
+>) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

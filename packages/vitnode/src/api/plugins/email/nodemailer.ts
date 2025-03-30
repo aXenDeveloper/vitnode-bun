@@ -16,12 +16,12 @@ export const NodemailerEmailPlugin = ({
   secure?: boolean;
   user: string | undefined;
 }): EmailApiPlugin => {
-  if (!host || !user || !password || !from) {
-    throw new Error('Missing nodemailer configuration');
-  }
-
   return {
     sendEmail: async ({ site, to, subject, html, replyTo }) => {
+      if (!host || !user || !password || !from) {
+        throw new Error('Missing nodemailer configuration');
+      }
+
       const transporter = createTransport(
         {
           host,
