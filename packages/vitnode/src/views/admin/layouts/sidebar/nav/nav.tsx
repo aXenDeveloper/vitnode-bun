@@ -1,23 +1,34 @@
-import { SidebarMenuButton } from '@/components/ui/sidebar';
 import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuItem,
 } from '@/components/ui/sidebar-server';
 import { HomeIcon } from 'lucide-react';
+
+import { ItemNavAdmin } from './item';
 
 export const NavSidebarAdmin = () => {
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
-        <SidebarMenuItem>
-          <SidebarMenuButton>
-            <HomeIcon />
-            <span>test button</span>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
+        <ItemNavAdmin
+          href="/admin/core"
+          icon={<HomeIcon />}
+          title="test button"
+        />
+
+        <ItemNavAdmin
+          href="/admin/core/users"
+          icon={<HomeIcon />}
+          items={[
+            {
+              title: 'test 123',
+              href: '/admin/core/users/test',
+            },
+          ]}
+          title="Users"
+        />
       </SidebarMenu>
     </SidebarGroup>
   );

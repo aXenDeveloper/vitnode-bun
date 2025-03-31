@@ -18,6 +18,7 @@
 | Skeleton      | `vitnode/components/ui/skeleton`      | `@/components/ui/skeleton`      |
 | Sonner        | `vitnode/components/ui/sonner`        | `@/components/ui/sonner`        |
 | Tooltip       | `vitnode/components/ui/tooltip`       | `@/components/ui/tooltip`       |
+| Collapsible   | `vitnode/components/ui/collapsible`   | `@/components/ui/collapsible`   |
 
 ### Other UI components
 

@@ -23,14 +23,14 @@ export const GoogleSSOApiPlugin = ({
     verified_email: z.boolean(),
   });
 
-  if (!clientId || !clientSecret) {
-    throw new Error('Missing Google client ID or secret');
-  }
-
   return {
     id,
     name: 'Google',
     fetchToken: async code => {
+      if (!clientId || !clientSecret) {
+        throw new Error('Missing Google client ID or secret');
+      }
+
       const res = await fetch('https://oauth2.googleapis.com/token', {
         method: 'POST',
         headers: {
@@ -90,6 +90,10 @@ export const GoogleSSOApiPlugin = ({
       };
     },
     getUrl: ({ state }) => {
+      if (!clientId) {
+        throw new Error('Missing Google client ID');
+      }
+
       const url = new URL('https://accounts.google.com/o/oauth2/auth');
       url.searchParams.set('client_id', clientId);
       url.searchParams.set('redirect_uri', redirectUri);

@@ -2,7 +2,7 @@ import { setRequestLocale } from 'next-intl/server';
 import { Metadata } from 'next/dist/types';
 import { notFound } from 'next/navigation';
 
-import { DashboardAdminView } from './dashboard/dashboard-admin-view';
+import { DashboardAdminView } from './views/core/dashboard/dashboard-admin-view';
 
 interface Props {
   params: Promise<{
@@ -29,6 +29,7 @@ export const DynamicAdminView = async ({ params }: Props) => {
 
   const views = {
     core: <DashboardAdminView />,
+    'core/users': <div>users view</div>,
   };
 
   const view = views[path];
@@ -41,5 +42,5 @@ export const DynamicAdminView = async ({ params }: Props) => {
 };
 
 export const dynamicAdminViewGenerateStaticParams = (locales: string[]) => {
-  return locales.map(locale => ({ locale, rest: ['core'] }));
+  return locales.map(locale => ({ locale, rest: ['core', 'core/users'] }));
 };

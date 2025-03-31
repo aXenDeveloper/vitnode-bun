@@ -22,12 +22,12 @@ export const DiscordSSOApiPlugin = ({
     token_type: z.string(),
   });
 
-  if (!clientId || !clientSecret) {
-    throw new Error('Missing Discord client ID or secret');
-  }
-
   return {
     fetchToken: async code => {
+      if (!clientId || !clientSecret) {
+        throw new Error('Missing Discord client ID or secret');
+      }
+
       const res = await fetch('https://discord.com/api/oauth2/token', {
         method: 'POST',
         headers: {
@@ -77,6 +77,10 @@ export const DiscordSSOApiPlugin = ({
       return data;
     },
     getUrl: ({ state }) => {
+      if (!clientId) {
+        throw new Error('Missing Discord client ID');
+      }
+
       const url = new URL('https://discord.com/oauth2/authorize');
       url.searchParams.set('client_id', clientId);
       url.searchParams.set('redirect_uri', redirectUri);

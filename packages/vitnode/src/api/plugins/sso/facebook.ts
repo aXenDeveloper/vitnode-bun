@@ -22,14 +22,14 @@ export const FacebookSSOApiPlugin = ({
     email: z.string(),
   });
 
-  if (!clientId || !clientSecret) {
-    throw new Error('Missing Facebook client ID or secret');
-  }
-
   return {
     id,
     name: 'Facebook',
     fetchToken: async code => {
+      if (!clientId || !clientSecret) {
+        throw new Error('Missing Facebook client ID or secret');
+      }
+
       const url = new URL(
         'https://graph.facebook.com/v22.0/oauth/access_token',
       );
@@ -83,6 +83,10 @@ export const FacebookSSOApiPlugin = ({
     },
 
     getUrl: ({ state }) => {
+      if (!clientId) {
+        throw new Error('Missing Facebook client ID');
+      }
+
       const url = new URL('https://www.facebook.com/v22.0/dialog/oauth');
       url.searchParams.set('client_id', clientId);
       url.searchParams.set('redirect_uri', redirectUri);
