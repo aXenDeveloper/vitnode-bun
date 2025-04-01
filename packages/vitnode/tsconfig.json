@@ -3,7 +3,6 @@
   "extends": "eslint-config-typescript-vitnode/tsconfig",
   "compilerOptions": {
     "target": "ESNext",
-    "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
     "moduleResolution": "bundler",
     "rootDir": "./",
@@ -21,12 +20,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "exclude": ["node_modules", "eslint.config.mjs"],
-  "include": [
-    "src",
-    "scripts",
-    "global.d.ts",
-    "src/views/layouts/theme/header/user",
-    "emails"
-  ]
+  "exclude": ["node_modules"],
+  "include": ["src", "scripts", "global.d.ts", "emails"]
 }

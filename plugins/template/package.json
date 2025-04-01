@@ -1,7 +1,7 @@
 {
-  "name": "vitnode-blog",
-  "version": "0.2.0",
-  "description": "Backend wrapper for VitNode projects",
+  "name": "vitnode-template",
+  "version": "0.1.0",
+  "description": "",
   "author": "VitNode",
   "homepage": "https://vitnode.com",
   "type": "module",

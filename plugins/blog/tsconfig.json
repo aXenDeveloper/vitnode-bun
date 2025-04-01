@@ -5,8 +5,12 @@
     "target": "ESNext",
     "module": "esnext",
     "moduleResolution": "bundler",
-    "noEmit": true,
-    "baseUrl": ".",
+    "rootDir": "./",
+    "outDir": "./dist",
+    "jsx": "react-jsx",
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationMap": true,
     "plugins": [
       {
         "name": "next"
@@ -16,6 +20,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "include": ["src"]
 }

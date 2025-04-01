@@ -24,7 +24,7 @@ export const NavSidebarAdmin = () => {
           items={[
             {
               title: 'test 123',
-              href: '/admin/core/users/test',
+              href: '/admin/core/users',
             },
           ]}
           title="Users"

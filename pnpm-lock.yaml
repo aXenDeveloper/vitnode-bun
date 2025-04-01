@@ -300,6 +300,9 @@ importers:
       eslint:
         specifier: ^9.23.0
         version: 9.23.0(jiti@2.4.2)
+      eslint-config-typescript-vitnode:
+        specifier: workspace:*
+        version: link:../eslint
       hono:
         specifier: ^4.7.5
         version: 4.7.5
@@ -343,7 +346,97 @@ importers:
         specifier: ^3.24.2
         version: 3.24.2
 
-  plugins/blog: {}
+  plugins/blog:
+    dependencies:
+      drizzle-kit:
+        specifier: ^0.30.6
+        version: 0.30.6
+      drizzle-orm:
+        specifier: ^0.41.0
+        version: 0.41.0(@neondatabase/serverless@0.10.4)(@types/pg@8.11.10)(gel@2.0.1)(pg@8.13.1)(postgres@3.4.5)
+      hono:
+        specifier: ^4.7.5
+        version: 4.7.5
+      lucide-react:
+        specifier: ^0.485.0
+        version: 0.485.0(react@19.1.0)
+      next:
+        specifier: ^15.2.4
+        version: 15.2.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      next-intl:
+        specifier: ^4.0.2
+        version: 4.0.2(next@15.2.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(typescript@5.8.2)
+      react:
+        specifier: ^19.1.0
+        version: 19.1.0
+      react-dom:
+        specifier: ^19.1.0
+        version: 19.1.0(react@19.1.0)
+      vitnode:
+        specifier: workspace:*
+        version: link:../../packages/vitnode
+    devDependencies:
+      concurrently:
+        specifier: ^9.1.2
+        version: 9.1.2
+      eslint:
+        specifier: ^9.23.0
+        version: 9.23.0(jiti@2.4.2)
+      eslint-config-typescript-vitnode:
+        specifier: workspace:*
+        version: link:../../packages/eslint
+      typescript:
+        specifier: ^5.8.2
+        version: 5.8.2
+
+  plugins/template:
+    dependencies:
+      drizzle-kit:
+        specifier: ^0.30.6
+        version: 0.30.6
+      drizzle-orm:
+        specifier: ^0.41.0
+        version: 0.41.0(@neondatabase/serverless@0.10.4)(@types/pg@8.11.10)(gel@2.0.1)(pg@8.13.1)(postgres@3.4.5)
+      hono:
+        specifier: ^4.7.5
+        version: 4.7.5
+      lucide-react:
+        specifier: ^0.485.0
+        version: 0.485.0(react@19.1.0)
+      next:
+        specifier: ^15.2.4
+        version: 15.2.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      next-intl:
+        specifier: ^4.0.2
+        version: 4.0.2(next@15.2.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(typescript@5.8.2)
+      react:
+        specifier: ^19.1.0
+        version: 19.1.0
+      react-dom:
+        specifier: ^19.1.0
+        version: 19.1.0(react@19.1.0)
+      vitnode:
+        specifier: workspace:*
+        version: link:../../packages/vitnode
+    devDependencies:
+      '@swc/cli':
+        specifier: ^0.6.0
+        version: 0.6.0(@swc/core@1.11.13(@swc/helpers@0.5.15))(chokidar@4.0.3)
+      '@swc/core':
+        specifier: ^1.11.13
+        version: 1.11.13(@swc/helpers@0.5.15)
+      concurrently:
+        specifier: ^9.1.2
+        version: 9.1.2
+      eslint:
+        specifier: ^9.23.0
+        version: 9.23.0(jiti@2.4.2)
+      eslint-config-typescript-vitnode:
+        specifier: workspace:*
+        version: link:../../packages/eslint
+      typescript:
+        specifier: ^5.8.2
+        version: 5.8.2
 
 packages:
 
