@@ -376,6 +376,12 @@ importers:
         specifier: workspace:*
         version: link:../../packages/vitnode
     devDependencies:
+      '@swc/cli':
+        specifier: ^0.6.0
+        version: 0.6.0(@swc/core@1.11.13(@swc/helpers@0.5.15))(chokidar@4.0.3)
+      '@swc/core':
+        specifier: ^1.11.13
+        version: 1.11.13(@swc/helpers@0.5.15)
       concurrently:
         specifier: ^9.1.2
         version: 9.1.2
