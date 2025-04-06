@@ -4,7 +4,7 @@ import { getDefaultValues, getObjectFormSchema } from '@/lib/helpers/auto-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { DefaultValues, Mode, useForm, UseFormReturn } from 'react-hook-form';
-import { TypeOf, z } from 'zod';
+import { z } from 'zod';
 
 import { Button } from '../ui/button';
 import { Form } from '../ui/form';

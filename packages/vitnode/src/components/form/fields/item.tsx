@@ -1,4 +1,4 @@
-import { FormField, FormItem, FormMessage } from '@/components/ui/form';
+import { FormField } from '@/components/ui/form';
 import { ControllerRenderProps, FieldPath, FieldValues } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -25,12 +25,7 @@ export function ItemAutoForm<
     <FormField
       name={id}
       render={({ field }) => {
-        return (
-          <FormItem>
-            {component({ field })}
-            <FormMessage />
-          </FormItem>
-        );
+        return <>{component({ field })}</>;
       }}
     />
   );

@@ -1,6 +1,5 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import { useForm } from 'react-hook-form';
+import { UseFormReturn } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -12,13 +11,21 @@ export const useFormSignUp = () => {
   const invalidPassword = t('password.invalid');
   const formSchema = z.object({
     name: z
-      .string()
+      .string({
+        message: tError('field_required'),
+      })
       .min(3, t('username.min_length'))
       .max(32, t('username.max_length')),
     // .refine(value => nameRegex.test(value), t('name.invalid'))
-    email: z.string().email(t('email.invalid')),
+    email: z
+      .string({
+        message: tError('field_required'),
+      })
+      .email(t('email.invalid')),
     password: z
-      .string()
+      .string({
+        message: tError('field_required'),
+      })
       .regex(/^.{8,}$/, invalidPassword)
       .regex(/[A-Z]/, invalidPassword)
       .regex(/\d/, invalidPassword)
@@ -27,19 +34,10 @@ export const useFormSignUp = () => {
     newsletter: z.boolean().optional(),
   });
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    mode: 'onBlur',
-    defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-      terms: false,
-      newsletter: false,
-    },
-  });
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (
+    values: z.infer<typeof formSchema>,
+    form: UseFormReturn<z.infer<typeof formSchema>>,
+  ) => {
     const mutation = await mutationApi({
       json: values,
     });
@@ -83,5 +81,5 @@ export const useFormSignUp = () => {
     });
   };
 
-  return { form, onSubmit, formSchema };
+  return { onSubmit, formSchema };
 };

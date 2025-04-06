@@ -1,3 +1,4 @@
+import { FormControl, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import React from 'react';
 import { z } from 'zod';
@@ -17,23 +18,26 @@ export function AutoFormInput<T extends z.ZodTypeAny>({
     label?: React.ReactNode;
   }) {
   return (
-    <>
+    <FormItem>
       {label && <AutoFormLabel>{label}</AutoFormLabel>}
 
-      <Input
-        onBlur={e => {
-          field.onBlur();
-          props.onBlur?.(e);
-        }}
-        onChange={e => {
-          field.onChange(e);
-          props.onChange?.(e);
-        }}
-        value={field.value ?? ''}
-        {...props}
-      />
+      <FormControl>
+        <Input
+          onBlur={e => {
+            field.onBlur();
+            props.onBlur?.(e);
+          }}
+          onChange={e => {
+            field.onChange(e);
+            props.onChange?.(e);
+          }}
+          value={field.value ?? ''}
+          {...props}
+        />
+      </FormControl>
 
       {description && <AutoFormDesc>{description}</AutoFormDesc>}
-    </>
+      <FormMessage />
+    </FormItem>
   );
 }
