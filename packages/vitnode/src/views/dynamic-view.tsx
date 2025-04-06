@@ -2,6 +2,7 @@ import { setRequestLocale } from 'next-intl/server';
 import { Metadata } from 'next/dist/types';
 import { notFound } from 'next/navigation';
 
+import { VitNodeConfig } from '../vitnode.config';
 import {
   generateMetadataSignInView,
   SignInView,
@@ -12,7 +13,7 @@ import {
 } from './auth/sign-up/sign-up-view';
 import { CallbackSSOView } from './auth/sso/callback/callback-sso-view';
 
-interface Props {
+export interface DynamicViewProps {
   params: Promise<{
     locale: string;
     rest: string[];
@@ -22,7 +23,7 @@ interface Props {
 
 export const generateMetadataDynamicView = async ({
   params,
-}: Props): Promise<Metadata> => {
+}: DynamicViewProps): Promise<Metadata> => {
   const { rest, locale } = await params;
   const path = rest.join('/');
 
@@ -34,7 +35,12 @@ export const generateMetadataDynamicView = async ({
   return await views[path];
 };
 
-export const DynamicView = async ({ params, searchParams }: Props) => {
+export const DynamicView = async ({
+  params,
+  searchParams,
+}: DynamicViewProps & {
+  config: VitNodeConfig;
+}) => {
   const { rest, locale } = await params;
   setRequestLocale(locale);
   const path = rest.join('/');

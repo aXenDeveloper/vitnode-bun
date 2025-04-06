@@ -1,7 +1,5 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import React from 'react';
-import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -12,16 +10,11 @@ export const useFormSignIn = ({ isAdmin }: { isAdmin?: boolean }) => {
   const t = useTranslations('core.auth.sign_in');
   const tErrors = useTranslations('core.global.errors');
   const formSchema = z.object({
-    email: z.string().email({ message: t('email.invalid') }),
-    password: z.string(),
-  });
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
+    email: z
+      .string()
+      .email({ message: t('email.invalid') })
+      .default(''),
+    password: z.string().default(''),
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -42,5 +35,5 @@ export const useFormSignIn = ({ isAdmin }: { isAdmin?: boolean }) => {
     });
   };
 
-  return { form, onSubmit, error };
+  return { onSubmit, error, formSchema };
 };

@@ -1,18 +1,21 @@
-import { CONFIG } from '@/lib/config';
-import { Locale, NextIntlClientProvider } from 'next-intl';
+import { VitNodeConfig } from '@/vitnode.config';
+import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { Metadata } from 'next/dist/types';
 import React from 'react';
 
 import { RootProvider } from './provider';
 
+export interface RootLayoutProps {
+  children: React.ReactNode;
+  params: Promise<{
+    locale: string;
+  }>;
+}
+
 export const generateMetadataRootLayout = ({
-  title,
-  shortTitle,
-}: {
-  shortTitle?: string;
-  title: string;
-}): Metadata => {
+  metadata: { title, shortTitle },
+}: VitNodeConfig): Metadata => {
   return {
     title: {
       default: title,
@@ -26,31 +29,20 @@ export const RootLayout = async ({
   children,
   className,
   params,
-  debug,
   head,
   ...paramsForRoot
-}: React.ComponentProps<typeof RootProvider> & {
-  children: React.ReactNode;
-  className?: string;
-  debug?: boolean;
-  head?: React.ReactNode;
-  params: Promise<{ locale: Locale }>;
-}) => {
+}: React.ComponentProps<typeof RootProvider> &
+  RootLayoutProps & {
+    className?: string;
+    head?: React.ReactNode;
+  }) => {
   const { locale } = await params;
   const messages = await getMessages();
   setRequestLocale(locale);
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <head>
-        {debug && CONFIG.node_development && (
-          <script
-            crossOrigin="anonymous"
-            src="//unpkg.com/react-scan/dist/auto.global.js"
-          />
-        )}
-        {head}
-      </head>
+      {head && <head>{head}</head>}
       <body className={className}>
         <NextIntlClientProvider messages={messages}>
           <RootProvider {...paramsForRoot}>{children}</RootProvider>

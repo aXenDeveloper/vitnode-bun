@@ -2,9 +2,10 @@ import { setRequestLocale } from 'next-intl/server';
 import { Metadata } from 'next/dist/types';
 import { notFound } from 'next/navigation';
 
+import { VitNodeConfig } from '../../vitnode.config';
 import { DashboardAdminView } from './views/core/dashboard/dashboard-admin-view';
 
-interface Props {
+export interface DynamicAdminViewProps {
   params: Promise<{
     locale: string;
     rest: string[];
@@ -13,7 +14,7 @@ interface Props {
 
 export const generateMetadataDynamicAdminView = async ({
   params,
-}: Props): Promise<Metadata> => {
+}: DynamicAdminViewProps): Promise<Metadata> => {
   const { rest } = await params;
   const path = rest.join('/');
 
@@ -22,7 +23,11 @@ export const generateMetadataDynamicAdminView = async ({
   return await views[path];
 };
 
-export const DynamicAdminView = async ({ params }: Props) => {
+export const DynamicAdminView = async ({
+  params,
+}: DynamicAdminViewProps & {
+  config: VitNodeConfig;
+}) => {
   const { rest, locale } = await params;
   setRequestLocale(locale);
   const path = rest.join('/');

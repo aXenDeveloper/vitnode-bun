@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 
 import { locales } from '@/i18n';
+import { vitNodeConfig } from '@/vitnode.config';
 import { Geist, Geist_Mono } from 'next/font/google';
 import {
   generateMetadataRootLayout,
   RootLayout,
+  RootLayoutProps,
 } from 'vitnode/views/layouts/root-layout';
 
 const geistSans = Geist({
@@ -17,21 +19,16 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-export const generateMetadata = (): Metadata => {
-  return generateMetadataRootLayout({
-    title: 'VitNode',
-  });
-};
+export const generateMetadata = (): Metadata =>
+  generateMetadataRootLayout(vitNodeConfig);
 
 export const generateStaticParams = () => locales.map(locale => ({ locale }));
 
-export default function LocaleLayout(
-  props: Pick<React.ComponentProps<typeof RootLayout>, 'children' | 'params'>,
-) {
+export default function LocaleLayout(props: RootLayoutProps) {
   return (
     <RootLayout
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      // debug
+      config={vitNodeConfig}
       theme={{
         defaultTheme: 'dark',
       }}

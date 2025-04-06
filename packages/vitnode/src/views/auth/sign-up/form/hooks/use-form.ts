@@ -44,7 +44,9 @@ export const useFormSignUp = () => {
       json: values,
     });
     if (!mutation?.message) {
-      return toast('Event has been created.');
+      toast('Event has been created.');
+
+      return;
     }
 
     const errorMessages = {
@@ -81,5 +83,5 @@ export const useFormSignUp = () => {
     });
   };
 
-  return { form, onSubmit };
+  return { form, onSubmit, formSchema };
 };

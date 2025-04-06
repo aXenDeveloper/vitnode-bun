@@ -12,6 +12,7 @@
       "register": "Register",
       "login": "Login",
       "save": "Save",
+      "submit": "Submit",
       "cancel": "Cancel",
       "optional": "Optional",
       "loading": "Loading...",

@@ -7,29 +7,46 @@ import { HomeIcon } from 'lucide-react';
 
 import { ItemNavAdmin } from './item';
 
-export const NavSidebarAdmin = () => {
-  return (
-    <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
-      <SidebarMenu>
-        <ItemNavAdmin
-          href="/admin/core"
-          icon={<HomeIcon />}
-          title="test button"
-        />
+export interface NavAdminParent {
+  id: string;
+  items: React.ComponentProps<typeof ItemNavAdmin>[];
+  title: string;
+}
 
-        <ItemNavAdmin
-          href="/admin/core/users"
-          icon={<HomeIcon />}
-          items={[
+export const NavSidebarAdmin = () => {
+  const rootItems: NavAdminParent[] = [
+    {
+      id: 'core',
+      title: 'Core',
+      items: [
+        {
+          href: '/admin/core/users',
+          title: 'test 123',
+          icon: <HomeIcon />,
+        },
+        {
+          href: '/admin/core',
+          title: 'test button',
+          icon: <HomeIcon />,
+          items: [
             {
               title: 'test 123',
               href: '/admin/core/users',
             },
-          ]}
-          title="Users"
-        />
+          ],
+        },
+      ],
+    },
+  ];
+
+  return rootItems.map(parent => (
+    <SidebarGroup key={parent.title}>
+      <SidebarGroupLabel>{parent.title}</SidebarGroupLabel>
+      <SidebarMenu>
+        {parent.items.map(item => (
+          <ItemNavAdmin key={item.href} {...item} />
+        ))}
       </SidebarMenu>
     </SidebarGroup>
-  );
+  ));
 };
