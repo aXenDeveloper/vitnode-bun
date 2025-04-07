@@ -1,10 +1,10 @@
 import createMiddleware from 'next-intl/middleware';
 
-import { locales } from './i18n';
+import { vitNodeConfig } from './vitnode.config';
 
 export default createMiddleware({
   // A list of all locales that are supported
-  locales,
+  locales: vitNodeConfig.i18n.locales,
 
   // Used when no locale matches
   defaultLocale: 'en',

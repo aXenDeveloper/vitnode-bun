@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 
-import { locales } from '@/i18n';
 import { vitNodeConfig } from '@/vitnode.config';
 import { Geist, Geist_Mono } from 'next/font/google';
 import {
@@ -22,7 +21,8 @@ const geistMono = Geist_Mono({
 export const generateMetadata = (): Metadata =>
   generateMetadataRootLayout(vitNodeConfig);
 
-export const generateStaticParams = () => locales.map(locale => ({ locale }));
+export const generateStaticParams = () =>
+  vitNodeConfig.i18n.locales.map(locale => ({ locale }));
 
 export default function LocaleLayout(props: RootLayoutProps) {
   return (

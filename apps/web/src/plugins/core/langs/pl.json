@@ -22,6 +22,7 @@
       "errors": {
         "title": "Oops! Something went wrong.",
         "internal_server_error": "Internal server error.",
+        "field_required": "This field is required.",
         "404": {
           "title": "Page Not Found",
           "desc": "Oops! The page you're looking for doesn't exist."

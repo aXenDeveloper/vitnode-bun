@@ -3,7 +3,7 @@ import createNextIntlPlugin from 'next-intl/plugin';
 import * as dotenv from 'dotenv';
 import { join } from 'path';
 
-const withNextIntl = createNextIntlPlugin('./src/i18n.ts');
+const withNextIntl = createNextIntlPlugin('./src/vitnode.config.ts');
 
 dotenv.config({
   path: join(process.cwd(), '..', '..', '.env'),

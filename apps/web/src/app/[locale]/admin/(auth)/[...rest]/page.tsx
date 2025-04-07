@@ -1,4 +1,3 @@
-import { locales } from '@/i18n';
 import { vitNodeConfig } from '@/vitnode.config';
 import {
   DynamicAdminView,
@@ -9,7 +8,7 @@ import {
 
 export const generateMetadata = generateMetadataDynamicAdminView;
 export const generateStaticParams = () =>
-  dynamicAdminViewGenerateStaticParams(locales);
+  dynamicAdminViewGenerateStaticParams(vitNodeConfig.i18n.locales);
 
 export default function CatchAllPage(props: DynamicAdminViewProps) {
   return <DynamicAdminView config={vitNodeConfig} {...props} />;
