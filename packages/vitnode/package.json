@@ -4,6 +4,7 @@
   "devDependencies": {
     "@hono/swagger-ui": "^0.5.1",
     "@hono/zod-openapi": "^0.19.2",
+    "@hono/zod-validator": "^0.4.3",
     "@hookform/resolvers": "^5.0.1",
     "@react-email/components": "0.0.36",
     "@swc/cli": "^0.6.0",

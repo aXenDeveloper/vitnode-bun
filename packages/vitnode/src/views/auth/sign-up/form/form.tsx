@@ -10,12 +10,12 @@ import { useTranslations } from 'next-intl';
 import { PasswordInput } from '../../components/password-input';
 import { useFormSignUp } from './hooks/use-form';
 
-export const FormSignUp = () => {
+export const FormSignUp = ({ isEmail }: { isEmail: boolean }) => {
   const t = useTranslations('core.auth.sign_up');
   const { onSubmit, formSchema } = useFormSignUp();
 
   return (
-    <AutoForm
+    <AutoForm<typeof formSchema>
       fields={[
         {
           id: 'name',
@@ -70,16 +70,20 @@ export const FormSignUp = () => {
             />
           ),
         },
-        {
-          id: 'newsletter',
-          component: ({ field }) => (
-            <AutoFormCheckbox
-              description={t('newsletter.desc')}
-              field={field}
-              label={t('newsletter.label')}
-            />
-          ),
-        },
+        ...(isEmail
+          ? [
+              {
+                id: 'newsletter' as const,
+                component: ({ field }) => (
+                  <AutoFormCheckbox
+                    description={t('newsletter.desc')}
+                    field={field}
+                    label={t('newsletter.label')}
+                  />
+                ),
+              },
+            ]
+          : []),
       ]}
       formSchema={formSchema}
       mode="onBlur"

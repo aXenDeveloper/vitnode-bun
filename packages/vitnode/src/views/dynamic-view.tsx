@@ -67,6 +67,8 @@ export const DynamicView = async ({
   notFound();
 };
 
-export const dynamicViewGenerateStaticParams = (locales: string[]) => {
+export function dynamicViewGenerateStaticParams<
+  AppLocales extends string[] = string[],
+>(locales: AppLocales) {
   return locales.map(locale => ({ locale, rest: ['register', 'login'] }));
-};
+}

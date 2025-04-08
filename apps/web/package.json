@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@hono/zod-openapi": "^0.19.2",
+    "@hono/zod-validator": "^0.4.3",
     "@hookform/resolvers": "^5.0.1",
     "@react-email/components": "0.0.36",
     "dotenv": "^16.4.7",

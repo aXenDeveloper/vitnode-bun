@@ -1,6 +1,6 @@
 import { Card, CardDescription } from '@/components/ui/card';
+import { getMiddlewareApi } from '@/lib/api/get-middleware-api';
 import { Link } from '@/lib/navigation';
-import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next/dist/types';
 import React from 'react';
@@ -18,9 +18,12 @@ export const generateMetadataSignUpView = async (
   };
 };
 
-export const SignUpView = () => {
-  const t = useTranslations('core.auth.sign_up');
-  const tGlobal = useTranslations('core.global');
+export const SignUpView = async () => {
+  const [t, tGlobal, { isEmail }] = await Promise.all([
+    getTranslations('core.auth.sign_up'),
+    getTranslations('core.global'),
+    getMiddlewareApi(),
+  ]);
 
   return (
     <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-md flex-col justify-center px-4 py-16">
@@ -32,7 +35,7 @@ export const SignUpView = () => {
             </h1>
             <CardDescription>{t('desc')}</CardDescription>
           </div>
-          <FormSignUp />
+          <FormSignUp isEmail={isEmail} />
 
           <React.Suspense fallback={<SSOButtonsSkeleton />}>
             <SSOButtons />

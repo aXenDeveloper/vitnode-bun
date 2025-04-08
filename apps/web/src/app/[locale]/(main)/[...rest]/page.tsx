@@ -8,7 +8,7 @@ import {
 
 export const generateMetadata = generateMetadataDynamicView;
 export const generateStaticParams = () =>
-  dynamicViewGenerateStaticParams(vitNodeConfig.i18n.locales);
+  dynamicViewGenerateStaticParams([...vitNodeConfig.i18n.locales]);
 
 export default function RestPage(props: DynamicViewProps) {
   return <DynamicView config={vitNodeConfig} {...props} />;
